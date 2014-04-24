@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<title>FII Admis REST API</title>
+<link rel="stylesheet" href="styles/styles.css" type="text/css" media="screen">
+</head>
+<body>
+
+  <h2>
+    FII Admis REST API <font color="red">{DRAFT}</font>
+  </h2>
+
+
+  <p>
+    * <i>Input/ Output sunt in format json.</i>
+  </p>
+
+
+  <p>
+    GET /candidates <br />- Output: lista de {candidate_id} <br />- Scop: vezi toti candidatii inscrisi (fara
+    rezultate)
+  </p>
+
+  <p>
+    GET /candidates/{candidate_id} <br />- Output: informatiile de inscriere ale unui candidat: {candidate_id,
+    first_name, last_name, social_id, gpa_grade, a_test_grade} <br />- Scop: informatiile personale doar unui student
+  </p>
+
+  <p>
+    GET /admission_results <br />- Input: adaugat header "Pragma:admin" (fff secure :)) ) <br />- Output: lista cu
+    {candidate_id, final_grade, status} <br />- Scop: publicarea rezultatelor (echivalent cu start calcularea admitere)
+    <br />- Restrictie: prima oara, aceasta operatie este permisa doar de admin, elevu va primi 401 Unauthorized; apoi
+    va fi permisa si din interfata de elevi
+  </p>
+
+  <p>
+    GET /admission_results/{candidate_id} <br />- Output: informatiile unui cantitat despre rezultatul sau:
+    {candidate_id, final_grade, status} <br />- Scop: informatii de admitere doar pentru un student <br />-
+    Restrictie: aceasta operatie va fi permisa doar dupa ce un admin va data GET la /admission_results
+  </p>
+
+  <p>- - - - - - - - - - - - - - - -</p>
+
+  <p>
+    POST /candidates <br />- Input: un json cu datele {first_name, last_name, social_id, gpa_grade, a_test_grade} <br />-
+    Output: 201 Created + Header: "Location: /{candidate_id}" <br />- Scop: se inregistreaza elevul la facultate
+  </p>
+
+  <p>- - - - - - - - - - - - - - - -</p>
+
+  <p>
+    PUT /candidates/{candidate_id} <br />- Input: un json cu datele {candidate_id, first_name, last_name, social_id,
+    gpa_grade, a_test_grade} <br />- Output: 204 No Content <br />- Scop: elevul sa-si updateze datele personale
+  </p>
+
+  <p>- - - - - - - - - - - - - - - -</p>
+
+  <p>
+    DELETE /candidates/{candidate_id} <br />- Input: no content <br />- Output: 204 No Content <br />- Scop: elevul
+    vrea sa renunte la admitere
+  </p>
+</body>
+</html>
