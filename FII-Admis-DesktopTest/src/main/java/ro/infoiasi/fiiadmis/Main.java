@@ -1,5 +1,8 @@
 package ro.infoiasi.fiiadmis;
 
+import ro.infoiasi.fiiadmis.model.Candidate;
+import ro.infoiasi.fiiadmis.model.Candidate;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -10,18 +13,18 @@ import java.util.List;
 public class Main {
 
 	public static void main(String[] args) {
-		List<CandidateBean> list = readCandidates("test.input");
+		List<Candidate> list = readCandidates("test.input");
 		System.out.println(list);
 	}
 	
-	public static List<CandidateBean> readCandidates(String inputFile) {
-		List<CandidateBean> output = new ArrayList<CandidateBean>();
+	public static List<Candidate> readCandidates(String inputFile) {
+		List<Candidate> output = new ArrayList<Candidate>();
 		BufferedReader br;
 		try {
 			br = new BufferedReader(new FileReader(inputFile));
 			String line;
 			while ((line = br.readLine()) != null) {
-				CandidateBean bean = parseCandidateFromLine(line);
+				Candidate bean = parseCandidateFromLine(line);
 				if (bean != null) {
 					output.add(bean);
 				}
@@ -40,8 +43,8 @@ public class Main {
 	 * @param line
 	 * @return
 	 */
-	private static CandidateBean parseCandidateFromLine(String line) {
-		CandidateBean output = new CandidateBean();
+	private static Candidate parseCandidateFromLine(String line) {
+		Candidate output = new Candidate();
 		String[] tokens = line.split(":");
 		if (tokens.length == 6) {
 			output.setCandidateId(Integer.parseInt(tokens[0]));

@@ -1,6 +1,6 @@
-package ro.infoiasi.fiiadmis;
+package ro.infoiasi.fiiadmis.model;
 
-public class CandidateBean {
+public class Candidate {
 
 	private int candidateId;
 	private String firstName;
@@ -9,11 +9,11 @@ public class CandidateBean {
 	private double gpaGrade;
 	private double aTestGrade;
 
-	public CandidateBean() {
+	public Candidate() {
 	}
 
-	public CandidateBean(int candidateId, String firstName, String lastName, String socialId, double gpaGrade,
-			double aTestGrade) {
+	public Candidate(int candidateId, String firstName, String lastName, String socialId, double gpaGrade,
+                     double aTestGrade) {
 		super();
 		this.candidateId = candidateId;
 		this.firstName = firstName;
@@ -101,7 +101,7 @@ public class CandidateBean {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		CandidateBean other = (CandidateBean) obj;
+		Candidate other = (Candidate) obj;
 		if (Double.doubleToLongBits(aTestGrade) != Double.doubleToLongBits(other.aTestGrade))
 			return false;
 		if (candidateId != other.candidateId)
