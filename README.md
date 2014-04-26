@@ -33,8 +33,8 @@ final_grade {4-5 chars 0.00 - 10.00}
 status {0(tax-free), 1(tax) or 2(rejected)}
 
 Exemplu de doua inregistrari in tabela 'candidates'
-0|sandu|istrate|1900201345644|9.55|8.7
-1|alexandru|ivan|1900201345644|7.67|5.67
+ad4e:sandu:istrate:1900201345644:9.55:8.7
+15a9:alexandru:ivan:1900201345644:7.67:5.67
 ```
 
 - Sample:
