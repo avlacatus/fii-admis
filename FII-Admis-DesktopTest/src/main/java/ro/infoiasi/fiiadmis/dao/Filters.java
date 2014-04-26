@@ -5,9 +5,6 @@ import com.google.common.base.Predicates;
 import com.google.common.math.DoubleMath;
 import ro.infoiasi.fiiadmis.model.Candidate;
 
-/**
- * @author <a href="mailto:anad@amazon.com">Ana-Maria Daneliuc</a>
- */
 public class Filters {
 
     private Filters() {}
@@ -22,6 +19,24 @@ public class Filters {
         return Predicates.alwaysFalse();
     }
 
+    public static Predicate<Candidate> byId(final int id) {
+
+        return new Predicate<Candidate>() {
+            @Override
+            public boolean apply(Candidate candidate) {
+                return candidate.getCandidateId() == id;
+            }
+        };
+    }
+    public static Predicate<Candidate> bySocialId(final String socialId) {
+
+        return new Predicate<Candidate>() {
+            @Override
+            public boolean apply(Candidate candidate) {
+                return candidate.getSocialId().equals(socialId);
+            }
+        };
+    }
     public static Predicate<Candidate> byFirstName(final String name) {
 
         return new Predicate<Candidate>() {
@@ -62,6 +77,8 @@ public class Filters {
             }
         };
     }
+
+
 
 
 }
