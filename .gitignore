@@ -3,6 +3,8 @@
 .settings
 .project
 
+AwsCredentials.properties
+
 build/
 bin/
 target/
