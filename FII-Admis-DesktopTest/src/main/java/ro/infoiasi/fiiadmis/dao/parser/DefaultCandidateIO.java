@@ -14,7 +14,7 @@ public class DefaultCandidateIO implements CandidateIO {
     public Candidate read(String textLine) {
 
         String[] fields = textLine.split(getFieldSeparator());
-        Preconditions.checkArgument(fields != null && fields.length == 6, "The candidate line must have 6 fields");
+        Preconditions.checkArgument(fields.length == 6, "The candidate line must have 6 fields");
         Candidate candidate = new Candidate();
         candidate.setCandidateId(fields[0]);
         candidate.setFirstName(fields[1]);
@@ -28,9 +28,8 @@ public class DefaultCandidateIO implements CandidateIO {
 
     @Override
     public String write(Candidate candidate) {
-        return "\n" + Joiner.on(getFieldSeparator())
+        return Joiner.on(getFieldSeparator())
                      .join(
-
                             candidate.getCandidateId(),
                             candidate.getFirstName(),
                             candidate.getLastName(),

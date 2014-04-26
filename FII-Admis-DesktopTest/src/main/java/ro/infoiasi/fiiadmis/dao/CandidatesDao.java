@@ -16,7 +16,7 @@ public interface CandidatesDao {
 
     String addCandidate(Candidate c) throws IOException;
 
-    void updateCandidate(Candidate c);
+    void updateCandidate(Candidate c) throws IOException;
 
-    void deleteCandidate(int candidateId);
+    void deleteCandidate(String candidateId) throws IOException;
 }

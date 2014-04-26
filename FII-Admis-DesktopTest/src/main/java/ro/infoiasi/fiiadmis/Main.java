@@ -14,7 +14,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
         CandidatesDao dao = new CandidatesDaoImpl("test.input", new DefaultCandidateIO());
 
-        Candidate candidate = dao.getCandidateById("0");
+        Candidate candidate = dao.getCandidateById("15a9");
 
         System.out.println(candidate);
 
@@ -37,7 +37,30 @@ public class Main {
 
         System.out.println(s);
 
-        List<Candidate> candidateList = dao.getAllCandidates(Filters.all());
+        listAll(dao);
+
+        dao.deleteCandidate(s);
+
+        listAll(dao);
+
+        s = dao.addCandidate(c);
+
+        System.out.println(s);
+
+        listAll(dao);
+
+        candidate.setFirstName("mihai");
+
+        dao.updateCandidate(candidate);
+
+        listAll(dao);
+
+
+    }
+
+    private static void listAll(CandidatesDao dao) throws IOException {
+        List<Candidate> candidateList;
+        candidateList = dao.getAllCandidates(Filters.all());
 
         System.out.println(candidateList);
     }

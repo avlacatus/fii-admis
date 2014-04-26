@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.*;
 import java.util.List;
+import java.util.Scanner;
 
 public class CandidatesDaoImpl implements CandidatesDao {
 
@@ -62,7 +63,7 @@ public class CandidatesDaoImpl implements CandidatesDao {
         try (BufferedWriter writer = Files.newBufferedWriter(dbFilePath, Charset.defaultCharset(), StandardOpenOption.APPEND)){
 
             writer.write(candidateIO.write(candidate));
-            writer.flush();
+            writer.write(System.lineSeparator());
 
         }
 
@@ -70,12 +71,58 @@ public class CandidatesDaoImpl implements CandidatesDao {
     }
 
     @Override
-    public void updateCandidate(Candidate c) {
+    public void updateCandidate(Candidate c) throws IOException {
 
+        Preconditions.checkArgument(c != null, "The input candidate must not be null");
+
+        Path tmpPath = Paths.get(dbFilePath.toString() + ".tmp");
+        Scanner s = new Scanner(dbFilePath);
+
+        try (BufferedWriter writer = Files.newBufferedWriter(tmpPath, Charset.defaultCharset())){
+
+            while (s.hasNextLine()) {
+                String line = s.nextLine();
+                if (line.isEmpty())
+                    continue; // skipping empty lines
+                Candidate currentCandidate = candidateIO.read(line);
+
+                if (c.getCandidateId().equals(currentCandidate.getCandidateId())) {
+                    writer.write(candidateIO.write(c));
+                    writer.write(System.lineSeparator());
+                } else {
+                    writer.write(line);
+                    writer.write(System.lineSeparator());
+                }
+            }
+            s.close();
+        }
+        Files.move(tmpPath, dbFilePath, StandardCopyOption.REPLACE_EXISTING);
     }
 
     @Override
-    public void deleteCandidate(int candidateId) {
+    public void deleteCandidate(String candidateId) throws IOException {
+
+        Preconditions.checkArgument(candidateId != null, "Candidate id must be null");
+
+        Path tmpPath = Paths.get(dbFilePath.toString() + ".tmp");
+        Scanner s = new Scanner(dbFilePath);
+
+        try (BufferedWriter writer = Files.newBufferedWriter(tmpPath, Charset.defaultCharset())){
+
+            while (s.hasNextLine()) {
+                String line = s.nextLine();
+                if (line.isEmpty())
+                    continue; // skipping empty lines
+                Candidate currentCandidate = candidateIO.read(line);
+
+                if (!candidateId.equals(currentCandidate.getCandidateId())) {
+                    writer.write(line);
+                    writer.write(System.lineSeparator());
+                }
+            }
+            s.close();
+        }
+        Files.move(tmpPath, dbFilePath, StandardCopyOption.REPLACE_EXISTING);
 
     }
 
