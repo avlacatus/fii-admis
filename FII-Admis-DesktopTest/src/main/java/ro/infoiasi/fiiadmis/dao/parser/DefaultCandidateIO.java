@@ -4,7 +4,7 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import ro.infoiasi.fiiadmis.model.Candidate;
 
-public class DefaultCandidateIO implements CandidateIO {
+public class DefaultCandidateIO implements EntityIO<Candidate> {
     @Override
     public String getFieldSeparator() {
         return ":";
@@ -27,15 +27,15 @@ public class DefaultCandidateIO implements CandidateIO {
     }
 
     @Override
-    public String write(Candidate candidate) {
+    public String write(Candidate entity) {
         return Joiner.on(getFieldSeparator())
                      .join(
-                            candidate.getCandidateId(),
-                            candidate.getFirstName(),
-                            candidate.getLastName(),
-                            candidate.getSocialId(),
-                            candidate.getGpaGrade(),
-                            candidate.getATestGrade()
+                            entity.getCandidateId(),
+                            entity.getFirstName(),
+                            entity.getLastName(),
+                            entity.getSocialId(),
+                            entity.getGpaGrade(),
+                            entity.getATestGrade()
                     );
     }
 }

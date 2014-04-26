@@ -2,13 +2,12 @@ package ro.infoiasi.fiiadmis.dao;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
-import com.google.common.collect.Lists;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.log4j.Logger;
-import ro.infoiasi.fiiadmis.dao.parser.CandidateIO;
+import ro.infoiasi.fiiadmis.dao.parser.DefaultCandidateIO;
+import ro.infoiasi.fiiadmis.dao.parser.EntityIO;
 import ro.infoiasi.fiiadmis.model.Candidate;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -16,78 +15,55 @@ import java.nio.file.*;
 import java.util.List;
 import java.util.Scanner;
 
-public class CandidatesDaoImpl implements CandidatesDao {
+public class CandidatesDaoImpl extends AbstractEntityDAO<Candidate> {
 
     private static final Logger LOG = Logger.getLogger(CandidatesDaoImpl.class);
 
     private final Path dbFilePath;
-    private final CandidateIO candidateIO;
+    private final DefaultCandidateIO candidateIO;
 
-    public CandidatesDaoImpl(String dbFilename, CandidateIO candidateIO) {
-
+    public CandidatesDaoImpl(String dbFilename, DefaultCandidateIO candidateIO) {
         this.dbFilePath = Paths.get(dbFilename);
         this.candidateIO = candidateIO;
     }
 
     @Override
-    public Candidate getCandidateById(String id) throws IOException {
-
-        Preconditions.checkArgument(id != null, "Candidate id must not be null");
-
-        return singleCandidate(Filters.byId(id));
-
+    public Candidate getItemById(String entityId) throws IOException {
+        Preconditions.checkArgument(entityId != null, "Candidate id must not be null");
+        return getSingleItem(Filters.byId(entityId));
     }
 
     @Override
-    public Candidate getCandidateBySocialNumber(String socialId) throws IOException {
-
-        Preconditions.checkArgument(socialId != null, "Candidate social id must not be null");
-
-        return singleCandidate(Filters.bySocialId(socialId));
-
-    }
-
-    @Override
-    public List<Candidate> getAllCandidates(Predicate<Candidate> filter) throws IOException {
+    public List<Candidate> getItems(Predicate<Candidate> filter) throws IOException {
         Preconditions.checkArgument(filter != null, "Filter must not be null");
-
-        return multipleCandidates(filter);
+        return getMultipleItems(filter);
     }
 
     @Override
-    public String addCandidate(Candidate candidate) throws IOException {
-
+    public String addItem(Candidate item) throws IOException {
         String newId = RandomStringUtils.randomAlphanumeric(4);
-        candidate.setCandidateId(newId);
-
-        try (BufferedWriter writer = Files.newBufferedWriter(dbFilePath, Charset.defaultCharset(), StandardOpenOption.APPEND)){
-
-            writer.write(candidateIO.write(candidate));
+        item.setCandidateId(newId);
+        try (BufferedWriter writer = Files.newBufferedWriter(dbFilePath, Charset.defaultCharset(), StandardOpenOption.APPEND)) {
+            writer.write(candidateIO.write(item));
             writer.write(System.lineSeparator());
-
         }
-
         return newId;
     }
 
     @Override
-    public void updateCandidate(Candidate c) throws IOException {
-
-        Preconditions.checkArgument(c != null, "The input candidate must not be null");
-
+    public void updateItem(Candidate item) throws IOException {
+        Preconditions.checkArgument(item != null, "The input candidate must not be null");
         Path tmpPath = Paths.get(dbFilePath.toString() + ".tmp");
         Scanner s = new Scanner(dbFilePath);
-
-        try (BufferedWriter writer = Files.newBufferedWriter(tmpPath, Charset.defaultCharset())){
-
+        try (BufferedWriter writer = Files.newBufferedWriter(tmpPath, Charset.defaultCharset())) {
             while (s.hasNextLine()) {
                 String line = s.nextLine();
                 if (line.isEmpty())
                     continue; // skipping empty lines
                 Candidate currentCandidate = candidateIO.read(line);
 
-                if (c.getCandidateId().equals(currentCandidate.getCandidateId())) {
-                    writer.write(candidateIO.write(c));
+                if (item.getCandidateId().equals(currentCandidate.getCandidateId())) {
+                    writer.write(candidateIO.write(item));
                     writer.write(System.lineSeparator());
                 } else {
                     writer.write(line);
@@ -100,14 +76,12 @@ public class CandidatesDaoImpl implements CandidatesDao {
     }
 
     @Override
-    public void deleteCandidate(String candidateId) throws IOException {
-
-        Preconditions.checkArgument(candidateId != null, "Candidate id must be null");
-
+    public void deleteItem(String entityId) throws IOException {
+        Preconditions.checkArgument(entityId != null, "Candidate id must be null");
         Path tmpPath = Paths.get(dbFilePath.toString() + ".tmp");
         Scanner s = new Scanner(dbFilePath);
 
-        try (BufferedWriter writer = Files.newBufferedWriter(tmpPath, Charset.defaultCharset())){
+        try (BufferedWriter writer = Files.newBufferedWriter(tmpPath, Charset.defaultCharset())) {
 
             while (s.hasNextLine()) {
                 String line = s.nextLine();
@@ -115,7 +89,7 @@ public class CandidatesDaoImpl implements CandidatesDao {
                     continue; // skipping empty lines
                 Candidate currentCandidate = candidateIO.read(line);
 
-                if (!candidateId.equals(currentCandidate.getCandidateId())) {
+                if (!entityId.equals(currentCandidate.getCandidateId())) {
                     writer.write(line);
                     writer.write(System.lineSeparator());
                 }
@@ -126,38 +100,14 @@ public class CandidatesDaoImpl implements CandidatesDao {
 
     }
 
-    private Candidate singleCandidate(Predicate<Candidate> filter) throws IOException {
-        try (BufferedReader reader = Files.newBufferedReader(dbFilePath, Charset.defaultCharset())){
-            String line = null;
-            while ((line = reader.readLine()) != null) {
-                if (line.isEmpty())
-                    continue; // skipping empty lines
 
-                Candidate currentCandidate = candidateIO.read(line);
-                if (filter.apply(currentCandidate)) {
-                    return currentCandidate;
-                }
-            }
-
-            return null; // no candidate with this id was found
-        }
+    @Override
+    protected Path getDBFilePath() {
+        return dbFilePath;
     }
 
-    private List<Candidate> multipleCandidates(Predicate<Candidate> filter) throws IOException {
-        try (BufferedReader reader = Files.newBufferedReader(dbFilePath, Charset.defaultCharset())){
-            String line = null;
-            final List<Candidate> results = Lists.newArrayList();
-            while ((line = reader.readLine()) != null) {
-
-                if (line.isEmpty())
-                    continue; // skipping empty lines
-                Candidate currentCandidate = candidateIO.read(line);
-                if (filter.apply(currentCandidate)) {
-                    results.add(currentCandidate);
-                }
-            }
-
-            return results;
-        }
+    @Override
+    protected EntityIO<Candidate> getEntityIO() {
+        return candidateIO;
     }
 }

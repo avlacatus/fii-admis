@@ -1,6 +1,6 @@
 package ro.infoiasi.fiiadmis.model;
 
-public class Candidate {
+public class Candidate implements Entity {
 
 	private String candidateId;
 	private String firstName;

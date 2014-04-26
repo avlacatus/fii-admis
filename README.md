@@ -72,7 +72,7 @@ Tools and Libraries
 Team
 ----
 - Daneliuc Ana-Maria
-- Lăcătușu Alexandra
+- Lăcătuș Alexandra
 - Popoveniuc Mirela
 - Popovici Adrian
 
