@@ -19,7 +19,7 @@ Custom database
 ```
 candidates
 ==========
-candidate_id {0-9999}
+candidate_id {4 alphanumeric characters}
 first_name {max 20 chars}
 last_name {max 20 chars}
 social_id {13 chars exactly}
@@ -40,8 +40,8 @@ Exemplu de doua inregistrari in tabela 'candidates'
 - Sample:
 
 ```
-0:sandu:istrate:1900201345644:9.55:8.7
-1:alexandru:ivan:1900201345644:7.67:5.67
+ad4e:sandu:istrate:1900201345644:9.55:8.7
+15a9:alexandru:ivan:1900201345644:7.67:5.67
 ```
 
 
