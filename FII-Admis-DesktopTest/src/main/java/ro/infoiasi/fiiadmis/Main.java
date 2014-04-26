@@ -18,7 +18,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        candidateTest();
+//        candidateTest();
 
         admissionResultsTest();
     }
@@ -81,7 +81,7 @@ public class Main {
 
         AdmissionResult candidate = dao.getItemById("aaaa");
         System.out.println(candidate);
-        List<AdmissionResult> result = dao.getItems(AdmissionResultFilters.all());
+        List<AdmissionResult> result = dao.getItems(AdmissionResultFilters.byCandidateId("3xiy"));
         System.out.println(result);
 
         AdmissionResult r = new AdmissionResult();
