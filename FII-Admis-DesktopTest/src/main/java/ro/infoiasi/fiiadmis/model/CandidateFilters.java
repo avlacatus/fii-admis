@@ -1,13 +1,12 @@
-package ro.infoiasi.fiiadmis.dao;
+package ro.infoiasi.fiiadmis.model;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.math.DoubleMath;
-import ro.infoiasi.fiiadmis.model.Candidate;
 
-public class Filters {
+public class CandidateFilters {
 
-    private Filters() {}
+    private CandidateFilters() {}
 
     public static Predicate<Candidate> all() {
 
@@ -24,7 +23,7 @@ public class Filters {
         return new Predicate<Candidate>() {
             @Override
             public boolean apply(Candidate candidate) {
-                return id.equals(candidate.getCandidateId());
+                return id.equals(candidate.getId());
             }
         };
     }

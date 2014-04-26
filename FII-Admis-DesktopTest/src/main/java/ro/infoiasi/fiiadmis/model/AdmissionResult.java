@@ -3,9 +3,6 @@ package ro.infoiasi.fiiadmis.model;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by Cosmin on 26/04/14.
- */
 public class AdmissionResult implements Entity {
 
 
@@ -43,7 +40,7 @@ public class AdmissionResult implements Entity {
             return statusString;
         }
     }
-    private String resultId;
+    private String id;
     private String candidateId;
     private double finalGrade;
     private Status admissionStatus;
@@ -52,18 +49,18 @@ public class AdmissionResult implements Entity {
     }
 
     public AdmissionResult(String resultId, String candidateId, double finalGrade, Status admissionStatus) {
-        this.resultId = resultId;
+        this.id = resultId;
         this.candidateId = candidateId;
         this.finalGrade = finalGrade;
         this.admissionStatus = admissionStatus;
     }
 
-    public String getResultId() {
-        return resultId;
+    public String getId() {
+        return id;
     }
 
-    public void setResultId(String resultId) {
-        this.resultId = resultId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getCandidateId() {
@@ -100,7 +97,7 @@ public class AdmissionResult implements Entity {
         if (Double.compare(that.finalGrade, finalGrade) != 0) return false;
         if (admissionStatus != that.admissionStatus) return false;
         if (candidateId != null ? !candidateId.equals(that.candidateId) : that.candidateId != null) return false;
-        if (resultId != null ? !resultId.equals(that.resultId) : that.resultId != null) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
 
         return true;
     }
@@ -109,7 +106,7 @@ public class AdmissionResult implements Entity {
     public int hashCode() {
         int result;
         long temp;
-        result = resultId != null ? resultId.hashCode() : 0;
+        result = id != null ? id.hashCode() : 0;
         result = 31 * result + (candidateId != null ? candidateId.hashCode() : 0);
         temp = Double.doubleToLongBits(finalGrade);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
@@ -120,7 +117,7 @@ public class AdmissionResult implements Entity {
     @Override
     public String toString() {
         return "AdmissionResult{" +
-                "resultId='" + resultId + '\'' +
+                "id='" + id + '\'' +
                 ", candidateId='" + candidateId + '\'' +
                 ", finalGrade=" + finalGrade +
                 ", admissionStatus=" + admissionStatus +

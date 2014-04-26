@@ -1,8 +1,8 @@
-package ro.infoiasi.fiiadmis.dao.parser;
+package ro.infoiasi.fiiadmis.db.parser;
 
 import ro.infoiasi.fiiadmis.model.Entity;
 
-public interface EntityIO<E extends Entity> {
+public interface EntityFormatter<E extends Entity> {
 
     String getFieldSeparator();
 

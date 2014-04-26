@@ -1,4 +1,4 @@
-package ro.infoiasi.fiiadmis.dao;
+package ro.infoiasi.fiiadmis.db.dao;
 
 import com.google.common.base.Predicate;
 import ro.infoiasi.fiiadmis.model.Entity;

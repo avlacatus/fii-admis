@@ -2,7 +2,7 @@ package ro.infoiasi.fiiadmis.model;
 
 public class Candidate implements Entity {
 
-	private String candidateId;
+	private String id;
 	private String firstName;
 	private String lastName;
 	private String socialId;
@@ -15,7 +15,7 @@ public class Candidate implements Entity {
 	public Candidate(String candidateId, String firstName, String lastName, String socialId, double gpaGrade,
                      double aTestGrade) {
 		super();
-		this.candidateId = candidateId;
+		this.id = candidateId;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.socialId = socialId;
@@ -23,12 +23,12 @@ public class Candidate implements Entity {
 		this.aTestGrade = aTestGrade;
 	}
 
-	public String getCandidateId() {
-		return candidateId;
+	public String getId() {
+		return id;
 	}
 
-	public void setCandidateId(String candidateId) {
-		this.candidateId = candidateId;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getFirstName() {
@@ -73,7 +73,7 @@ public class Candidate implements Entity {
 	
 	@Override
 	public String toString() {
-		return "Candidate [candidateId=" + candidateId + ", firstName=" + firstName + ", lastName=" + lastName
+		return "Candidate [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName
 				+ ", socialId=" + socialId + ", gpaGrade=" + gpaGrade + ", aTestGrade=" + aTestGrade + "]";
 	}
 
@@ -81,7 +81,7 @@ public class Candidate implements Entity {
     public int hashCode() {
         int result;
         long temp;
-        result = candidateId != null ? candidateId.hashCode() : 0;
+        result = id != null ? id.hashCode() : 0;
         result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
         result = 31 * result + (socialId != null ? socialId.hashCode() : 0);
@@ -103,7 +103,7 @@ public class Candidate implements Entity {
 		Candidate other = (Candidate) obj;
 		if (Double.doubleToLongBits(aTestGrade) != Double.doubleToLongBits(other.aTestGrade))
 			return false;
-		if (candidateId != other.candidateId)
+		if (id != other.id)
 			return false;
 		if (firstName == null) {
 			if (other.firstName != null)

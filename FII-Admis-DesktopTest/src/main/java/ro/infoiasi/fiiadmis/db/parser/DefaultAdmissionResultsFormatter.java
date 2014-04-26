@@ -1,10 +1,10 @@
-package ro.infoiasi.fiiadmis.dao.parser;
+package ro.infoiasi.fiiadmis.db.parser;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import ro.infoiasi.fiiadmis.model.AdmissionResult;
 
-public class DefaultAdmissionResultsIO implements EntityIO<AdmissionResult> {
+public class DefaultAdmissionResultsFormatter implements EntityFormatter<AdmissionResult> {
     @Override
     public String getFieldSeparator() {
         return ":";
@@ -13,9 +13,9 @@ public class DefaultAdmissionResultsIO implements EntityIO<AdmissionResult> {
     @Override
     public AdmissionResult read(String textLine) {
         String[] fields = textLine.split(getFieldSeparator());
-        Preconditions.checkArgument(fields != null && fields.length == 4, "The admission result line must have 4 fields");
+        Preconditions.checkArgument(fields.length == 4, "The admission result line must have 4 fields");
         AdmissionResult candidate = new AdmissionResult();
-        candidate.setResultId(fields[0]);
+        candidate.setId(fields[0]);
         candidate.setCandidateId(fields[1]);
         candidate.setFinalGrade(Double.parseDouble(fields[2]));
         candidate.setAdmissionStatus(AdmissionResult.Status.getStatus(Integer.parseInt(fields[3])));
@@ -24,9 +24,9 @@ public class DefaultAdmissionResultsIO implements EntityIO<AdmissionResult> {
 
     @Override
     public String write(AdmissionResult entity) {
-        return "\n" + Joiner.on(getFieldSeparator())
+        return Joiner.on(getFieldSeparator())
                      .join(
-                            entity.getResultId(),
+                            entity.getId(),
                             entity.getCandidateId(),
                             entity.getFinalGrade(),
                             entity.getAdmissionStatus().getStatusInt()
