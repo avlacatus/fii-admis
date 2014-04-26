@@ -15,13 +15,20 @@
     <b>Github Project:</b> <a href="https://github.com/avlacatus/fii-admis">avlacatus/fii-admis</a>
   </p>
   <p>
-    * <i>Input/ Output sunt in format json.</i>
+    * Input/ Output sunt in format json.
+    <br/>
+    * La url-ul http://fii-admis-restservice-tdq5yd2mhw.elasticbeanstalk.com/api se adauga urmatorele uri path-urile.
+    <br/>
+    *  <font color="red">ATENTIE!</font> Momentan, nu functioneaza niciun URL! 
   </p>
 
 
   <p>
     GET /candidates <br />- Output: lista de {candidate_id} <br />- Scop: vezi toti candidatii inscrisi (fara
     rezultate)
+    <br/><br />
+    GET /candidates?query
+    
   </p>
 
   <p>
@@ -34,6 +41,9 @@
     {candidate_id, final_grade, status} <br />- Scop: publicarea rezultatelor (echivalent cu start calcularea admitere)
     <br />- Restrictie: prima oara, aceasta operatie este permisa doar de admin, elevu va primi 401 Unauthorized; apoi
     va fi permisa si din interfata de elevi
+    <br/>
+    <br/>
+    GET /admission_results?query (media finala, nume)
   </p>
 
   <p>
