@@ -19,12 +19,12 @@ public class Filters {
         return Predicates.alwaysFalse();
     }
 
-    public static Predicate<Candidate> byId(final int id) {
+    public static Predicate<Candidate> byId(final String id) {
 
         return new Predicate<Candidate>() {
             @Override
             public boolean apply(Candidate candidate) {
-                return candidate.getCandidateId() == id;
+                return id.equals(candidate.getCandidateId());
             }
         };
     }
@@ -33,7 +33,7 @@ public class Filters {
         return new Predicate<Candidate>() {
             @Override
             public boolean apply(Candidate candidate) {
-                return candidate.getSocialId().equals(socialId);
+                return socialId.equals(candidate.getSocialId());
             }
         };
     }

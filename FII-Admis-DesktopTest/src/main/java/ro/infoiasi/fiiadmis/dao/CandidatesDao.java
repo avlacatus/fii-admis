@@ -8,13 +8,13 @@ import java.util.List;
 
 public interface CandidatesDao {
 
-    Candidate getCandidateById(int id) throws IOException;
+    Candidate getCandidateById(String id) throws IOException;
 
     Candidate getCandidateBySocialNumber(String socialNumber) throws IOException;
 
     List<Candidate> getAllCandidates(Predicate<Candidate> filter) throws IOException;
 
-    int addCandidate(Candidate c);
+    String addCandidate(Candidate c) throws IOException;
 
     void updateCandidate(Candidate c);
 

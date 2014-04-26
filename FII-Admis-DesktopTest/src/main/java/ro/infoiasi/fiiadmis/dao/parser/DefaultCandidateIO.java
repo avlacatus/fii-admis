@@ -1,6 +1,7 @@
 package ro.infoiasi.fiiadmis.dao.parser;
 
 import com.google.common.base.Joiner;
+import com.google.common.base.Preconditions;
 import ro.infoiasi.fiiadmis.model.Candidate;
 
 public class DefaultCandidateIO implements CandidateIO {
@@ -13,8 +14,9 @@ public class DefaultCandidateIO implements CandidateIO {
     public Candidate read(String textLine) {
 
         String[] fields = textLine.split(getFieldSeparator());
+        Preconditions.checkArgument(fields != null && fields.length == 6, "The candidate line must have 6 fields");
         Candidate candidate = new Candidate();
-        candidate.setCandidateId(Integer.parseInt(fields[0]));
+        candidate.setCandidateId(fields[0]);
         candidate.setFirstName(fields[1]);
         candidate.setLastName(fields[2]);
         candidate.setSocialId(fields[3]);
@@ -26,7 +28,7 @@ public class DefaultCandidateIO implements CandidateIO {
 
     @Override
     public String write(Candidate candidate) {
-        return Joiner.on(getFieldSeparator())
+        return "\n" + Joiner.on(getFieldSeparator())
                      .join(
 
                             candidate.getCandidateId(),
