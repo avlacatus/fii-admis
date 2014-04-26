@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ro.infoiasi.css</groupId>
@@ -11,51 +10,48 @@
 
     <repositories>
         <repository>
-           <id>maven-restlet</id>
-           <name>Restlet Framework repository</name>
-           <url>http://maven.restlet.org</url>
+            <id>maven-restlet</id>
+            <name>Restlet Framework repository</name>
+            <url>http://maven.restlet.org</url>
         </repository>
-
     </repositories>
-
 
     <dependencies>
         <dependency>
-           <groupId>org.restlet.jse</groupId>
-           <artifactId>org.restlet</artifactId>
-           <version>2.2.0</version>
+            <groupId>org.restlet.jee</groupId>
+            <artifactId>org.restlet</artifactId>
+            <version>2.2.0</version>
         </dependency>
 
         <dependency>
-           <groupId>org.restlet.jse</groupId>
-           <artifactId>org.restlet.ext.jackson</artifactId>
-           <version>2.2.0</version>
+            <groupId>org.restlet.jee</groupId>
+            <artifactId>org.restlet.ext.servlet</artifactId>
+            <version>2.2.0</version>
         </dependency>
 
         <dependency>
-           <groupId>org.restlet.jse</groupId>
-           <artifactId>org.restlet.ext.jaxrs</artifactId>
-           <version>2.2.0</version>
+            <groupId>org.restlet.jee</groupId>
+            <artifactId>org.restlet.ext.json</artifactId>
+            <version>2.2.0</version>
         </dependency>
 
         <dependency>
-           <groupId>org.restlet.jse</groupId>
-           <artifactId>org.restlet.ext.jaxb</artifactId>
-           <version>2.2.0</version>
+            <groupId>org.restlet.jse</groupId>
+            <artifactId>org.restlet.ext.jaxb</artifactId>
+            <version>2.2.0</version>
         </dependency>
 
         <dependency>
-           <groupId>org.restlet.jse</groupId>
-           <artifactId>org.restlet.ext.json</artifactId>
-           <version>2.2.0</version>
+            <groupId>org.restlet.jse</groupId>
+            <artifactId>org.restlet.ext.json</artifactId>
+            <version>2.2.0</version>
         </dependency>
 
         <dependency>
-           <groupId>org.restlet.jse</groupId>
-           <artifactId>org.restlet.ext.slf4j</artifactId>
-           <version>2.2.0</version>
+            <groupId>org.restlet.jse</groupId>
+            <artifactId>org.restlet.ext.slf4j</artifactId>
+            <version>2.2.0</version>
         </dependency>
-
     </dependencies>
 
 </project>
