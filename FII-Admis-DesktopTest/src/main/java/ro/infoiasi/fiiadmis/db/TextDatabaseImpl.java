@@ -57,13 +57,6 @@ public class TextDatabaseImpl implements TextDatabase {
             Files.delete(t.getTablePath());
         }
 
-        try {
-            Files.delete(dbRootPath); // only delete the db directory if it's empty (it contained only the tables)
-        } catch (IOException e) {
-            // this occurs if the current directory is not empty
-            // if this is the case, for safety, do not delete it
-        }
-
         tables.clear();
     }
 
