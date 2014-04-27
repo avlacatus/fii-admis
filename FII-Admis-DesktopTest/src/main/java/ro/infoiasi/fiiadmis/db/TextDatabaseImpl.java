@@ -24,12 +24,12 @@ public class TextDatabaseImpl implements TextDatabase {
 
         this.dbRootPath = Paths.get(dbRootPathName);
 
-        createDb(dbRootPath);
+        createDbFolderIfNotExists(dbRootPath);
 
         tables = new HashMap<>();
     }
 
-    private void createDb(Path dbRootPath) throws IOException {
+    private void createDbFolderIfNotExists(Path dbRootPath) throws IOException {
         if (Files.notExists(dbRootPath)) {
             Files.createDirectory(dbRootPath);
         }
@@ -46,14 +46,9 @@ public class TextDatabaseImpl implements TextDatabase {
     }
 
     @Override
-    public Table<? extends Entity> getTable(String tableName) {
-        return tables.get(tableName);
-    }
-
-    @Override
     public void drop() throws IOException {
 
-        for (Table t : getAllTables()) {
+        for (Table<? extends Entity> t : getAllTables()) {
             Files.delete(t.getTablePath());
         }
 
@@ -61,18 +56,18 @@ public class TextDatabaseImpl implements TextDatabase {
     }
 
     @Override
-    public <E extends Entity> Table<E> createTable(String tableName, EntityFormatter<E> formatter, boolean replace)
+    public <E extends Entity> Table<E> openTableOrCreateIfNotExists(String tableName, EntityFormatter<E> formatter)
                                         throws IOException {
 
         Preconditions.checkArgument(tableName != null, "table name must not be null");
         Preconditions.checkArgument(formatter != null, "formatter must not be null");
 
-        if (!tables.containsKey(tableName) || replace) {
+        if (!tables.containsKey(tableName)) {
 
             Table<E> newTable = new TableImpl<>(dbRootPath, tableName, formatter);
             tables.put(tableName, newTable);
         }
-        return (Table<E>) getTable(tableName);
+        return (Table<E>) (tables.get(tableName));
     }
 
 

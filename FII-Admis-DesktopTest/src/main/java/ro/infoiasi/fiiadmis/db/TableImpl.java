@@ -16,12 +16,12 @@ public class TableImpl<E extends Entity> implements Table<E> {
 
     public TableImpl(Path dbPath, String tableName, EntityFormatter<E> formatter) throws IOException {
         this.tablePath = Paths.get(dbPath.toString(), tableName);
-        createTable(tablePath);
+        createTableFileIfNotExists(tablePath);
 
         this.formatter = formatter;
     }
 
-    private void createTable(Path tablePath) throws IOException {
+    private void createTableFileIfNotExists(Path tablePath) throws IOException {
         if (Files.notExists(tablePath)) {
             Files.createFile(tablePath);
         }

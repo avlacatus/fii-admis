@@ -21,11 +21,11 @@ public class Main {
 
         TextDatabase db = initDb();
 
-        Table<Candidate> candidateTable = db.createTable("test-candidates", new DefaultCandidateFormatter(), false);
+        Table<Candidate> candidateTable = db.openTableOrCreateIfNotExists("test-candidates", new DefaultCandidateFormatter());
 
         candidateTest(candidateTable);
 
-        Table<AdmissionResult> admissionResultTable = db.createTable("test-admission", new DefaultAdmissionResultsFormatter(), false);
+        Table<AdmissionResult> admissionResultTable = db.openTableOrCreateIfNotExists("test-admission", new DefaultAdmissionResultsFormatter());
 
         admissionResultsTest(admissionResultTable);
 

@@ -1,9 +1,6 @@
 package ro.infoiasi.fiiadmis.service.rest.dao;
 
-import java.io.IOException;
-
 import org.apache.log4j.Logger;
-
 import ro.infoiasi.fiiadmis.db.Table;
 import ro.infoiasi.fiiadmis.db.TextDatabase;
 import ro.infoiasi.fiiadmis.db.TextDatabaseImpl;
@@ -14,6 +11,8 @@ import ro.infoiasi.fiiadmis.db.parser.DefaultCandidateFormatter;
 import ro.infoiasi.fiiadmis.model.AdmissionResult;
 import ro.infoiasi.fiiadmis.model.Candidate;
 import ro.infoiasi.fiiadmis.service.rest.resources.CandidatesResource;
+
+import java.io.IOException;
 
 public class DaoHolder {
 
@@ -52,13 +51,13 @@ public class DaoHolder {
     }
 
     private static EntityDAO<Candidate> initCandidateDao(String tableName) throws IOException {
-        Table<Candidate> candidatesTable = db.createTable(tableName, new DefaultCandidateFormatter(), false);
+        Table<Candidate> candidatesTable = db.openTableOrCreateIfNotExists(tableName, new DefaultCandidateFormatter());
         return new EntityDAOImpl<>(candidatesTable);
     }
 
     private static EntityDAO<AdmissionResult> initAdmissionResults(String tableName) throws IOException {
-        Table<AdmissionResult> admissionResultsTable = db.createTable(tableName,
-                new DefaultAdmissionResultsFormatter(), false);
+        Table<AdmissionResult> admissionResultsTable = db.openTableOrCreateIfNotExists(tableName,
+                new DefaultAdmissionResultsFormatter());
         return new EntityDAOImpl<>(admissionResultsTable);
     }
 

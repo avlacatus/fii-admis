@@ -14,11 +14,9 @@ public interface TextDatabase {
 
     Collection<Table<? extends Entity>> getAllTables();
 
-    Table<? extends Entity> getTable(String tableName);
-
     void drop() throws IOException;
 
-    <E extends Entity> Table<E> createTable(String tableName, EntityFormatter<E> formatter, boolean replace)
+    <E extends Entity> Table<E> openTableOrCreateIfNotExists(String tableName, EntityFormatter<E> formatter)
                                     throws IOException;
 
 
