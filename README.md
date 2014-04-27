@@ -28,7 +28,9 @@ a_test_grade {4-5 chars 0.00 - 10.00}
 
 admission_results
 =================
-candidate_id {candidates-foreign-key, 0-9999}
+
+admission_result_id {4 alphanumeric characters}
+candidate_id {candidates-foreign-key, 4 alphanumeric characters}
 final_grade {4-5 chars 0.00 - 10.00}
 status {0(tax-free), 1(tax) or 2(rejected)}
 
