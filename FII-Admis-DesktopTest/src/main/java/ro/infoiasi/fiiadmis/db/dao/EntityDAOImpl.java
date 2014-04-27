@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang.RandomStringUtils;
-import ro.infoiasi.fiiadmis.db.TextDatabase;
+import ro.infoiasi.fiiadmis.db.Table;
 import ro.infoiasi.fiiadmis.model.Entity;
 
 import java.io.BufferedReader;
@@ -17,20 +17,20 @@ import java.util.Scanner;
 
 public class EntityDAOImpl<E extends Entity> implements EntityDAO<E> {
 
-    private final TextDatabase<E> db;
+    private final Table<E> table;
 
-    public EntityDAOImpl(TextDatabase<E> db) {
-        this.db = db;
+    public EntityDAOImpl(Table<E> table) {
+        this.table = table;
     }
 
     private E getSingleItem(Predicate<E> filter) throws IOException {
-        try (BufferedReader reader = Files.newBufferedReader(db.getPath(), Charset.defaultCharset())) {
+        try (BufferedReader reader = Files.newBufferedReader(table.getTablePath(), Charset.defaultCharset())) {
             String line = null;
             while ((line = reader.readLine()) != null) {
                 if (line.isEmpty())
                     continue; // skipping empty lines
 
-                E currentItem = db.getFormatter().read(line);
+                E currentItem = table.getFormatter().read(line);
                 if (filter.apply(currentItem)) {
                     return currentItem;
                 }
@@ -41,14 +41,14 @@ public class EntityDAOImpl<E extends Entity> implements EntityDAO<E> {
     }
 
     private List<E> getMultipleItems(Predicate<E> filter) throws IOException {
-        try (BufferedReader reader = Files.newBufferedReader(db.getPath(), Charset.defaultCharset())) {
+        try (BufferedReader reader = Files.newBufferedReader(table.getTablePath(), Charset.defaultCharset())) {
             String line = null;
             final List<E> results = Lists.newArrayList();
             while ((line = reader.readLine()) != null) {
 
                 if (line.isEmpty())
                     continue; // skipping empty lines
-                E currentItem = db.getFormatter().read(line);
+                E currentItem = table.getFormatter().read(line);
                 if (filter.apply(currentItem)) {
                     results.add(currentItem);
                 }
@@ -62,8 +62,8 @@ public class EntityDAOImpl<E extends Entity> implements EntityDAO<E> {
     public String addItem(E item) throws IOException {
         String newId = RandomStringUtils.randomAlphanumeric(4);
         item.setId(newId);
-        try (BufferedWriter writer = Files.newBufferedWriter(db.getPath(), Charset.defaultCharset(), StandardOpenOption.APPEND)) {
-            writer.write(db.getFormatter().write(item));
+        try (BufferedWriter writer = Files.newBufferedWriter(table.getTablePath(), Charset.defaultCharset(), StandardOpenOption.APPEND)) {
+            writer.write(table.getFormatter().write(item));
             writer.write(System.lineSeparator());
         }
         return newId;
@@ -89,17 +89,17 @@ public class EntityDAOImpl<E extends Entity> implements EntityDAO<E> {
     @Override
     public void updateItem(E item) throws IOException {
         Preconditions.checkArgument(item != null, "The input must not be null");
-        Path tmpPath = Paths.get(db.getPath().toString() + ".tmp");
-        Scanner s = new Scanner(db.getPath());
+        Path tmpPath = Paths.get(table.getTablePath().toString() + ".tmp");
+        Scanner s = new Scanner(table.getTablePath());
         try (BufferedWriter writer = Files.newBufferedWriter(tmpPath, Charset.defaultCharset())) {
             while (s.hasNextLine()) {
                 String line = s.nextLine();
                 if (line.isEmpty())
                     continue; // skipping empty lines
-                E currentE = db.getFormatter().read(line);
+                E currentE = table.getFormatter().read(line);
 
                 if (item.getId().equals(currentE.getId())) {
-                    writer.write(db.getFormatter().write(item));
+                    writer.write(table.getFormatter().write(item));
                     writer.write(System.lineSeparator());
                 } else {
                     writer.write(line);
@@ -108,14 +108,14 @@ public class EntityDAOImpl<E extends Entity> implements EntityDAO<E> {
             }
             s.close();
         }
-        Files.move(tmpPath, db.getPath(), StandardCopyOption.REPLACE_EXISTING);
+        Files.move(tmpPath, table.getTablePath(), StandardCopyOption.REPLACE_EXISTING);
     }
 
     @Override
     public void deleteItem(String entityId) throws IOException {
         Preconditions.checkArgument(entityId != null, "id must be null");
-        Path tmpPath = Paths.get(db.getPath().toString() + ".tmp");
-        Scanner s = new Scanner(db.getPath());
+        Path tmpPath = Paths.get(table.getTablePath().toString() + ".tmp");
+        Scanner s = new Scanner(table.getTablePath());
 
         try (BufferedWriter writer = Files.newBufferedWriter(tmpPath, Charset.defaultCharset())) {
 
@@ -123,7 +123,7 @@ public class EntityDAOImpl<E extends Entity> implements EntityDAO<E> {
                 String line = s.nextLine();
                 if (line.isEmpty())
                     continue; // skipping empty lines
-                E currentE = db.getFormatter().read(line);
+                E currentE = table.getFormatter().read(line);
 
                 if (!entityId.equals(currentE.getId())) {
                     writer.write(line);
@@ -132,7 +132,7 @@ public class EntityDAOImpl<E extends Entity> implements EntityDAO<E> {
             }
             s.close();
         }
-        Files.move(tmpPath, db.getPath(), StandardCopyOption.REPLACE_EXISTING);
+        Files.move(tmpPath, table.getTablePath(), StandardCopyOption.REPLACE_EXISTING);
 
     }
 }

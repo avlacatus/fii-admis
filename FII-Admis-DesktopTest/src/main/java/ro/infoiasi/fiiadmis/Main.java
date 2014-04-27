@@ -1,5 +1,6 @@
 package ro.infoiasi.fiiadmis;
 
+import ro.infoiasi.fiiadmis.db.Table;
 import ro.infoiasi.fiiadmis.db.dao.EntityDAO;
 import ro.infoiasi.fiiadmis.db.dao.EntityDAOImpl;
 import ro.infoiasi.fiiadmis.db.parser.DefaultAdmissionResultsFormatter;
@@ -18,15 +19,26 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-//        candidateTest();
+        TextDatabase db = initDb();
 
-        admissionResultsTest();
+        Table<Candidate> candidateTable = db.createTable("test-candidates", new DefaultCandidateFormatter(), false);
+
+        candidateTest(candidateTable);
+
+        Table<AdmissionResult> admissionResultTable = db.createTable("test-admission", new DefaultAdmissionResultsFormatter(), false);
+
+        admissionResultsTest(admissionResultTable);
+
     }
 
-    private static void candidateTest() throws IOException {
-        TextDatabase<Candidate> db = new TextDatabaseImpl<>("test.input", new DefaultCandidateFormatter());
+    private static TextDatabase initDb() throws IOException {
 
-        EntityDAO<Candidate> dao = new EntityDAOImpl<>(db);
+        return new TextDatabaseImpl("fiiadmisdb");
+    }
+
+    private static void candidateTest(Table<Candidate> candidateTable) throws IOException {
+
+        EntityDAO<Candidate> dao = new EntityDAOImpl<>(candidateTable);
 
         Candidate candidate = dao.getItemById("ad4e");
 
@@ -74,10 +86,9 @@ public class Main {
         System.out.println(candidateList);
     }
 
-    private static void admissionResultsTest() throws IOException {
-        TextDatabase<AdmissionResult> db = new TextDatabaseImpl<>("test-admission.input", new DefaultAdmissionResultsFormatter());
+    private static void admissionResultsTest(Table<AdmissionResult> admissionResultTable) throws IOException {
 
-        EntityDAO<AdmissionResult> dao = new EntityDAOImpl<>(db);
+        EntityDAO<AdmissionResult> dao = new EntityDAOImpl<>(admissionResultTable);
 
         AdmissionResult candidate = dao.getItemById("aaaa");
         System.out.println(candidate);

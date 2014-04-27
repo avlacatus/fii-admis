@@ -7,7 +7,7 @@ import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 
-import ro.infoiasi.fiiadmis.dao.CandidatesDaoImpl;
+import ro.infoiasi.fiiadmis.db.dao.CandidatesDaoImpl;
 import ro.infoiasi.fiiadmis.model.Candidate;
 
 public class CandidatesResource extends ServerResource {
