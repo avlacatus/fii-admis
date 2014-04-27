@@ -44,7 +44,6 @@ public abstract class AbstractResource extends ServerResource {
 
     protected void logInternalServerError(JsonRepresentation internalServerErrorResponse) {
         getLOG().error("RESPONSE - Internal Server Error: " + internalServerErrorResponse.toString());
-
     }
 
     protected void logResponse(JsonRepresentation json) throws IOException {
