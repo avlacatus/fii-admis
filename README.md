@@ -59,11 +59,9 @@ http://fii-admis-restservice-tdq5yd2mhw.elasticbeanstalk.com/
 
 Tools and Libraries
 -------------------
+
+- Language: Java 7
 - [Github for Source Control]
-- [JetBrains IntelliJ IDEA]
-- [Eclipse IDE for Java EE Developers]
-- [AWS Toolkit for Eclipse]
-- [Github plugin for Eclipse]
 - [AWS Elastic Beanstalk]
 - [Apache Maven]
 - [Google Guava Libraries]
