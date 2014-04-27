@@ -1,16 +1,17 @@
 package ro.infoiasi.fiiadmis.service.rest.resources;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.json.JSONException;
 import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.resource.Get;
-import org.restlet.resource.ServerResource;
 
-import ro.infoiasi.fiiadmis.db.dao.CandidatesDaoImpl;
 import ro.infoiasi.fiiadmis.model.Candidate;
 
-public class CandidatesResource extends ServerResource {
+public class CandidatesResource extends AbstractResource {
 
     private static final Logger LOG = Logger.getLogger(CandidatesResource.class);
 
@@ -18,13 +19,30 @@ public class CandidatesResource extends ServerResource {
     public JsonRepresentation getCandidates() {
         LOG.debug("Retrieving the candidates from the DAO.");
 
-        // Retrieving data from the DAO.
-        List<Candidate> candidates = new CandidatesDaoImpl("db").getAllCandidates(null);
+        // TODO mirelap use the DAO
 
-        // TODO mirelap translate List<Candidate> to json
-        String responseText = "{\"candidates\": {}}";
-
+        // Sample code.
+        List<Candidate> candidates = new ArrayList<Candidate>();
         // Response.
-        return new JsonRepresentation(responseText);
+        candidates.add(new Candidate(1, "Mirela", "Popoveniuc", "121", 12.3, 12.56));
+        candidates.add(new Candidate(2, "Georgiana", "Popoveniuc", "121", 12.3, 12.56));
+
+        // Create the resonse in json format.
+        JsonRepresentation response = null;
+        try {
+            response = createJsonFrom("candidates", candidates);
+            logResponse(response);
+        } catch (JSONException e) {
+            handleInternalServerError(e);
+        } catch (IOException e) {
+            handleInternalServerError(e);
+        }
+
+        return response;
+    }
+
+    @Override
+    protected Logger getLOG() {
+        return LOG;
     }
 }
