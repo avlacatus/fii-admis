@@ -3,6 +3,9 @@ package ro.infoiasi.fiiadmis.model;
 import java.util.HashMap;
 import java.util.Map;
 
+import ro.infoiasi.fiiadmis.db.dao.EntityDAO;
+import ro.infoiasi.fiiadmis.db.dao.EntityDAOImpl;
+
 public class AdmissionResult implements Entity {
 
 
@@ -122,5 +125,10 @@ public class AdmissionResult implements Entity {
                 ", finalGrade=" + finalGrade +
                 ", admissionStatus=" + admissionStatus +
                 '}';
+    }
+
+    public static void populateAdmissionResultsDao(EntityDAO<Candidate> candidateDao, EntityDAO<AdmissionResult> admissionResultsDao) {
+        // TODO populate admissionResultsDao based on the information from the candidateDao
+        // admissionResultsDao.addItem();
     }
 }
