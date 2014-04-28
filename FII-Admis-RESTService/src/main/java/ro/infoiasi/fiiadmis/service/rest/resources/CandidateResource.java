@@ -29,8 +29,7 @@ public class CandidateResource extends AbstractResource {
         }
 
         if (candidates.size() != 1) {
-            setStatus(Status.CLIENT_ERROR_NOT_FOUND);
-            return null;
+            return handleClientError(null, Status.CLIENT_ERROR_NOT_FOUND);
         }
 
         // Create the response in json format.

@@ -35,6 +35,13 @@ public abstract class AbstractResource extends ServerResource {
 
     }
 
+    protected JsonRepresentation handleClientError(Exception e, Status status) {
+        setStatus(status);
+        JsonRepresentation clientError = new JsonRepresentation(e);
+        getLOG().debug("RESPONSE - Client Error: " + clientError.toString());
+        return clientError;
+    }
+
     protected JsonRepresentation handleInternalServerError(Exception e) {
         setStatus(Status.SERVER_ERROR_INTERNAL);
         JsonRepresentation internalServerErrorResponse = new JsonRepresentation(e);

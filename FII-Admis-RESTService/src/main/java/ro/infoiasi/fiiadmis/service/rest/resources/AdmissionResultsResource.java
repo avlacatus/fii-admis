@@ -46,9 +46,7 @@ public class AdmissionResultsResource extends AbstractResource {
                 }
             } else {
                 // If not admin, forbidden.
-                LOG.debug("RESPONSE: " + Status.CLIENT_ERROR_FORBIDDEN);
-                setStatus(Status.CLIENT_ERROR_FORBIDDEN);
-                return null;
+                return handleClientError(null, Status.CLIENT_ERROR_FORBIDDEN);
             }
 
         }
