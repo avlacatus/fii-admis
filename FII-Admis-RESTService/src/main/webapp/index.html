@@ -15,36 +15,55 @@
     <b>Github Project:</b> <a href="https://github.com/avlacatus/fii-admis">avlacatus/fii-admis</a>
   </p>
   <p>
-    * Input/ Output sunt in formatter json.
-    <br/>
-    * La url-ul <B><font color="red">http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api</font></B> se adauga urmatorele uri path-urile.
-    <br/>
-    *  <font color="red">ATENTIE!</font> Momentan, nu functioneaza niciun URL! 
+    * Input/ Output sunt in formatter json. <br /> * La url-ul <a
+      href="http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api">http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api</a>
+    <B><font color="red">se adauga</font></b> urmatorele uri path-urile. <br /> * <font color="red">Update!</font>
+    URL-uri functionale!
   </p>
 
+  <hr />
 
   <p>
     GET /candidates <br />- Output: lista de {candidate_id} <br />- Scop: vezi toti candidatii inscrisi (fara
-    rezultate)
-    <br/><br />
-    GET /candidates?query
-    
+    rezultate) <br /> <br />
   </p>
+
+  <p>
+    <b><font color="red"> GET http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates <br />
+        <br /> 200 OK <br /> { "candidates": [ { "id": "Aa2I", "lastName": "Popescu", "gpaGrade": 9.3, "ATestGrade":
+        8.9, "socialId": "347389523255435", "firstName": "Ionut" }, { "id": "vr6U", "lastName": "Popescu", "gpaGrade":
+        9.3, "ATestGrade": 8.9, "socialId": "347389523255435", "firstName": "Ionut" } ]}
+    </font></b>
+  </p>
+
+  <hr />
+
+  <p>TODO: GET /candidates?query</p>
+
+  <hr />
 
   <p>
     GET /candidates/{candidate_id} <br />- Output: informatiile de inscriere ale unui candidat: {candidate_id,
     first_name, last_name, social_id, gpa_grade, a_test_grade} <br />- Scop: informatiile personale doar unui student
   </p>
+  <p>
+    <b><font color="red"> GET
+        http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates/Aa2I </br> <br /> 200 OK <br />{ "id":
+        "Aa2I", "lastName": "Popescu", "gpaGrade": 9.3, "ATestGrade": 8.9, "socialId": "347389523255435", "firstName":
+        "Ionut" }
+    </font></b>
+  </p>
+
+  <hr />
 
   <p>
     GET /admission_results <br />- Input: adaugat header "Pragma:admin" (fff secure :)) ) <br />- Output: lista cu
     {candidate_id, final_grade, status} <br />- Scop: publicarea rezultatelor (echivalent cu start calcularea admitere)
-    <br />- Restrictie: prima oara, aceasta operatie este permisa doar de admin, elevu va primi 401 Unauthorized; apoi
-    va fi permisa si din interfata de elevi
-    <br/>
-    <br/>
-    GET /admission_results?query (media finala, nume)
+    <br />- Restrictie: prima oara, aceasta operatie este permisa doar de admin, elevu va primi 403 Forbidden; apoi va
+    fi permisa si din interfata de elevi <br /> <br /> GET /admission_results?query (media finala, nume)
   </p>
+
+  <hr />
 
   <p>
     GET /admission_results/{candidate_id} <br />- Output: informatiile unui cantitat despre rezultatul sau:
@@ -52,25 +71,45 @@
     Restrictie: aceasta operatie va fi permisa doar dupa ce un admin va data GET la /admission_results
   </p>
 
+
   <p>- - - - - - - - - - - - - - - -</p>
 
   <p>
     POST /candidates <br />- Input: un json cu datele {first_name, last_name, social_id, gpa_grade, a_test_grade} <br />-
     Output: 201 Created + Header: "Location: /{candidate_id}" <br />- Scop: se inregistreaza elevul la facultate
   </p>
+  <p>
+    <b><font color="red"> POST http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates <br />{"lastName":"Jolie","gpaGrade":9.3,"ATestGrade":8.9,"socialId":"347389523255435","firstName":"Angelina"}
+        <br /> <br />201 Created <br /> Location:
+        http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates/PmbP
+    </font></b>
+  </p>
 
-  <p>- - - - - - - - - - - - - - - -</p>
+
+  <hr />
 
   <p>
     PUT /candidates/{candidate_id} <br />- Input: un json cu datele {candidate_id, first_name, last_name, social_id,
     gpa_grade, a_test_grade} <br />- Output: 204 No Content <br />- Scop: elevul sa-si updateze datele personale
   </p>
 
-  <p>- - - - - - - - - - - - - - - -</p>
+  <p>
+    <b><font color="red"> PUT
+        http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates/zZY7 <br />{"lastName":"Popescianu","gpaGrade":9.3,"ATestGrade":8.9,"socialId":"347389523255435","firstName":"Ionut"}
+        <br /> <br />204 No Content
+    </font></b>
+  </p>
+
+  <hr />
 
   <p>
     DELETE /candidates/{candidate_id} <br />- Input: no content <br />- Output: 204 No Content <br />- Scop: elevul
     vrea sa renunte la admitere
+  </p>
+  <p>
+    <b><font color="red"> DELETE <br />http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates/Dmzi
+        <br /> <br />204 No Content
+    </font></b>
   </p>
 </body>
 </html>
