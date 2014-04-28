@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.restlet.data.Status;
 import org.restlet.ext.json.JsonRepresentation;
+import org.restlet.resource.Delete;
 import org.restlet.resource.Get;
 import org.restlet.resource.Put;
 
@@ -32,7 +33,8 @@ public class CandidateResource extends AbstractResource {
         }
 
         if (candidates.size() != 1) {
-            return handleClientError(null, Status.CLIENT_ERROR_NOT_FOUND);
+            handleClientError(Status.CLIENT_ERROR_NOT_FOUND);
+            return null;
         }
 
         // Create the response in json format.
@@ -59,11 +61,24 @@ public class CandidateResource extends AbstractResource {
 
             LOG.debug("RESPONSE: " + Status.SUCCESS_NO_CONTENT);
         } catch (JSONException e) {
-            handleClientError(e, Status.CLIENT_ERROR_BAD_REQUEST);
+            handleClientError(Status.CLIENT_ERROR_BAD_REQUEST);
             return;
         } catch (IOException e) {
             handleInternalServerError(e);
             return;
+        }
+    }
+
+    @Delete
+    public void deleteCandidate() {
+        String candidateId = (String) getRequestAttributes().get("candidate_id");
+        LOG.debug("Deleting candidate " + candidateId + " from the DAO.");
+
+        try {
+            DaoHolder.getCandidateDao().deleteItem(candidateId);
+            setStatus(Status.SUCCESS_NO_CONTENT);
+        } catch (IOException e) {
+            handleInternalServerError(e);
         }
     }
 

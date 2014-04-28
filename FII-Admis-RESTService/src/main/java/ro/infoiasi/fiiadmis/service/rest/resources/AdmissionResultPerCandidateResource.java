@@ -30,7 +30,8 @@ public class AdmissionResultPerCandidateResource extends AbstractResource {
         }
 
         if (admissionResultPerCandidate.size() != 1) {
-            return handleClientError(null, Status.CLIENT_ERROR_NOT_FOUND);
+            handleClientError(Status.CLIENT_ERROR_NOT_FOUND);
+            return null;
         }
 
         // Create the response in json format.

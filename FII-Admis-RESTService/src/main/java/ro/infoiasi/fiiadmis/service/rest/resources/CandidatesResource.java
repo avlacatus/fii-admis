@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.restlet.data.Status;
 import org.restlet.ext.json.JsonRepresentation;
+import org.restlet.resource.Delete;
 import org.restlet.resource.Get;
 import org.restlet.resource.Post;
 
@@ -56,7 +57,7 @@ public class CandidatesResource extends AbstractResource {
 
             LOG.debug("RESPONSE: " + Status.SUCCESS_CREATED + " and location header set to " + getLocationRef());
         } catch (JSONException e) {
-            handleClientError(e, Status.CLIENT_ERROR_BAD_REQUEST);
+            handleClientError(Status.CLIENT_ERROR_BAD_REQUEST);
             return;
         } catch (IOException e) {
             handleInternalServerError(e);
