@@ -30,7 +30,7 @@ public class AdmissionResultPerCandidateResource extends AbstractResource {
         }
 
         if (admissionResultPerCandidate.size() != 1) {
-            setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+            handleClientError(Status.CLIENT_ERROR_NOT_FOUND);
             return null;
         }
 
