@@ -1,6 +1,8 @@
 package ro.infoiasi.fiiadmis.service.rest.dao;
 
 import org.apache.log4j.Logger;
+import org.restlet.ext.json.JsonRepresentation;
+
 import ro.infoiasi.fiiadmis.db.Table;
 import ro.infoiasi.fiiadmis.db.TextDatabase;
 import ro.infoiasi.fiiadmis.db.TextDatabaseImpl;
@@ -42,7 +44,7 @@ public class DaoHolder {
             LOG.debug("Initializing table test-candidates.");
             candidatesDao = initCandidateDao("test-candidates");
 
-            LOG.debug("Initializing table test-admission-miralp.");
+            LOG.debug("Initializing table test-admission-mirelap.");
             admissionResultsDao = initAdmissionResults("test-admission-mirelap");
         } catch (IOException e) {
             e.printStackTrace();
@@ -61,4 +63,8 @@ public class DaoHolder {
         return new EntityDAOImpl<>(admissionResultsTable);
     }
 
+    public static EntityDAO<AdmissionResult> startComputingAdmissionResults() {
+        AdmissionResult.populateAdmissionResultsDao(getCandidateDao(), getAdmissionResultsDao());
+        return getAdmissionResultsDao();
+    }
 }

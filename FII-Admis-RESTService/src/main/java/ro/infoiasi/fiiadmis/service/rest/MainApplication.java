@@ -7,6 +7,9 @@ import org.restlet.resource.ServerResource;
 import org.restlet.routing.Router;
 
 import ro.infoiasi.fiiadmis.service.rest.dao.DaoHolder;
+import ro.infoiasi.fiiadmis.service.rest.resources.AdmissionResultPerCandidateResource;
+import ro.infoiasi.fiiadmis.service.rest.resources.AdmissionResultsResource;
+import ro.infoiasi.fiiadmis.service.rest.resources.CandidateResource;
 import ro.infoiasi.fiiadmis.service.rest.resources.CandidatesResource;
 
 public class MainApplication extends Application {
@@ -21,14 +24,18 @@ public class MainApplication extends Application {
         LOG.debug("Routing each call to a new respective instance of resource");
 
         initializeDb();
-        
+
         Router router = new Router(getContext());
 
         attach(router, "/candidates", CandidatesResource.class);
+        attach(router, "/candidates/{candidate_id}", CandidateResource.class);
+
+        attach(router, "/admission_results", AdmissionResultsResource.class);
+        attach(router, "/admission_results/{candidate_id}", AdmissionResultPerCandidateResource.class);
 
         return router;
     }
-    
+
     private void initializeDb() {
         DaoHolder.initializeDb();
     }

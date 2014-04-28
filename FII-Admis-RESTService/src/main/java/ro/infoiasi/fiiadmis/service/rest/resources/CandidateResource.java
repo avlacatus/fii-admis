@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.json.JSONException;
+import org.restlet.data.Status;
 import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.resource.Get;
 
@@ -12,28 +12,32 @@ import ro.infoiasi.fiiadmis.model.Candidate;
 import ro.infoiasi.fiiadmis.model.CandidateFilters;
 import ro.infoiasi.fiiadmis.service.rest.dao.DaoHolder;
 
-public class CandidatesResource extends AbstractResource {
+public class CandidateResource extends AbstractResource {
 
-    private static final Logger LOG = Logger.getLogger(CandidatesResource.class);
+    private static final Logger LOG = Logger.getLogger(CandidateResource.class);
 
     @Get
-    public JsonRepresentation getCandidates() {
-        LOG.debug("Retrieving the candidates from the DAO.");
+    public JsonRepresentation getCandidate() {
+        String candidateId = (String) getRequestAttributes().get("candidate_id");
+        LOG.debug("Retrieving candidate " + candidateId + " from the DAO.");
 
         List<Candidate> candidates = null;
         try {
-            candidates = DaoHolder.getCandidateDao().getItems(CandidateFilters.all());
+            candidates = DaoHolder.getCandidateDao().getItems(CandidateFilters.byId(candidateId));
         } catch (IOException e) {
             handleInternalServerError(e);
         }
 
-        // Create the resonse in json format.
+        if (candidates.size() != 1) {
+            setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+            return null;
+        }
+
+        // Create the response in json format.
         JsonRepresentation response = null;
         try {
-            response = createJsonFrom("candidates", candidates);
+            response = createJsonFrom(candidates.get(0));
             logResponse(response);
-        } catch (JSONException e) {
-            handleInternalServerError(e);
         } catch (IOException e) {
             handleInternalServerError(e);
         }
@@ -45,4 +49,5 @@ public class CandidatesResource extends AbstractResource {
     protected Logger getLOG() {
         return LOG;
     }
+
 }

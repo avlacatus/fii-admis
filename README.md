@@ -53,7 +53,7 @@ REST Service
 - Deployment: The REST service is deployed with [AWS Elastic Beanstalk].
 
 - API Documentation:
-http://fii-admis-restservice-tdq5yd2mhw.elasticbeanstalk.com/
+http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/
 
 
 
