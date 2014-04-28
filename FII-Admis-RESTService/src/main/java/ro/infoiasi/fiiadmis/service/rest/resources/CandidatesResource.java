@@ -48,13 +48,11 @@ public class CandidatesResource extends AbstractResource {
     public void postCandidate(JsonRepresentation jsonCandidate) {
         LOG.debug("Posting the candidate to the DAO.");
 
-        JSONObject obj;
         try {
-            obj = jsonCandidate.getJsonObject();
-            String candidateId = addCandidateFrom(obj);
+            String candidateId = addCandidateFrom(jsonCandidate.getJsonObject());
 
             setStatus(Status.SUCCESS_CREATED);
-            setLocationRef("api/candidates/" + candidateId);
+            setLocationRef("candidates/" + candidateId);
 
             LOG.debug("RESPONSE: " + Status.SUCCESS_CREATED + " and location header set to " + getLocationRef());
         } catch (JSONException e) {
@@ -70,11 +68,11 @@ public class CandidatesResource extends AbstractResource {
         LOG.debug("Get information from the json and creating the candidate.");
 
         Candidate candidate = new Candidate();
-        candidate.setFirstName(obj.getString("first_name"));
-        candidate.setLastName(obj.getString("last_name"));
-        candidate.setSocialId(obj.getString("social_id"));
-        candidate.setGpaGrade(obj.getDouble("gpa_grade"));
-        candidate.setATestGrade(obj.getDouble("a_test_grade"));
+        candidate.setFirstName(obj.getString("firstName"));
+        candidate.setLastName(obj.getString("lastName"));
+        candidate.setSocialId(obj.getString("socialId"));
+        candidate.setGpaGrade(obj.getDouble("gpaGrade"));
+        candidate.setATestGrade(obj.getDouble("ATestGrade"));
 
         LOG.debug("Adding the candidate in the CandidateDAO.");
         return DaoHolder.getCandidateDao().addItem(candidate);
