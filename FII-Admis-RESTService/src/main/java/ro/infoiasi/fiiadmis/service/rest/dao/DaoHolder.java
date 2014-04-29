@@ -1,7 +1,8 @@
 package ro.infoiasi.fiiadmis.service.rest.dao;
 
+import java.io.IOException;
+
 import org.apache.log4j.Logger;
-import org.restlet.ext.json.JsonRepresentation;
 
 import ro.infoiasi.fiiadmis.db.Table;
 import ro.infoiasi.fiiadmis.db.TextDatabase;
@@ -12,9 +13,8 @@ import ro.infoiasi.fiiadmis.db.parser.DefaultAdmissionResultsFormatter;
 import ro.infoiasi.fiiadmis.db.parser.DefaultCandidateFormatter;
 import ro.infoiasi.fiiadmis.model.AdmissionResult;
 import ro.infoiasi.fiiadmis.model.Candidate;
+import ro.infoiasi.fiiadmis.service.rest.dao.business.AdmissionResultsProcessor;
 import ro.infoiasi.fiiadmis.service.rest.resources.CandidatesResource;
-
-import java.io.IOException;
 
 public class DaoHolder {
 
@@ -64,7 +64,7 @@ public class DaoHolder {
     }
 
     public static EntityDAO<AdmissionResult> startComputingAdmissionResults() {
-        AdmissionResult.populateAdmissionResultsDao(getCandidateDao(), getAdmissionResultsDao());
+    	AdmissionResultsProcessor.get().processResults(getCandidateDao(), getAdmissionResultsDao());
         return getAdmissionResultsDao();
     }
 }

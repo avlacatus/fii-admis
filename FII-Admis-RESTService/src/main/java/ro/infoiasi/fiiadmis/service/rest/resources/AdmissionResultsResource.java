@@ -8,7 +8,6 @@ import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.restlet.data.Parameter;
 import org.restlet.data.Status;
-import org.restlet.engine.header.HeaderUtils;
 import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.resource.Get;
 import org.restlet.util.Series;
