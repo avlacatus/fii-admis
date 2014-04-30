@@ -19,6 +19,8 @@ public class TextDatabaseImpl implements TextDatabase {
 
     private final Map<String, Table<? extends Entity>> tables;
 
+    private final Object toSync = new Object();
+
 
     public TextDatabaseImpl(String dbRootPathName) throws IOException {
 
@@ -47,12 +49,14 @@ public class TextDatabaseImpl implements TextDatabase {
 
     @Override
     public void drop() throws IOException {
+        synchronized (toSync) {
 
-        for (Table<? extends Entity> t : getAllTables()) {
-            Files.delete(t.getTablePath());
+            for (Table<? extends Entity> t : getAllTables()) {
+                Files.delete(t.getTablePath());
+            }
+
+            tables.clear();
         }
-
-        tables.clear();
     }
 
     @Override
@@ -61,22 +65,26 @@ public class TextDatabaseImpl implements TextDatabase {
 
         Preconditions.checkArgument(tableName != null, "table name must not be null");
         Preconditions.checkArgument(formatter != null, "formatter must not be null");
+        synchronized (toSync) {
 
-        if (!tables.containsKey(tableName)) {
+            if (!tables.containsKey(tableName)) {
 
-            Table<E> newTable = new TableImpl<>(dbRootPath, tableName, formatter);
-            tables.put(tableName, newTable);
+                Table<E> newTable = new TableImpl<>(dbRootPath, tableName, formatter);
+                tables.put(tableName, newTable);
+            }
+            return (Table<E>) (tables.get(tableName));
         }
-        return (Table<E>) (tables.get(tableName));
     }
 
 
     @Override
     public void dropTable(String tableName) throws IOException {
         Preconditions.checkArgument(tables.containsKey(tableName), tableName +  "does not exist in the database");
+        synchronized (toSync) {
 
-        Files.deleteIfExists(tables.get(tableName).getTablePath());
-        tables.remove(tableName);
+            Files.deleteIfExists(tables.get(tableName).getTablePath());
+            tables.remove(tableName);
+        }
     }
 
 }
