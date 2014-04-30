@@ -18,6 +18,8 @@ import java.util.Scanner;
 public class EntityDAOImpl<E extends Entity> implements EntityDAO<E> {
 
     private final Table<E> table;
+    private final Object toSync = new Object();
+
 
     public EntityDAOImpl(Table<E> table) {
         this.table = table;
@@ -60,13 +62,19 @@ public class EntityDAOImpl<E extends Entity> implements EntityDAO<E> {
 
     @Override
     public String addItem(E item) throws IOException {
+
         String newId = RandomStringUtils.randomAlphanumeric(4);
-        item.setId(newId);
-        try (BufferedWriter writer = Files.newBufferedWriter(table.getTablePath(), Charset.defaultCharset(), StandardOpenOption.APPEND)) {
-            writer.write(table.getFormatter().write(item));
-            writer.write(System.lineSeparator());
+        while (getItemById(newId) != null) {
+            newId = RandomStringUtils.randomAlphanumeric(4);   // ensuring that the id is unique
         }
-        return newId;
+        synchronized (toSync) {
+            item.setId(newId);
+            try (BufferedWriter writer = Files.newBufferedWriter(table.getTablePath(), Charset.defaultCharset(), StandardOpenOption.APPEND)) {
+                writer.write(table.getFormatter().write(item));
+                writer.write(System.lineSeparator());
+            }
+            return newId;
+        }
     }
 
     @Override
@@ -89,50 +97,54 @@ public class EntityDAOImpl<E extends Entity> implements EntityDAO<E> {
     @Override
     public void updateItem(E item) throws IOException {
         Preconditions.checkArgument(item != null, "The input must not be null");
-        Path tmpPath = Paths.get(table.getTablePath().toString() + ".tmp");
-        Scanner s = new Scanner(table.getTablePath());
-        try (BufferedWriter writer = Files.newBufferedWriter(tmpPath, Charset.defaultCharset())) {
-            while (s.hasNextLine()) {
-                String line = s.nextLine();
-                if (line.isEmpty())
-                    continue; // skipping empty lines
-                E currentE = table.getFormatter().read(line);
+        synchronized (toSync) {
+            Path tmpPath = Paths.get(table.getTablePath().toString() + ".tmp");
+            Scanner s = new Scanner(table.getTablePath());
+            try (BufferedWriter writer = Files.newBufferedWriter(tmpPath, Charset.defaultCharset())) {
+                while (s.hasNextLine()) {
+                    String line = s.nextLine();
+                    if (line.isEmpty())
+                        continue; // skipping empty lines
+                    E currentE = table.getFormatter().read(line);
 
-                if (item.getId().equals(currentE.getId())) {
-                    writer.write(table.getFormatter().write(item));
-                    writer.write(System.lineSeparator());
-                } else {
-                    writer.write(line);
-                    writer.write(System.lineSeparator());
+                    if (item.getId().equals(currentE.getId())) {
+                        writer.write(table.getFormatter().write(item));
+                        writer.write(System.lineSeparator());
+                    } else {
+                        writer.write(line);
+                        writer.write(System.lineSeparator());
+                    }
                 }
+                s.close();
             }
-            s.close();
+            Files.move(tmpPath, table.getTablePath(), StandardCopyOption.REPLACE_EXISTING);
         }
-        Files.move(tmpPath, table.getTablePath(), StandardCopyOption.REPLACE_EXISTING);
     }
 
     @Override
     public void deleteItem(String entityId) throws IOException {
         Preconditions.checkArgument(entityId != null, "id must be null");
-        Path tmpPath = Paths.get(table.getTablePath().toString() + ".tmp");
-        Scanner s = new Scanner(table.getTablePath());
+        synchronized (toSync) {
+            Path tmpPath = Paths.get(table.getTablePath().toString() + ".tmp");
+            Scanner s = new Scanner(table.getTablePath());
 
-        try (BufferedWriter writer = Files.newBufferedWriter(tmpPath, Charset.defaultCharset())) {
+            try (BufferedWriter writer = Files.newBufferedWriter(tmpPath, Charset.defaultCharset())) {
 
-            while (s.hasNextLine()) {
-                String line = s.nextLine();
-                if (line.isEmpty())
-                    continue; // skipping empty lines
-                E currentE = table.getFormatter().read(line);
+                while (s.hasNextLine()) {
+                    String line = s.nextLine();
+                    if (line.isEmpty())
+                        continue; // skipping empty lines
+                    E currentE = table.getFormatter().read(line);
 
-                if (!entityId.equals(currentE.getId())) {
-                    writer.write(line);
-                    writer.write(System.lineSeparator());
+                    if (!entityId.equals(currentE.getId())) {
+                        writer.write(line);
+                        writer.write(System.lineSeparator());
+                    }
                 }
+                s.close();
             }
-            s.close();
+            Files.move(tmpPath, table.getTablePath(), StandardCopyOption.REPLACE_EXISTING);
         }
-        Files.move(tmpPath, table.getTablePath(), StandardCopyOption.REPLACE_EXISTING);
 
     }
 }
