@@ -63,11 +63,12 @@ public class EntityDAOImpl<E extends Entity> implements EntityDAO<E> {
     @Override
     public String addItem(E item) throws IOException {
 
-        String newId = RandomStringUtils.randomAlphanumeric(4);
-        while (getItemById(newId) != null) {
-            newId = RandomStringUtils.randomAlphanumeric(4);   // ensuring that the id is unique
-        }
         synchronized (toSync) {
+            String newId = RandomStringUtils.randomAlphanumeric(4);
+            while (getItemById(newId) != null) {
+                newId = RandomStringUtils.randomAlphanumeric(4);   // ensuring that the id is unique
+            }
+
             item.setId(newId);
             try (BufferedWriter writer = Files.newBufferedWriter(table.getTablePath(), Charset.defaultCharset(), StandardOpenOption.APPEND)) {
                 writer.write(table.getFormatter().write(item));
