@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.json.JSONException;
+import org.restlet.data.Form;
 import org.restlet.data.Parameter;
 import org.restlet.data.Status;
 import org.restlet.ext.json.JsonRepresentation;
@@ -27,7 +28,7 @@ public class AdmissionResultsResource extends AbstractResource {
 
         List<AdmissionResult> admissionResults = null;
         try {
-            admissionResults = DaoHolder.getAdmissionResultsDao().getItems(AdmissionResultFilters.all());
+            admissionResults = getAdmissionResultsFromDao();
         } catch (IOException e) {
             handleInternalServerError(e);
         }
@@ -64,6 +65,34 @@ public class AdmissionResultsResource extends AbstractResource {
         }
 
         return response;
+    }
+
+    private List<AdmissionResult> getAdmissionResultsFromDao() throws IOException {
+        Form queryParams = getRequest().getResourceRef().getQueryAsForm();
+        if (queryParams == null) {
+            LOG.debug("Get all admission results.");
+            return DaoHolder.getAdmissionResultsDao().getItems(AdmissionResultFilters.all());
+        }
+
+        String value = queryParams.getFirstValue("sort_by");
+        if (value == null) {
+            return DaoHolder.getAdmissionResultsDao().getItems(AdmissionResultFilters.all());
+        }
+
+        if (value.equals("lastName")) {
+            // TODO get sorted admisson results from Dao by lastName
+            LOG.debug("Get admission results sorted by lastname.");
+            return DaoHolder.getAdmissionResultsDao().getItems(AdmissionResultFilters.all());
+        }
+
+        if (value.equals("finalGrade")) {
+            // TODO get sorted admisson results from Dao by finalGrade.
+            LOG.debug("Get admission results sorted by final grade.");
+            return DaoHolder.getAdmissionResultsDao().getItems(AdmissionResultFilters.all());
+        }
+
+        LOG.debug("Get all admission results.");
+        return DaoHolder.getAdmissionResultsDao().getItems(AdmissionResultFilters.all());
     }
 
     @Delete
