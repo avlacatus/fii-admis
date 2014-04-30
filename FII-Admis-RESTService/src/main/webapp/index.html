@@ -15,10 +15,16 @@
     <b>Github Project:</b> <a href="https://github.com/avlacatus/fii-admis">avlacatus/fii-admis</a>
   </p>
   <p>
-    * Input/ Output sunt in formatter json. <br /> * La url-ul <a
+    * Input/ Output sunt in formatter json. <br />
+    * La url-ul <a
       href="http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api">http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api</a>
-    <B><font color="red">se adauga</font></b> urmatorele uri path-urile. <br /> * <font color="red">Update!</font>
+    <B><font color="red">se adauga</font></b> urmatorele uri path-urile. <br />
+    * ATENȚIE la url-uri, să nu se termine cu '/' !!
+    <br/><br/>
+    * <font color="red">Update!</font>
     URL-uri functionale!
+    <br /> * <font color="red">Update 2!</font>
+    Merge DELETE pe /admission_results (doar de admin).
   </p>
 
   <hr />
@@ -38,7 +44,7 @@
 
   <hr />
 
-  <p>TODO: GET /candidates?query</p>
+  <p><font color="purple">TODO: GET /candidates --> search for id, last name</font></p>
 
   <hr />
 
@@ -71,8 +77,12 @@
     Restrictie: aceasta operatie va fi permisa doar dupa ce un admin va data GET la /admission_results
   </p>
 
+  <hr/>
+  
+  <p><font color="purple">TODO: GET /admission_results ---> sort by pentru nume, medie</font></p>
+ 
 
-  <p>- - - - - - - - - - - - - - - -</p>
+  <hr/>
 
   <p>
     POST /candidates <br />- Input: un json cu datele {first_name, last_name, social_id, gpa_grade, a_test_grade} <br />-
@@ -108,6 +118,18 @@
   </p>
   <p>
     <b><font color="red"> DELETE <br />http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates/Dmzi
+        <br /> <br />204 No Content
+    </font></b>
+  </p>
+  
+  <hr/>
+
+  <p>
+    DELETE /admission_results <br />- Input: no content <br />- Output: 204 No Content <br />- Scop: admin-ul vrea sa stearga rezultatele (mai mult in in scop de test)
+    <br/> Doar admin-ul (Pragma: admin) are voie. Studentul va primi un 403 Forbidden.
+  </p>
+  <p>
+    <b><font color="red"> DELETE <br />http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/admission_results
         <br /> <br />204 No Content
     </font></b>
   </p>

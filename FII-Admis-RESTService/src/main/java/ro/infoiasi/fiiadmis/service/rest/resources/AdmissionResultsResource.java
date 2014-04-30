@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.restlet.data.Parameter;
 import org.restlet.data.Status;
 import org.restlet.ext.json.JsonRepresentation;
+import org.restlet.resource.Delete;
 import org.restlet.resource.Get;
 import org.restlet.util.Series;
 
@@ -63,6 +64,26 @@ public class AdmissionResultsResource extends AbstractResource {
         }
 
         return response;
+    }
+
+    @Delete
+    public void deleteAdmissionResults() {
+        if (!isAdmin()) {
+            handleClientError(Status.CLIENT_ERROR_FORBIDDEN);
+            return;
+        }
+
+        try {
+            List<AdmissionResult> items = DaoHolder.getAdmissionResultsDao().getItems(AdmissionResultFilters.all());
+            for (AdmissionResult item : items) {
+                DaoHolder.getAdmissionResultsDao().deleteItem(item.getId());
+            }
+        } catch (IOException e) {
+            handleInternalServerError(e);
+            return;
+        }
+
+        setStatus(Status.SUCCESS_NO_CONTENT);
     }
 
     private boolean isAdmin() {
