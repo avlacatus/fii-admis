@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.restlet.data.Form;
 import org.restlet.data.Status;
 import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.resource.Get;
@@ -23,14 +24,15 @@ public class CandidatesResource extends AbstractResource {
     public JsonRepresentation getCandidates() {
         LOG.debug("Retrieving the candidates from the DAO.");
 
+        // Get candidates from dao.
         List<Candidate> candidates = null;
         try {
-            candidates = DaoHolder.getCandidateDao().getItems(CandidateFilters.all());
+            candidates = getCandidatesFromDao();
         } catch (IOException e) {
             handleInternalServerError(e);
         }
 
-        // Create the resonse in json format.
+        // Create the response in json format.
         JsonRepresentation response = null;
         try {
             response = createJsonFrom("candidates", candidates);
@@ -42,6 +44,28 @@ public class CandidatesResource extends AbstractResource {
         }
 
         return response;
+    }
+
+    private List<Candidate> getCandidatesFromDao() throws IOException {
+        Form queryParams = getRequest().getResourceRef().getQueryAsForm();
+        if (queryParams == null) {
+            LOG.debug("Get all candidates.");
+            return DaoHolder.getCandidateDao().getItems(CandidateFilters.all());
+        }
+
+        String lastName = queryParams.getFirstValue("sort_by");
+        if (lastName == null) {
+            return DaoHolder.getCandidateDao().getItems(CandidateFilters.all());
+        }
+
+        if (lastName.equals("lastName")) {
+            // TODO get sorted candidates from Dao
+            LOG.debug("Get candidates sorted by lastname.");
+            return DaoHolder.getCandidateDao().getItems(CandidateFilters.all());
+        }
+
+        LOG.debug("Get all candidates.");
+        return DaoHolder.getCandidateDao().getItems(CandidateFilters.all());
     }
 
     @Post
