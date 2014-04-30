@@ -30,7 +30,7 @@
   <hr />
 
   <p>
-    GET /candidates <br />- Output: lista de {candidate_id} <br />- Scop: vezi toti candidatii inscrisi (fara
+    <b>GET /candidates </b>n><br />- Output: lista de {candidate_id} <br />- Scop: vezi toti candidatii inscrisi (fara
     rezultate) <br /> <br />
   </p>
 
@@ -44,12 +44,16 @@
 
   <hr />
 
-  <p><font color="purple">TODO: GET /candidates --> search for id, last name</font></p>
+  <p>
+  <font color="purple"><b>TODO:</b> GET /candidates --> search by name (and check for first_name and last_name)</font>
+  <br/> Input: no contet
+  <br/> Output: returneaza o lista in care numele dat ca parametru e o parte din first_name sau last_name
+  </p>
 
   <hr />
 
   <p>
-    GET /candidates/{candidate_id} <br />- Output: informatiile de inscriere ale unui candidat: {candidate_id,
+    <b>GET /candidates/{candidate_id}</b> <br />- Output: informatiile de inscriere ale unui candidat: {candidate_id,
     first_name, last_name, social_id, gpa_grade, a_test_grade} <br />- Scop: informatiile personale doar unui student
   </p>
   <p>
@@ -63,29 +67,33 @@
   <hr />
 
   <p>
-    GET /admission_results <br />- Input: adaugat header "Pragma:admin" (fff secure :)) ) <br />- Output: lista cu
+    <b>GET /admission_results </b> <br />- Input: adaugat header "Pragma:admin" (fff secure :)) ) <br />- Output: lista cu
     {candidate_id, final_grade, status} <br />- Scop: publicarea rezultatelor (echivalent cu start calcularea admitere)
     <br />- Restrictie: prima oara, aceasta operatie este permisa doar de admin, elevu va primi 403 Forbidden; apoi va
-    fi permisa si din interfata de elevi <br /> <br /> GET /admission_results?query (media finala, nume)
+    fi permisa si din interfata de elevi <br />
   </p>
 
   <hr />
 
   <p>
-    GET /admission_results/{candidate_id} <br />- Output: informatiile unui cantitat despre rezultatul sau:
+    <b>GET /admission_results/{candidate_id}</b> <br />- Output: informatiile unui cantitat despre rezultatul sau:
     {candidate_id, final_grade, status} <br />- Scop: informatii de admitere doar pentru un student <br />-
     Restrictie: aceasta operatie va fi permisa doar dupa ce un admin va data GET la /admission_results
   </p>
 
   <hr/>
   
-  <p><font color="purple">TODO: GET /admission_results ---> sort by pentru nume, medie</font></p>
+  <p>
+  <font color="purple"><b>TODO</b>: GET /admission_results ---> sort by last_nume, medie</font>
+  <br/>Input: no content
+  <br/>Output: returneaza o lista sortata dupa nume (A-Z) sau dupa medie (descrescator)
+  </p>
  
 
   <hr/>
 
   <p>
-    POST /candidates <br />- Input: un json cu datele {first_name, last_name, social_id, gpa_grade, a_test_grade} <br />-
+    <b>POST /candidates</b> <br />- Input: un json cu datele {first_name, last_name, social_id, gpa_grade, a_test_grade} <br />-
     Output: 201 Created + Header: "Location: /{candidate_id}" <br />- Scop: se inregistreaza elevul la facultate
   </p>
   <p>
@@ -99,7 +107,7 @@
   <hr />
 
   <p>
-    PUT /candidates/{candidate_id} <br />- Input: un json cu datele {candidate_id, first_name, last_name, social_id,
+    <b>PUT /candidates/{candidate_id}</b> <br />- Input: un json cu datele {candidate_id, first_name, last_name, social_id,
     gpa_grade, a_test_grade} <br />- Output: 204 No Content <br />- Scop: elevul sa-si updateze datele personale
   </p>
 
@@ -113,7 +121,7 @@
   <hr />
 
   <p>
-    DELETE /candidates/{candidate_id} <br />- Input: no content <br />- Output: 204 No Content <br />- Scop: elevul
+    <b>DELETE /candidates/{candidate_id}</b> <br />- Input: no content <br />- Output: 204 No Content <br />- Scop: elevul
     vrea sa renunte la admitere
   </p>
   <p>
@@ -125,7 +133,7 @@
   <hr/>
 
   <p>
-    DELETE /admission_results <br />- Input: no content <br />- Output: 204 No Content <br />- Scop: admin-ul vrea sa stearga rezultatele (mai mult in in scop de test)
+    <b>DELETE /admission_results</b> <br />- Input: no content <br />- Output: 204 No Content <br />- Scop: admin-ul vrea sa stearga rezultatele (mai mult in in scop de test)
     <br/> Doar admin-ul (Pragma: admin) are voie. Studentul va primi un 403 Forbidden.
   </p>
   <p>
