@@ -26,37 +26,45 @@ public class EntityDAOImpl<E extends Entity> implements EntityDAO<E> {
     }
 
     private E getSingleItem(Predicate<E> filter) throws IOException {
-        try (BufferedReader reader = Files.newBufferedReader(table.getTablePath(), Charset.defaultCharset())) {
-            String line = null;
-            while ((line = reader.readLine()) != null) {
-                if (line.isEmpty())
-                    continue; // skipping empty lines
 
-                E currentItem = table.getFormatter().read(line);
-                if (filter.apply(currentItem)) {
-                    return currentItem;
+        synchronized (toSync) {
+
+            try (BufferedReader reader = Files.newBufferedReader(table.getTablePath(), Charset.defaultCharset())) {
+                String line = null;
+                while ((line = reader.readLine()) != null) {
+                    if (line.isEmpty())
+                        continue; // skipping empty lines
+
+                    E currentItem = table.getFormatter().read(line);
+                    if (filter.apply(currentItem)) {
+                        return currentItem;
+                    }
                 }
-            }
 
-            return null; // no items with this id was found
+                return null; // no items with this id was found
+            }
         }
     }
 
     private List<E> getMultipleItems(Predicate<E> filter) throws IOException {
-        try (BufferedReader reader = Files.newBufferedReader(table.getTablePath(), Charset.defaultCharset())) {
-            String line = null;
-            final List<E> results = Lists.newArrayList();
-            while ((line = reader.readLine()) != null) {
 
-                if (line.isEmpty())
-                    continue; // skipping empty lines
-                E currentItem = table.getFormatter().read(line);
-                if (filter.apply(currentItem)) {
-                    results.add(currentItem);
+        synchronized (toSync) {
+
+            try (BufferedReader reader = Files.newBufferedReader(table.getTablePath(), Charset.defaultCharset())) {
+                String line = null;
+                final List<E> results = Lists.newArrayList();
+                while ((line = reader.readLine()) != null) {
+
+                    if (line.isEmpty())
+                        continue; // skipping empty lines
+                    E currentItem = table.getFormatter().read(line);
+                    if (filter.apply(currentItem)) {
+                        results.add(currentItem);
+                    }
                 }
-            }
 
-            return results;
+                return results;
+            }
         }
     }
 
@@ -99,6 +107,7 @@ public class EntityDAOImpl<E extends Entity> implements EntityDAO<E> {
     public void updateItem(E item) throws IOException {
         Preconditions.checkArgument(item != null, "The input must not be null");
         synchronized (toSync) {
+
             Path tmpPath = Paths.get(table.getTablePath().toString() + ".tmp");
             Scanner s = new Scanner(table.getTablePath());
             try (BufferedWriter writer = Files.newBufferedWriter(tmpPath, Charset.defaultCharset())) {
@@ -126,6 +135,7 @@ public class EntityDAOImpl<E extends Entity> implements EntityDAO<E> {
     public void deleteItem(String entityId) throws IOException {
         Preconditions.checkArgument(entityId != null, "id must be null");
         synchronized (toSync) {
+
             Path tmpPath = Paths.get(table.getTablePath().toString() + ".tmp");
             Scanner s = new Scanner(table.getTablePath());
 
