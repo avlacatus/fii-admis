@@ -45,9 +45,10 @@
   <hr />
 
   <p>
-  <font color="purple"><b>TODO:</b> GET /candidates --> search by name (and check for first_name and last_name)</font>
-  <br/> Input: no contet
-  <br/> Output: returneaza o lista in care numele dat ca parametru e o parte din first_name sau last_name
+  <font color="purple"><b>GET /candidates?sort_by=lastName</b></font>
+  <br/> Input: no content
+  <br/> Output: returneaza o lista in care lista va fi sortata dupa last name
+  <br/> <B>TODO: </B> the actual implementation from Dao
   </p>
 
   <hr />
@@ -83,12 +84,19 @@
 
   <hr/>
   
-  <p>
-  <font color="purple"><b>TODO</b>: GET /admission_results ---> sort by last_nume, medie</font>
-  <br/>Input: no content
-  <br/>Output: returneaza o lista sortata dupa nume (A-Z) sau dupa medie (descrescator)
+<p>
+  <font color="purple"><b> GET /admission_results?sort_by=lastName</b></font>
+  <br/> Input: no content
+  <br/> Output: returneaza o lista in care lista va fi sortata dupa last name
+  <br/> <B>TODO: </B> the actual implementation from Dao
   </p>
- 
+  
+<p>
+  <font color="purple"> <b>GET /admission_results?sort_by=finalGrade</b></font>
+  <br/> Input: no content
+  <br/> Output: returneaza o lista in care lista va fi sortata dupa finalGrade
+  <br/> <B>TODO: </B> the actual implementation from Dao
+  </p> 
 
   <hr/>
 
