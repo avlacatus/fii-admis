@@ -1,20 +1,18 @@
 package ro.infoiasi.fiiadmis.service.rest.resources;
 
-import java.io.IOException;
-import java.util.Comparator;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.restlet.data.Form;
 import org.restlet.data.Status;
 import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.resource.Get;
 import org.restlet.resource.Post;
-
 import ro.infoiasi.fiiadmis.model.Candidate;
 import ro.infoiasi.fiiadmis.service.rest.dao.DaoHolder;
+
+import java.io.IOException;
+import java.util.Comparator;
+import java.util.List;
 
 public class CandidatesResource extends AbstractResource {
 
@@ -37,9 +35,7 @@ public class CandidatesResource extends AbstractResource {
         try {
             response = createJsonFrom("candidates", candidates);
             logResponse(response);
-        } catch (JSONException e) {
-            handleInternalServerError(e);
-        } catch (IOException e) {
+        } catch (JSONException | IOException e) {
             handleInternalServerError(e);
         }
 
@@ -47,38 +43,22 @@ public class CandidatesResource extends AbstractResource {
     }
 
     private List<Candidate> getCandidatesFromDao() throws IOException {
-        Form queryParams = getRequest().getResourceRef().getQueryAsForm();
-        if (queryParams == null) {
-            LOG.debug("Get all candidates; no query parameters");
-            return DaoHolder.getCandidateDao().getItems(null, null);
-        }
+        LOG.debug("Get candidates sorted by lastname.");
+        return DaoHolder.getCandidateDao().getItems(null, new Comparator<Candidate>() {
 
-        String lastName = queryParams.getFirstValue("sort_by");
-        if (lastName == null) {
-        	LOG.debug("Get all candidates; no sort_by param");
-            return DaoHolder.getCandidateDao().getItems(null, null);
-        }
+            @Override
+            public int compare(Candidate o1, Candidate o2) {
+                if (o1 != null && o2 != null) {
+                    if (o1.getLastName() != null) {
+                        return o1.getLastName().compareTo(o2.getLastName());
+                    } else return 1;
 
-        if (lastName.equals("lastName")) {
-            LOG.debug("Get candidates sorted by lastname.");
-            return DaoHolder.getCandidateDao().getItems(null, new Comparator<Candidate>() {
-				
-				@Override
-				public int compare(Candidate o1, Candidate o2) {
-					if (o1 != null && o2 != null) {
-						if (o1.getLastName() != null) {
-							return o1.getLastName().compareTo(o2.getLastName());
-						} else return 1;
-						
-					}
-					return 0;
-				}
-			});
-        }
-
-        LOG.debug("Get all candidates.");
-        return DaoHolder.getCandidateDao().getItems(null, null);
+                }
+                return 0;
+            }
+        });
     }
+
 
     @Post
     public void postCandidate(JsonRepresentation jsonCandidate) {
@@ -93,10 +73,8 @@ public class CandidatesResource extends AbstractResource {
             LOG.debug("RESPONSE: " + Status.SUCCESS_CREATED + " and location header set to " + getLocationRef());
         } catch (JSONException e) {
             handleClientError(Status.CLIENT_ERROR_BAD_REQUEST);
-            return;
         } catch (IOException e) {
             handleInternalServerError(e);
-            return;
         }
     }
 

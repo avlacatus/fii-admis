@@ -8,7 +8,7 @@
 <body>
 
   <h2>
-    FII Admis REST API <font color="red">{DRAFT}</font>
+    FII Admis REST API <span style="color: red; ">{DRAFT}</span>
   </h2>
 
   <p>
@@ -18,37 +18,22 @@
     * Input/ Output sunt in formatter json. <br />
     * La url-ul <a
       href="http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api">http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api</a>
-    <B><font color="red">se adauga</font></b> urmatorele uri path-urile. <br />
-    * ATENȚIE la url-uri, să nu se termine cu '/' !!
-    <br/><br/>
-    * <font color="red">Update!</font>
-    URL-uri functionale!
-    <br /> * <font color="red">Update 2!</font>
-    Merge DELETE pe /admission_results (doar de admin).
+    <B><span style="color: red; ">se adauga</span></b> urmatorele path-uri. <br />
   </p>
 
   <hr />
 
   <p>
-    <b>GET /candidates </b>n><br />- Output: lista de {candidate_id} <br />- Scop: vezi toti candidatii inscrisi (fara
+    <b>GET /candidates </b><br/>- Output: lista de {candidate_id} <br/>- Scop: vezi toti candidatii inscrisi, in ordinea alfabetica a numelui (fara
     rezultate) <br /> <br />
   </p>
 
   <p>
-    <b><font color="red"> GET http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates <br />
+    <b><span style="color: red; "> GET http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates <br />
         <br /> 200 OK <br /> { "candidates": [ { "id": "Aa2I", "lastName": "Popescu", "gpaGrade": 9.3, "ATestGrade":
         8.9, "socialId": "347389523255435", "firstName": "Ionut" }, { "id": "vr6U", "lastName": "Popescu", "gpaGrade":
         9.3, "ATestGrade": 8.9, "socialId": "347389523255435", "firstName": "Ionut" } ]}
-    </font></b>
-  </p>
-
-  <hr />
-
-  <p>
-  <font color="purple"><b>GET /candidates?sort_by=lastName</b></font>
-  <br/> Input: no content
-  <br/> Output: returneaza o lista in care lista va fi sortata dupa last name
-  <br/> <B>TODO: </B> the actual implementation from Dao
+    </span></b>
   </p>
 
   <hr />
@@ -58,45 +43,28 @@
     first_name, last_name, social_id, gpa_grade, a_test_grade} <br />- Scop: informatiile personale doar unui student
   </p>
   <p>
-    <b><font color="red"> GET
+    <b><span style="color: red; "> GET
         http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates/Aa2I </br> <br /> 200 OK <br />{ "id":
         "Aa2I", "lastName": "Popescu", "gpaGrade": 9.3, "ATestGrade": 8.9, "socialId": "347389523255435", "firstName":
         "Ionut" }
-    </font></b>
+    </span></b>
   </p>
 
   <hr />
 
   <p>
-    <b>GET /admission_results </b> <br />- Input: adaugat header "Pragma:admin" (fff secure :)) ) <br />- Output: lista cu
-    {candidate_id, final_grade, status} <br />- Scop: publicarea rezultatelor (echivalent cu start calcularea admitere)
-    <br />- Restrictie: prima oara, aceasta operatie este permisa doar de admin, elevu va primi 403 Forbidden; apoi va
+    <b>GET /admission_results </b> <br />- Input: La prima operatie, care este permisa doar admin-ului, header-ul "Pragma:admin" <br />- Output: lista cu rezultatele admiterii, in ordinea descrescatoare a mediei finale {candidate_id, final_grade, status} <br />- Scop: publicarea rezultatelor (echivalent cu start calcul medii admitere).
+    <br />- Restrictie: prima oara, aceasta operatie este permisa doar adminului (identificat prin headerul mentionat mai sus), elevul va primi 403 Forbidden; apoi va
     fi permisa si din interfata de elevi <br />
   </p>
 
   <hr />
 
   <p>
-    <b>GET /admission_results/{candidate_id}</b> <br />- Output: informatiile unui cantitat despre rezultatul sau:
+    <b>GET /admission_results/{candidate_id}</b> <br />- Output: informatiile unui candidat despre rezultatul sau:
     {candidate_id, final_grade, status} <br />- Scop: informatii de admitere doar pentru un student <br />-
     Restrictie: aceasta operatie va fi permisa doar dupa ce un admin va data GET la /admission_results
   </p>
-
-  <hr/>
-  
-<p>
-  <font color="purple"><b> GET /admission_results?sort_by=lastName</b></font>
-  <br/> Input: no content
-  <br/> Output: returneaza o lista in care lista va fi sortata dupa last name
-  <br/> <B>TODO: </B> the actual implementation from Dao
-  </p>
-  
-<p>
-  <font color="purple"> <b>GET /admission_results?sort_by=finalGrade</b></font>
-  <br/> Input: no content
-  <br/> Output: returneaza o lista in care lista va fi sortata dupa finalGrade
-  <br/> <B>TODO: </B> the actual implementation from Dao
-  </p> 
 
   <hr/>
 
@@ -105,10 +73,10 @@
     Output: 201 Created + Header: "Location: /{candidate_id}" <br />- Scop: se inregistreaza elevul la facultate
   </p>
   <p>
-    <b><font color="red"> POST http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates <br />{"lastName":"Jolie","gpaGrade":9.3,"ATestGrade":8.9,"socialId":"347389523255435","firstName":"Angelina"}
+    <b><span style="color: red; "> POST http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates <br />{"lastName":"Jolie","gpaGrade":9.3,"ATestGrade":8.9,"socialId":"347389523255435","firstName":"Angelina"}
         <br /> <br />201 Created <br /> Location:
         http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates/PmbP
-    </font></b>
+    </span></b>
   </p>
 
 
@@ -120,34 +88,34 @@
   </p>
 
   <p>
-    <b><font color="red"> PUT
+    <b><span style="color: red; "> PUT
         http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates/zZY7 <br />{"lastName":"Popescianu","gpaGrade":9.3,"ATestGrade":8.9,"socialId":"347389523255435","firstName":"Ionut"}
         <br /> <br />204 No Content
-    </font></b>
+    </span></b>
   </p>
 
   <hr />
 
   <p>
-    <b>DELETE /candidates/{candidate_id}</b> <br />- Input: no content <br />- Output: 204 No Content <br />- Scop: elevul
-    vrea sa renunte la admitere
+    <b>DELETE /candidates/{candidate_id}</b> <br />- Input: operatie permisa doar admin-ului, marcat prin headerul Pragma:admin <br />- Output: 204 No Content <br />- Scop: studentul
+    vrea sa renunte la admitere, insa numai un administrator il poate sterge
   </p>
   <p>
-    <b><font color="red"> DELETE <br />http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates/Dmzi
+    <b><span style="color: red; "> DELETE <br />http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates/Dmzi
         <br /> <br />204 No Content
-    </font></b>
+    </span></b>
   </p>
   
   <hr/>
 
   <p>
-    <b>DELETE /admission_results</b> <br />- Input: no content <br />- Output: 204 No Content <br />- Scop: admin-ul vrea sa stearga rezultatele (mai mult in in scop de test)
-    <br/> Doar admin-ul (Pragma: admin) are voie. Studentul va primi un 403 Forbidden.
+    <b>DELETE /admission_results</b> <br />- Input: operatie permisa doar admin-ului, marcat prin header-ul Pragma:admin <br />- Output: 204 No Content <br />- Scop: admin-ul vrea sa stearga rezultatele (mai mult in scop de test). Operatia nu va fi permisa in interfata web.
+    <br/> Doar admin-ul (Pragma: admin) are voie. Altfel, se va primi un 403 Forbidden.
   </p>
   <p>
-    <b><font color="red"> DELETE <br />http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/admission_results
+    <b><span style="color: red; "> DELETE <br />http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/admission_results
         <br /> <br />204 No Content
-    </font></b>
+    </span></b>
   </p>
 </body>
 </html>

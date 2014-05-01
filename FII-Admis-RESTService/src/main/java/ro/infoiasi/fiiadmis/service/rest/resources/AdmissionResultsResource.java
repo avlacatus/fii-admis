@@ -1,25 +1,20 @@
 package ro.infoiasi.fiiadmis.service.rest.resources;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.log4j.Logger;
 import org.json.JSONException;
-import org.restlet.data.Form;
 import org.restlet.data.Parameter;
 import org.restlet.data.Status;
 import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.resource.Delete;
 import org.restlet.resource.Get;
 import org.restlet.util.Series;
-
 import ro.infoiasi.fiiadmis.model.AdmissionResult;
-import ro.infoiasi.fiiadmis.model.AdmissionResultFilters;
-import ro.infoiasi.fiiadmis.model.Candidate;
 import ro.infoiasi.fiiadmis.service.rest.dao.DaoHolder;
+
+import java.io.IOException;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
 
 public class AdmissionResultsResource extends AbstractResource {
 
@@ -60,60 +55,22 @@ public class AdmissionResultsResource extends AbstractResource {
 		try {
 			response = createJsonFrom("admissionResults", admissionResults);
 			logResponse(response);
-		} catch (JSONException e) {
-			handleInternalServerError(e);
-		} catch (IOException e) {
+		} catch (JSONException | IOException e) {
 			handleInternalServerError(e);
 		}
 
-		return response;
+        return response;
 	}
 
 	private List<AdmissionResult> getAdmissionResultsFromDao() throws IOException {
-		Form queryParams = getRequest().getResourceRef().getQueryAsForm();
 
-		if (queryParams == null) {
-			LOG.debug("Get all admission results.");
-			return DaoHolder.getAdmissionResultsDao().getItems(null, null);
-		}
-
-		String value = queryParams.getFirstValue("sort_by");
-		if (value != null) {
-			if (value.equals("lastName")) {
-				LOG.debug("Get admission results sorted by lastname.");
-				List<Candidate> candidatesByLastName = DaoHolder.getCandidateDao().getItems(null,
-						new Comparator<Candidate>() {
-							@Override
-							public int compare(Candidate o1, Candidate o2) {
-								if (o1 != null && o2 != null) {
-									if (o1.getLastName()!= null) {
-										return o1.getLastName().compareTo(o2.getLastName());
-									}
-									return 1;
-								}
-								return 0;
-							}
-						});
-				List<AdmissionResult> output = new ArrayList<AdmissionResult>();
-				for (Candidate candidate : candidatesByLastName) {
-					output.add(DaoHolder.getAdmissionResultsDao()
-							.getItems(AdmissionResultFilters.byCandidateId(candidate.getId()), null).get(0));
-				}
-				return output;
-			}
-			if (value.equals("finalGrade")) {
-				LOG.debug("Get admission results sorted by final grade.");
-				return DaoHolder.getAdmissionResultsDao().getItems(null, new Comparator<AdmissionResult>() {
-					@Override
-					public int compare(AdmissionResult o1, AdmissionResult o2) {
-						return (-1) * Double.compare(o1.getFinalGrade(), o2.getFinalGrade());
-					}
-				});
-			}
-		}
-
-		LOG.debug("Get all admission results.");
-		return DaoHolder.getAdmissionResultsDao().getItems(null, null);
+        LOG.debug("Get all admission results.");
+        return DaoHolder.getAdmissionResultsDao().getItems(null, new Comparator<AdmissionResult>() {
+            @Override
+            public int compare(AdmissionResult o1, AdmissionResult o2) {
+                return - Double.compare(o1.getFinalGrade(), o2.getFinalGrade());
+            }
+        });
 	}
 
 	@Delete
@@ -171,14 +128,8 @@ public class AdmissionResultsResource extends AbstractResource {
 	}
 
 	private boolean isAvailable(List<AdmissionResult> admissionResults) {
-		if (admissionResults == null) {
-			return false;
-		}
-		if (admissionResults.size() == 0) {
-			return false;
-		}
-		return true;
-	}
+        return admissionResults != null && !admissionResults.isEmpty();
+    }
 
 	@Override
 	protected Logger getLOG() {

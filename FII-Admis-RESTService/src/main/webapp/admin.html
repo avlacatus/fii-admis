@@ -33,8 +33,7 @@
 	<div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">          
-          <a class="brand" href="#">FII Admis</a>          
-          <a href="http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates?format=pdf" id="down-as-pdf">Download as pdf</a>
+          <a class="brand" href="#">FII Admis</a>     
         </div>
       </div>
     </div>
@@ -45,6 +44,7 @@
 		</ul>
 
 		<button id="add-new-candidate">Add new</button>
+		<button id="compute-results">Compute Results</button>
 		<div id="edit-box" class="hidden">
 
 			<form id="user-input">
@@ -88,7 +88,21 @@
 			$("#button-cancel").click(function(x) {
 				x.preventDefault();
 				$("#edit-box").hide();
-			});			
+			});
+
+			$("#compute-results").click(function() {					 
+				$.ajax({
+					type: "GET",
+					url: getResultsLink,				
+					beforeSend: function (request) {
+                		request.setRequestHeader("Pragma", "admin");
+            		}
+				}).done(function( data ) {
+					getResults();
+					$("#add-new-candidate").remove();
+					$("#compute-results").remove();
+				});    	
+			});
 	       
 	    });
 
@@ -116,7 +130,8 @@
 				parseJsonFile(data);
 			});
 			
-		   /* parseJsonFile(jQuery.parseJSON('{"candidates":[{"id":"hHAg","lastName":"Jolie","gpaGrade":9.3,"ATestGrade":8.9,"socialId":"2720102232554","firstName":"Angelina"},{"id":"Sf1c","lastName":"Malos","gpaGrade":7.23,"ATestGrade":5.67,"socialId":"1900908345456","firstName":"Gabriel"},{"id":"ovYU","lastName":"Neagu","gpaGrade":4.9,"ATestGrade":8.45,"socialId":"1911116602268","firstName":"Victor"},{"id":"2OGp","lastName":"Rotaru","gpaGrade":6.9,"ATestGrade":6.9,"socialId":"2900908785634","firstName":"Maria"},{"id":"Xgej","lastName":"Moraru","gpaGrade":6.56,"ATestGrade":7.39,"socialId":"2910520395712","firstName":"Maria"},{"id":"Uo9y","lastName":"Iridon","gpaGrade":4.67,"ATestGrade":9.56,"socialId":"2900207148328","firstName":"Adriana"},{"id":"OSM9","lastName":"Duta","gpaGrade":9.06,"ATestGrade":6.19,"socialId":"1910607137091","firstName":"Marius"},{"id":"bmVg","lastName":"Coman","gpaGrade":7.4,"ATestGrade":7.9,"socialId":"1910626157979","firstName":"Toma"},{"id":"SyXY","lastName":"Stuparu","gpaGrade":7.89,"ATestGrade":7.45,"socialId":"1920202195379","firstName":"Andrei"},{"id":"ff5r","lastName":"Dragan","gpaGrade":7.9,"ATestGrade":7.56,"socialId":"2910323091987","firstName":"Felicia"},{"id":"2qWs","lastName":"Banica","gpaGrade":8.37,"ATestGrade":7.34,"socialId":"1910417104043","firstName":"George"},{"id":"Fitl","lastName":"Matei","gpaGrade":8.34,"ATestGrade":7.46,"socialId":"1910614333577","firstName":"Romeo"},{"id":"8ixA","lastName":"Patrascu","gpaGrade":9.03,"ATestGrade":6.9,"socialId":"2920802110223","firstName":"Emanuela"},{"id":"zmSd","lastName":"Marin","gpaGrade":8.53,"ATestGrade":7.49,"socialId":"2910417104043","firstName":"Georgiana"},{"id":"sOed","lastName":"Florea","gpaGrade":8.58,"ATestGrade":7.54,"socialId":"2900517860265","firstName":"Andreea"},{"id":"UEuJ","lastName":"Zamfirescu","gpaGrade":6.78,"ATestGrade":9.56,"socialId":"2920127383531","firstName":"Alina"},{"id":"z5p1","lastName":"Ionescu","gpaGrade":9.1,"ATestGrade":7.25,"socialId":"2910721925153","firstName":"Elena"},{"id":"vpt7","lastName":"Dinu","gpaGrade":8.45,"ATestGrade":7.98,"socialId":"1960429395488","firstName":"Ionut"},{"id":"UxCK","lastName":"Negrila","gpaGrade":8.9,"ATestGrade":7.89,"socialId":"1911102611485","firstName":"Teodor"},{"id":"RBd2","lastName":"Negrila","gpaGrade":8.9,"ATestGrade":7.89,"socialId":"1911102611485","firstName":"Teodor"},{"id":"ltCs","lastName":"Lupulescu","gpaGrade":8.29,"ATestGrade":8.92,"socialId":"1901016980039","firstName":"Petre"},{"id":"uG6A","lastName":"Mustetea","gpaGrade":8.9,"ATestGrade":8.39,"socialId":"2910703130056","firstName":"Georgeta"},{"id":"aDZl","lastName":"Brezeanu","gpaGrade":8.9,"ATestGrade":8.45,"socialId":"2920804309766","firstName":"Ioana"},{"id":"DBvh","lastName":"Dedu","gpaGrade":8.37,"ATestGrade":9.35,"socialId":"2910506976611","firstName":"Lidia"},{"id":"75us","lastName":"Bonciu","gpaGrade":9.29,"ATestGrade":8.64,"socialId":"2910711007680","firstName":"Marta"},{"id":"j21y","lastName":"Brezeanu","gpaGrade":9.54,"ATestGrade":8.46,"socialId":"2901121352855","firstName":"Nicoleta"},{"id":"mjgQ","lastName":"Damian","gpaGrade":9.09,"ATestGrade":9.45,"socialId":"1910323091987","firstName":"Marian"},{"id":"Ssi6","lastName":"Teodorescu","gpaGrade":9.08,"ATestGrade":9.9,"socialId":"2900803929879","firstName":"Mihaela"},{"id":"fQak","lastName":"Ivanescu","gpaGrade":9.56,"ATestGrade":9.67,"socialId":"2902312786745","firstName":"Raluca"},{"id":"NuUI","lastName":"Enescu","gpaGrade":9.89,"ATestGrade":9.34,"socialId":"2900125946821","firstName":"Constanta"},{"id":"MZOp","lastName":"Piciorus","gpaGrade":9.78,"ATestGrade":9.76,"socialId":"1920804379242","firstName":"Marian"},{"id":"fswT","lastName":"maria","gpaGrade":3.6,"ATestGrade":9.3,"socialId":"1337878787424","firstName":"ana"}]}'));*/
+			/*
+		    parseJsonFile(jQuery.parseJSON('{"candidates":[{"id":"hHAg","lastName":"Jolie","gpaGrade":9.3,"ATestGrade":8.9,"socialId":"2720102232554","firstName":"Angelina"},{"id":"Sf1c","lastName":"Malos","gpaGrade":7.23,"ATestGrade":5.67,"socialId":"1900908345456","firstName":"Gabriel"},{"id":"ovYU","lastName":"Neagu","gpaGrade":4.9,"ATestGrade":8.45,"socialId":"1911116602268","firstName":"Victor"},{"id":"2OGp","lastName":"Rotaru","gpaGrade":6.9,"ATestGrade":6.9,"socialId":"2900908785634","firstName":"Maria"},{"id":"Xgej","lastName":"Moraru","gpaGrade":6.56,"ATestGrade":7.39,"socialId":"2910520395712","firstName":"Maria"},{"id":"Uo9y","lastName":"Iridon","gpaGrade":4.67,"ATestGrade":9.56,"socialId":"2900207148328","firstName":"Adriana"},{"id":"OSM9","lastName":"Duta","gpaGrade":9.06,"ATestGrade":6.19,"socialId":"1910607137091","firstName":"Marius"},{"id":"bmVg","lastName":"Coman","gpaGrade":7.4,"ATestGrade":7.9,"socialId":"1910626157979","firstName":"Toma"},{"id":"SyXY","lastName":"Stuparu","gpaGrade":7.89,"ATestGrade":7.45,"socialId":"1920202195379","firstName":"Andrei"},{"id":"ff5r","lastName":"Dragan","gpaGrade":7.9,"ATestGrade":7.56,"socialId":"2910323091987","firstName":"Felicia"},{"id":"2qWs","lastName":"Banica","gpaGrade":8.37,"ATestGrade":7.34,"socialId":"1910417104043","firstName":"George"},{"id":"Fitl","lastName":"Matei","gpaGrade":8.34,"ATestGrade":7.46,"socialId":"1910614333577","firstName":"Romeo"},{"id":"8ixA","lastName":"Patrascu","gpaGrade":9.03,"ATestGrade":6.9,"socialId":"2920802110223","firstName":"Emanuela"},{"id":"zmSd","lastName":"Marin","gpaGrade":8.53,"ATestGrade":7.49,"socialId":"2910417104043","firstName":"Georgiana"},{"id":"sOed","lastName":"Florea","gpaGrade":8.58,"ATestGrade":7.54,"socialId":"2900517860265","firstName":"Andreea"},{"id":"UEuJ","lastName":"Zamfirescu","gpaGrade":6.78,"ATestGrade":9.56,"socialId":"2920127383531","firstName":"Alina"},{"id":"z5p1","lastName":"Ionescu","gpaGrade":9.1,"ATestGrade":7.25,"socialId":"2910721925153","firstName":"Elena"},{"id":"vpt7","lastName":"Dinu","gpaGrade":8.45,"ATestGrade":7.98,"socialId":"1960429395488","firstName":"Ionut"},{"id":"UxCK","lastName":"Negrila","gpaGrade":8.9,"ATestGrade":7.89,"socialId":"1911102611485","firstName":"Teodor"},{"id":"RBd2","lastName":"Negrila","gpaGrade":8.9,"ATestGrade":7.89,"socialId":"1911102611485","firstName":"Teodor"},{"id":"ltCs","lastName":"Lupulescu","gpaGrade":8.29,"ATestGrade":8.92,"socialId":"1901016980039","firstName":"Petre"},{"id":"uG6A","lastName":"Mustetea","gpaGrade":8.9,"ATestGrade":8.39,"socialId":"2910703130056","firstName":"Georgeta"},{"id":"aDZl","lastName":"Brezeanu","gpaGrade":8.9,"ATestGrade":8.45,"socialId":"2920804309766","firstName":"Ioana"},{"id":"DBvh","lastName":"Dedu","gpaGrade":8.37,"ATestGrade":9.35,"socialId":"2910506976611","firstName":"Lidia"},{"id":"75us","lastName":"Bonciu","gpaGrade":9.29,"ATestGrade":8.64,"socialId":"2910711007680","firstName":"Marta"},{"id":"j21y","lastName":"Brezeanu","gpaGrade":9.54,"ATestGrade":8.46,"socialId":"2901121352855","firstName":"Nicoleta"},{"id":"mjgQ","lastName":"Damian","gpaGrade":9.09,"ATestGrade":9.45,"socialId":"1910323091987","firstName":"Marian"},{"id":"Ssi6","lastName":"Teodorescu","gpaGrade":9.08,"ATestGrade":9.9,"socialId":"2900803929879","firstName":"Mihaela"},{"id":"fQak","lastName":"Ivanescu","gpaGrade":9.56,"ATestGrade":9.67,"socialId":"2902312786745","firstName":"Raluca"},{"id":"NuUI","lastName":"Enescu","gpaGrade":9.89,"ATestGrade":9.34,"socialId":"2900125946821","firstName":"Constanta"},{"id":"MZOp","lastName":"Piciorus","gpaGrade":9.78,"ATestGrade":9.76,"socialId":"1920804379242","firstName":"Marian"},{"id":"fswT","lastName":"maria","gpaGrade":3.6,"ATestGrade":9.3,"socialId":"1337878787424","firstName":"ana"}]}'));*/
 		}
 
 	    function parseJsonFile(json) {	    	
@@ -135,10 +150,10 @@
 				type: "GET",
 				dataType: "json",
 				url: getResultsLink,
-			}) .done(function( data ) {
+			}) .done(function(data) {
 				results = data;
 				resultsInterval = setInterval(checkStartGetResults, 1000);
-			});	 
+			});	
 	    }
 
 	    function parseResults(json) {
@@ -166,6 +181,10 @@
 	    }
 
 	    function addCandidateToList(candidate, isFirst, id) {
+	    	idElem = $("<div></div>")
+	    		.attr("class", "id-elem")
+	    		.html(candidate.id);
+
 	    	firstNameElem = $("<div></div>")
 	    		.attr("class", "first-name-elem")
 	    		.html(candidate.firstName);
@@ -181,7 +200,11 @@
 	    	aTestGradeElem = $("<div></div>")
 	    		.attr("class", "atest-grade-elem")
 	    		.html(candidate.ATestGrade);
-	  
+
+	    	socialIdElem = $("<div></div>")
+	    		.attr("class", "social-id-elem")
+	    		.html(candidate.socialId);
+
 	    	resultScoreElem = $("<div></div>")
 	    		.attr("class", "result-score-elem")
 	    		.html("-");
@@ -198,14 +221,27 @@
 	    		resultStatusElem.html("Result Status");
 	    	}
 
+	    	actions = "Actions";
+	    	if (!isFirst) {
+	    		actions = "";
+	    		actions += "<a href='#' onclick='editCandidate(" + id + ");'>Edit</a> ";
+	    		actions += "<a href='#' onclick='deleteUser(" + id + ")'>Delete</a>";
+	    	}
+
+	    	actionsElem = $("<div></div>")
+	    		.attr("class", "actions-elem")
+	    		.html(actions);
 
 	    	elem = $("<li></li>")
+	    		.append(idElem)
 	    		.append(firstNameElem)
 	    		.append(lastNameElem)
 	    		.append(gpaGradeElem)
 	    		.append(aTestGradeElem)
+	    		.append(socialIdElem)
 	    		.append(resultScoreElem)
-	    		.append(resultStatusElem);
+	    		.append(resultStatusElem)
+	    		.append(actionsElem);
 
 	    	if (isFirst) {
 	    		elem.attr("class", "header");
@@ -223,6 +259,9 @@
 	    		addNewCandidate();
 	    	}
 
+	    	if (currentAction == "edit") {
+	    		editCandidateCommit();
+	    	}
 	    }
 
 	    function addNewCandidate() {
@@ -238,6 +277,46 @@
 			});
 
 		    currentAction = "none";
+	    }
+
+	    function editCandidate(id) {
+	    	currentAction = "edit";
+			$("#edit-box").show();	
+			$("#button-submit").attr("value", "Edit");
+
+			var c = candidates[id];
+			currentCandidateId = id;
+
+			$("[name=firstname]").val(c.firstName);
+			$("[name=lastname]").val(c.lastName);
+			$("[name=gpagrade]").val(c.gpaGrade);
+			$("[name=atestgrade]").val(c.ATestGrade);
+			$("[name=socialid]").val(c.socialId);
+	    }
+
+	    function editCandidateCommit() {	
+	    	$.ajax({
+				type: "PUT",
+				url: updateCandidate + "/" + currentCandidateId,				
+				data: getValuesFromFormAsJson()
+			}).done(function( data ) {
+			});	    	
+
+	    	var values = getValuesFromFormAsObject();
+	    	$("#candidate-id-" + candidates[currentCandidateId].id + " .first-name-elem").html(values.firstname);
+	    	$("#candidate-id-" + candidates[currentCandidateId].id + " .last-name-elem").html(values.lastname);
+	    	$("#candidate-id-" + candidates[currentCandidateId].id + " .gpa-grade-elem").html(values.gpagrade);
+	    	$("#candidate-id-" + candidates[currentCandidateId].id + " .atest-grade-elem").html(values.atestgrade);
+	    	$("#candidate-id-" + candidates[currentCandidateId].id + " .social-id-elem").html(values.socialid);
+
+	    	candidates[currentCandidateId].firstName = values.firstname;
+	    	candidates[currentCandidateId].lastName = values.lastname;
+	    	candidates[currentCandidateId].gpaGrade = values.gpagrade;
+	    	candidates[currentCandidateId].ATestGrade = values.atestgrade;
+	    	candidates[currentCandidateId].socialId = values.socialid;
+
+	    	$("#edit-box").hide();	
+	    	currentAction = "none";
 	    }
 
 	    function getValuesFromFormAsObject() {
@@ -268,14 +347,26 @@
 		   	return json;
 	    }
 
+	    function deleteUser(id) {
+	    	if (confirm("Are you sure you want to delete this user?")) {	    		
+				$.ajax({
+					type: "DELETE",
+					url: updateCandidate + "/" + candidates[id].id,
+                    beforeSend: function (request) {
+                        request.setRequestHeader("Pragma", "admin");
+                    }
+				}).done(function( data ) {
+				}); 
+
+				$("#candidate-id-" + candidates[id].id).remove();			
+				candidates[id] = null;
+			}
+	    }
+	     
 	    function checkStartGetResults() {	    	
 	    	if (candidates != null) {
 	    		window.clearInterval(resultsInterval);
 				parseResults(results);
-
-				if (results.admissionResults.length > 0) {
-					$("#add-new-candidate").remove();
-				}
 			}
 	    }
 	</script>

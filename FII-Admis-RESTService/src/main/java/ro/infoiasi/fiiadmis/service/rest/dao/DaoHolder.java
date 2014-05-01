@@ -1,9 +1,6 @@
 package ro.infoiasi.fiiadmis.service.rest.dao;
 
-import java.io.IOException;
-
 import org.apache.log4j.Logger;
-
 import ro.infoiasi.fiiadmis.db.Table;
 import ro.infoiasi.fiiadmis.db.TextDatabase;
 import ro.infoiasi.fiiadmis.db.TextDatabaseImpl;
@@ -15,6 +12,8 @@ import ro.infoiasi.fiiadmis.model.AdmissionResult;
 import ro.infoiasi.fiiadmis.model.Candidate;
 import ro.infoiasi.fiiadmis.service.rest.dao.business.AdmissionResultsProcessor;
 import ro.infoiasi.fiiadmis.service.rest.resources.CandidatesResource;
+
+import java.io.IOException;
 
 public class DaoHolder {
 
@@ -45,7 +44,7 @@ public class DaoHolder {
             candidatesDao = initCandidateDao("test-candidates");
 
             LOG.debug("Initializing table test-admission-mirelap.");
-            admissionResultsDao = initAdmissionResults("test-admission-mirelap");
+            admissionResultsDao = initAdmissionResults("test-admission");
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("Can't create database", e);
