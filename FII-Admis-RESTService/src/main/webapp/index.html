@@ -93,7 +93,7 @@
 			$("#compute-results").click(function() {					 
 				$.ajax({
 					type: "GET",
-					url: updateCandidate + "/" + currentCandidateId,				
+					url: getResultsLink,				
 					beforeSend: function (request) {
                 		request.setRequestHeader("Pragma", "admin");
             		}
