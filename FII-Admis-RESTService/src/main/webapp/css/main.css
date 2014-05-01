@@ -1,0 +1,68 @@
+.hidden {
+	display: none;
+}
+
+
+
+#candidate-list {
+	list-style: none;
+	padding: 0px;
+	margin-top: 50px;
+}
+
+#candidate-list li {
+	padding: 5px;
+	margin-bottom: 5px;
+}
+
+#candidate-list li:hover {
+	background-color: #f6f6f6;
+}
+
+#candidate-list .header {
+	background-color: #f3f3f3;
+}
+
+.id-elem {
+	display: inline-block;
+	width: 5%;
+}
+
+.first-name-elem {
+	display: inline-block;
+	width: 8%;
+}
+	    		
+.last-name-elem {
+	display: inline-block;
+	width: 8%;
+}
+
+.gpa-grade-elem {
+	display: inline-block;
+	width: 10%;
+}
+	
+.atest-grade-elem {
+	display: inline-block;
+	width: 10%;
+}
+
+.social-id-elem {
+	display: inline-block;
+	width: 15%;
+}
+
+.actions-elem {
+	display: inline-block;
+	width: 10%;
+}
+
+#edit-box {
+	margin-top: 20px;
+	margin-left: 25px;
+}
+
+#add-new-candidate {
+	margin-left: 25px;
+}

@@ -1,0 +1,204 @@
+<!DOCTYPE HTML>
+<html>
+<head>	
+
+	<title>FII Admis Admin Panel</title>
+
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">	
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link href="./css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="./css/main.css" rel="stylesheet" type="text/css" />
+
+	<script>
+
+		var currentAction = "none";
+		var currentCandidateId = -1;
+
+		var getCandidatesLink = "http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates";
+		var newCadidateLink = "http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates";
+
+		var candidates;
+
+	</script>
+
+</head>
+<body>
+
+	<div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">          
+          <a class="brand" href="#">FII Admis - Client</a>          
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+		<ul id="candidate-list">
+		</ul>
+
+		<button id="add-new-candidate">Add new</button>
+		<div id="edit-box" class="hidden">
+
+			<form id="user-input">
+
+				First name: <input type="text" name="firstname"><br>
+				Last name: <input type="text" name="lastname"><br>
+				Gpa grade: <input type="text" name="gpagrade"><br>
+				A Test Grade: <input type="text" name="atestgrade"><br>
+				Social Id: <input type="text" name="socialid"><br>
+
+				<input id="button-submit" type="submit" value="Create">
+				<input id="button-cancel" type="submit" value="Cancel">
+
+			</form>
+
+		</div>
+
+	</div>
+
+	<script src="./js/jquery.js"></script>
+	<script src="./js/jquery-ui-1.10.4.min.js"></script>	
+	<script src="js/bootstrap.min.js"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+/*
+			$.ajax({
+				type: "GET",
+				dataType: "jsonp",
+				url: getCandidatesLink,
+
+				statusCode: {
+					200: function() {
+						1+2;
+						alert(jqXHR.responseText);
+						//alert(responseText );
+					},
+					404: function() {
+						alert( "page not found" );
+					},
+				}
+			}) .done(function( data ) {
+				alerT("DA");
+			});*/			
+
+			getCandidatesFromServer();
+
+			$("#add-new-candidate").click(function() {
+				currentAction = "create";
+				$("#edit-box").show();	
+				$("#button-submit").attr("value", "Create");
+
+				$("#user-input input[type=text]").val("");				
+			});
+
+			$("#button-submit").click(function(x) {
+				x.preventDefault();
+				submitButtonPressed();
+			});
+
+			$("#button-cancel").click(function(x) {
+				x.preventDefault();
+				$("#edit-box").hide();
+			});
+
+	    });
+
+		function getCandidatesFromServer() {
+			// Create header
+			var candidatesHeader = new Object();
+		    candidatesHeader.id = "ID";
+		    candidatesHeader.firstName = "First Name";
+		    candidatesHeader.lastName = "Last Name";
+		    candidatesHeader.gpaGrade = "GPA grade";
+		    candidatesHeader.ATestGrade = "ATest Grade";
+		    candidatesHeader.socialId = "Social Id";
+		    candidatesHeader.actions = "Actions";
+		    addCandidateToList(candidatesHeader, true, 0)
+
+		    // Gets the candidates from the server
+		    parseJsonFile(jQuery.parseJSON('{"candidates":[{"id":"Aa2I","lastName":"Popescu","gpaGrade":9.3,"ATestGrade":8.9,"socialId":"347389523255435","firstName":"Ionut"},{"id":"vr6U","lastName":"Popescu","gpaGrade":9.3,"ATestGrade":8.9,"socialId":"347389523255435","firstName":"Ionut"},{"id":"Nxa7","lastName":"Popescu","gpaGrade":9.3,"ATestGrade":8.9,"socialId":"347389523255435","firstName":"Ionut"},{"id":"vvch","lastName":"Jolie","gpaGrade":9.3,"ATestGrade":8.9,"socialId":"347389523255435","firstName":"Angelina"},{"id":"WSEd","lastName":"Jolie","gpaGrade":9.3,"ATestGrade":8.9,"socialId":"347389523255435","firstName":"Angelina"},{"id":"PmbP","lastName":"Jolie","gpaGrade":9.3,"ATestGrade":8.9,"socialId":"347389523255435","firstName":"Angelina"}]}'));
+		}
+
+	    function parseJsonFile(json) {	    	
+	    	arrayLength = json.candidates.length;
+	    	for (var i = 0; i < arrayLength; i++) {
+	    		addCandidateToList(json.candidates[i], false, i);
+	    	}
+	    	candidates = json.candidates;
+	    }	    
+
+	    function addCandidateToList(candidate, isFirst, id) {
+	    	firstNameElem = $("<div></div>")
+	    		.attr("class", "first-name-elem")
+	    		.html(candidate.firstName);
+
+	    	lastNameElem = $("<div></div>")
+	    		.attr("class", "last-name-elem")
+	    		.html(candidate.lastName);
+
+	    	gpaGradeElem = $("<div></div>")
+	    		.attr("class", "gpa-grade-elem")
+	    		.html(candidate.gpaGrade);
+
+	    	aTestGradeElem = $("<div></div>")
+	    		.attr("class", "atest-grade-elem")
+	    		.html(candidate.ATestGrade);
+
+		    	
+
+	    	elem = $("<li></li>")
+	    		.append(firstNameElem)
+	    		.append(lastNameElem)
+	    		.append(gpaGradeElem)
+	    		.append(aTestGradeElem);
+
+	    	$("#candidate-list").append(elem);
+	    }
+
+	    function submitButtonPressed() {
+	    	if (currentAction == "create") {
+	    		addNewCandidate();
+	    	}
+
+	    	if (currentAction == "edit") {
+	    		editCandidateCommit();
+	    	}
+	    }
+
+	    function addNewCandidate() {
+		    $.ajax({
+				type: "POST",
+				url: updateCadidate,				
+				data: getValuesFromForm()
+			}) .done(function( data ) {
+				alert("Candidate added");
+
+			});
+		    currentAction = "none";
+	    }
+
+	    function getValuesFromForm() {
+	    	var $inputs = $("#user-input :input");
+		 
+		    var values = {};
+		    $inputs.each(function() {
+		        values[this.name] = $(this).val();
+		    });
+
+		    json = '{"lastName":"' + values.lastname + '",' +
+		    		'"gpaGrade":' + values.gpagrade + "," +
+		    		'"ATestGrade":' + values.atestgrade + "," + 
+		    		'"firstName":"' + values.firstname + '",' + 
+		    	    '"socialId":"' + values.socialid + '"}';
+
+		   	return json;
+	    }
+
+	</script>
+
+
+</body>
+</html>

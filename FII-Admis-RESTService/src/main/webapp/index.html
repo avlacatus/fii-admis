@@ -1,153 +1,283 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
-<head>
-<meta http-equiv="Content-type" content="text/html; charset=utf-8">
-<title>FII Admis REST API</title>
-<link rel="stylesheet" href="styles/styles.css" type="text/css" media="screen">
+<head>	
+
+	<title>FII Admis Admin Panel</title>
+
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">	
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link href="./css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="./css/main.css" rel="stylesheet" type="text/css" />
+
+	<script>
+
+		var currentAction = "none";
+		var currentCandidateId = -1;
+
+//		var getCandidatesLink = "http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates";
+//		var updateCandidate = "http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates";
+//		var newCadidateLink = "http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates";
+//		var deleteCandidateLink = "http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates";
+
+		var getCandidatesLink = "http://localhost:8080/api/candidates";
+		var updateCandidate = "http://localhost:8080/api/candidates";
+		var newCadidateLink = "http://localhost:8080/api/candidates";
+		var deleteCandidateLink = "http://localhost:8080/api/candidates";
+
+		var candidates;
+
+	</script>
+
 </head>
 <body>
 
-  <h2>
-    FII Admis REST API <font color="red">{DRAFT}</font>
-  </h2>
+	<div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">          
+          <a class="brand" href="#">FII Admis</a>          
+        </div>
+      </div>
+    </div>
 
-  <p>
-    <b>Github Project:</b> <a href="https://github.com/avlacatus/fii-admis">avlacatus/fii-admis</a>
-  </p>
-  <p>
-    * Input/ Output sunt in formatter json. <br />
-    * La url-ul <a
-      href="http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api">http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api</a>
-    <B><font color="red">se adauga</font></b> urmatorele uri path-urile. <br />
-    * ATENȚIE la url-uri, să nu se termine cu '/' !!
-    <br/><br/>
-    * <font color="red">Update!</font>
-    URL-uri functionale!
-    <br /> * <font color="red">Update 2!</font>
-    Merge DELETE pe /admission_results (doar de admin).
-  </p>
+    <div class="container">
 
-  <hr />
+		<ul id="candidate-list">
+		</ul>
 
-  <p>
-    <b>GET /candidates </b>n><br />- Output: lista de {candidate_id} <br />- Scop: vezi toti candidatii inscrisi (fara
-    rezultate) <br /> <br />
-  </p>
+		<button id="add-new-candidate">Add new</button>
+		<button id="compute-results">Compute Results</button>
+		<div id="edit-box" class="hidden">
 
-  <p>
-    <b><font color="red"> GET http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates <br />
-        <br /> 200 OK <br /> { "candidates": [ { "id": "Aa2I", "lastName": "Popescu", "gpaGrade": 9.3, "ATestGrade":
-        8.9, "socialId": "347389523255435", "firstName": "Ionut" }, { "id": "vr6U", "lastName": "Popescu", "gpaGrade":
-        9.3, "ATestGrade": 8.9, "socialId": "347389523255435", "firstName": "Ionut" } ]}
-    </font></b>
-  </p>
+			<form id="user-input">
 
-  <hr />
+				<div class="first-name-elem">First name:</div> <input type="text" name="firstname"><br>
+				<div class="first-name-elem">Last name:</div> <input type="text" name="lastname"><br>
+				<div class="first-name-elem">Gpa grade:</div> <input type="number" min="1" max="10" step="0.01" name="gpagrade"><br>
+				<div class="first-name-elem">A Test Grade:</div> <input type="number" min="1" max="10" step="0.01" name="atestgrade"><br>
+				<div class="first-name-elem">Social Id:</div> <input type="text" pattern="[0-9]{13}" maxlength="13" name="socialid"><br>
 
-  <p>
-  <font color="purple"><b>GET /candidates?sort_by=lastName</b></font>
-  <br/> Input: no content
-  <br/> Output: returneaza o lista in care lista va fi sortata dupa last name
-  <br/> <B>TODO: </B> the actual implementation from Dao
-  </p>
+				<input id="button-submit" type="submit" value="Create">
+				<input id="button-cancel" type="submit" value="Cancel">
 
-  <hr />
+			</form>
 
-  <p>
-    <b>GET /candidates/{candidate_id}</b> <br />- Output: informatiile de inscriere ale unui candidat: {candidate_id,
-    first_name, last_name, social_id, gpa_grade, a_test_grade} <br />- Scop: informatiile personale doar unui student
-  </p>
-  <p>
-    <b><font color="red"> GET
-        http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates/Aa2I </br> <br /> 200 OK <br />{ "id":
-        "Aa2I", "lastName": "Popescu", "gpaGrade": 9.3, "ATestGrade": 8.9, "socialId": "347389523255435", "firstName":
-        "Ionut" }
-    </font></b>
-  </p>
+		</div>
 
-  <hr />
+	</div>
 
-  <p>
-    <b>GET /admission_results </b> <br />- Input: adaugat header "Pragma:admin" (fff secure :)) ) <br />- Output: lista cu
-    {candidate_id, final_grade, status} <br />- Scop: publicarea rezultatelor (echivalent cu start calcularea admitere)
-    <br />- Restrictie: prima oara, aceasta operatie este permisa doar de admin, elevu va primi 403 Forbidden; apoi va
-    fi permisa si din interfata de elevi <br />
-  </p>
+	<script src="./js/jquery.js"></script>
+	<script src="./js/jquery-ui-1.10.4.min.js"></script>	
+	<script src="js/bootstrap.min.js"></script>
 
-  <hr />
+	<script type="text/javascript">
+		$(document).ready(function () {
+			getCandidatesFromServer();
 
-  <p>
-    <b>GET /admission_results/{candidate_id}</b> <br />- Output: informatiile unui cantitat despre rezultatul sau:
-    {candidate_id, final_grade, status} <br />- Scop: informatii de admitere doar pentru un student <br />-
-    Restrictie: aceasta operatie va fi permisa doar dupa ce un admin va data GET la /admission_results
-  </p>
+			$("#add-new-candidate").click(function() {
+				currentAction = "create";
+				$("#edit-box").show();	
+				$("#button-submit").attr("value", "Create");
 
-  <hr/>
-  
-<p>
-  <font color="purple"><b> GET /admission_results?sort_by=lastName</b></font>
-  <br/> Input: no content
-  <br/> Output: returneaza o lista in care lista va fi sortata dupa last name
-  <br/> <B>TODO: </B> the actual implementation from Dao
-  </p>
-  
-<p>
-  <font color="purple"> <b>GET /admission_results?sort_by=finalGrade</b></font>
-  <br/> Input: no content
-  <br/> Output: returneaza o lista in care lista va fi sortata dupa finalGrade
-  <br/> <B>TODO: </B> the actual implementation from Dao
-  </p> 
+				$("#user-input input[type=text]").val("");				
+			});
 
-  <hr/>
+			$("#button-submit").click(function(x) {
+				x.preventDefault();
+				submitButtonPressed();
+			});
 
-  <p>
-    <b>POST /candidates</b> <br />- Input: un json cu datele {first_name, last_name, social_id, gpa_grade, a_test_grade} <br />-
-    Output: 201 Created + Header: "Location: /{candidate_id}" <br />- Scop: se inregistreaza elevul la facultate
-  </p>
-  <p>
-    <b><font color="red"> POST http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates <br />{"lastName":"Jolie","gpaGrade":9.3,"ATestGrade":8.9,"socialId":"347389523255435","firstName":"Angelina"}
-        <br /> <br />201 Created <br /> Location:
-        http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates/PmbP
-    </font></b>
-  </p>
+			$("#button-cancel").click(function(x) {
+				x.preventDefault();
+				$("#edit-box").hide();
+			});
+
+			$("#compute-results").click(function() {					 
+				$.ajax({
+					type: "GET",
+					url: updateCandidate + "/" + currentCandidateId,				
+					beforeSend: function (request) {
+                		request.setRequestHeader("Pragma", "admin");
+            		}
+				}).done(function( data ) {
+					alert("Results computed!");
+				});    	
+			});
+	       
+	    });
+
+		function getCandidatesFromServer() {
+			// Create header
+			var candidatesHeader = new Object();
+		    candidatesHeader.id = "ID";
+		    candidatesHeader.firstName = "First Name";
+		    candidatesHeader.lastName = "Last Name";
+		    candidatesHeader.gpaGrade = "GPA grade";
+		    candidatesHeader.ATestGrade = "ATest Grade";
+		    candidatesHeader.socialId = "Social Id";
+		    candidatesHeader.actions = "Actions";
+		    addCandidateToList(candidatesHeader, true, 0);
+
+		    // Gets the candidates from the server
+		    $.ajax({
+				type: "GET",
+				dataType: "json",
+				url: getCandidatesLink,
+
+				statusCode: {
+					200: function() {
+					},
+					404: function() {
+						alert( "page not found" );
+					}
+				}
+			}) .done(function( data ) {
+				parseJsonFile(data);
+			});
+			/*
+		    parseJsonFile(jQuery.parseJSON('{"candidates":[{"id":"Aa2I","lastName":"Popescu","gpaGrade":9.3,"ATestGrade":8.9,"socialId":"347389523255435","firstName":"Ionut"},{"id":"vr6U","lastName":"Popescu","gpaGrade":9.3,"ATestGrade":8.9,"socialId":"347389523255435","firstName":"Ionut"},{"id":"Nxa7","lastName":"Popescu","gpaGrade":9.3,"ATestGrade":8.9,"socialId":"347389523255435","firstName":"Ionut"},{"id":"vvch","lastName":"Jolie","gpaGrade":9.3,"ATestGrade":8.9,"socialId":"347389523255435","firstName":"Angelina"},{"id":"WSEd","lastName":"Jolie","gpaGrade":9.3,"ATestGrade":8.9,"socialId":"347389523255435","firstName":"Angelina"},{"id":"PmbP","lastName":"Jolie","gpaGrade":9.3,"ATestGrade":8.9,"socialId":"347389523255435","firstName":"Angelina"}]}'));*/
+		}
+
+	    function parseJsonFile(json) {	    	
+	    	arrayLength = json.candidates.length;
+	    	for (var i = 0; i < arrayLength; i++) {
+	    		addCandidateToList(json.candidates[i], false, i);
+	    	}
+	    	candidates = json.candidates;
+	    }	    
+
+	    function addCandidateToList(candidate, isFirst, id) {
+	    	idElem = $("<div></div>")
+	    		.attr("class", "id-elem")
+	    		.html(candidate.id);
+
+	    	firstNameElem = $("<div></div>")
+	    		.attr("class", "first-name-elem")
+	    		.html(candidate.firstName);
+
+	    	lastNameElem = $("<div></div>")
+	    		.attr("class", "last-name-elem")
+	    		.html(candidate.lastName);
+
+	    	gpaGradeElem = $("<div></div>")
+	    		.attr("class", "gpa-grade-elem")
+	    		.html(candidate.gpaGrade);
+
+	    	aTestGradeElem = $("<div></div>")
+	    		.attr("class", "atest-grade-elem")
+	    		.html(candidate.ATestGrade);
+
+	    	socialIdElem = $("<div></div>")
+	    		.attr("class", "social-id-elem")
+	    		.html(candidate.socialId);
+
+	    	actions = "Actions";
+	    	if (!isFirst) {
+	    		actions = "";
+	    		actions += "<a href='#' onclick='editCandidate(" + id + ");'>Edit</a> ";
+	    		actions += "<a href='#' onclick='deleteUser(" + id + ")'>Delete</a>";
+	    	}
+
+	    	actionsElem = $("<div></div>")
+	    		.attr("class", "actions-elem")
+	    		.html(actions);
+
+	    	elem = $("<li></li>")
+	    		.append(idElem)
+	    		.append(firstNameElem)
+	    		.append(lastNameElem)
+	    		.append(gpaGradeElem)
+	    		.append(aTestGradeElem)
+	    		.append(socialIdElem)
+	    		.append(actionsElem);
+
+	    	if (isFirst) {
+	    		elem.attr("class", "header");
+	    	}
+
+	    	$("#candidate-list").append(elem);
+	    }
+
+	    function submitButtonPressed() {
+	    	if (currentAction == "create") {
+	    		addNewCandidate();
+	    	}
+
+	    	if (currentAction == "edit") {
+	    		editCandidateCommit();
+	    	}
+	    }
+
+	    function addNewCandidate() {
+		    $.ajax({
+				type: "POST",
+				url: newCadidateLink,				
+				data: getValuesFromForm()
+			}).done(function( data ) {
+				alert("Candidate added");
+			});
+		    currentAction = "none";
+	    }
+
+	    function editCandidate(id) {
+	    	currentAction = "edit";
+			$("#edit-box").show();	
+			$("#button-submit").attr("value", "Edit");
+
+			var c = candidates[id];
+			currentCandidateId = id;
+
+			$("[name=firstname]").val(c.firstName);
+			$("[name=lastname]").val(c.lastName);
+			$("[name=gpagrade]").val(c.gpaGrade);
+			$("[name=atestgrade]").val(c.ATestGrade);
+			$("[name=socialid]").val(c.socialId);
+	    }
+
+	    function editCandidateCommit() {	  
+	    	$.ajax({
+				type: "PUT",
+				url: updateCandidate + "/" + currentCandidateId,				
+				data: getValuesFromForm()
+			}).done(function( data ) {
+				alert("Candidate modified");
+			});
+	    	currentAction = "none";
+	    }
+
+	    function getValuesFromForm() {
+	    	var $inputs = $("#user-input :input");
+		 
+		    var values = {};
+		    $inputs.each(function() {
+		        values[this.name] = $(this).val();
+		    });
+
+		    json = '{"lastName":"' + values.lastname + '",' +
+		    		'"gpaGrade":' + values.gpagrade + "," +
+		    		'"ATestGrade":' + values.atestgrade + "," + 
+		    		'"firstName":"' + values.firstname + '",' + 
+		    	    '"socialId":"' + values.socialid + '"}';
+
+		   	return json;
+	    }
+
+	    function deleteUser(id) {
+	    	if (confirm("Are you sure you want to delete this user?")) {
+	    		$("#candidate-list").empty();
+	    		getCandidatesFromServer();
+				$.ajax({
+					type: "DELETE",
+					url: updateCandidate + "/" + currentCandidateId,				
+				}).done(function( data ) {
+					alert("Candidate deleted");
+					// request la useri
+				});    
+			} else {
+			}
+	    }
+	</script>
 
 
-  <hr />
-
-  <p>
-    <b>PUT /candidates/{candidate_id}</b> <br />- Input: un json cu datele {candidate_id, first_name, last_name, social_id,
-    gpa_grade, a_test_grade} <br />- Output: 204 No Content <br />- Scop: elevul sa-si updateze datele personale
-  </p>
-
-  <p>
-    <b><font color="red"> PUT
-        http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates/zZY7 <br />{"lastName":"Popescianu","gpaGrade":9.3,"ATestGrade":8.9,"socialId":"347389523255435","firstName":"Ionut"}
-        <br /> <br />204 No Content
-    </font></b>
-  </p>
-
-  <hr />
-
-  <p>
-    <b>DELETE /candidates/{candidate_id}</b> <br />- Input: no content <br />- Output: 204 No Content <br />- Scop: elevul
-    vrea sa renunte la admitere
-  </p>
-  <p>
-    <b><font color="red"> DELETE <br />http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates/Dmzi
-        <br /> <br />204 No Content
-    </font></b>
-  </p>
-  
-  <hr/>
-
-  <p>
-    <b>DELETE /admission_results</b> <br />- Input: no content <br />- Output: 204 No Content <br />- Scop: admin-ul vrea sa stearga rezultatele (mai mult in in scop de test)
-    <br/> Doar admin-ul (Pragma: admin) are voie. Studentul va primi un 403 Forbidden.
-  </p>
-  <p>
-    <b><font color="red"> DELETE <br />http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/admission_results
-        <br /> <br />204 No Content
-    </font></b>
-  </p>
 </body>
 </html>
