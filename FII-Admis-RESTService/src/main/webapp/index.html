@@ -15,15 +15,10 @@
 		var currentAction = "none";
 		var currentCandidateId = -1;
 
-//		var getCandidatesLink = "http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates";
-//		var updateCandidate = "http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates";
-//		var newCadidateLink = "http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates";
-//		var deleteCandidateLink = "http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates";
-
-		var getCandidatesLink = "http://localhost:8080/api/candidates";
-		var updateCandidate = "http://localhost:8080/api/candidates";
-		var newCadidateLink = "http://localhost:8080/api/candidates";
-		var deleteCandidateLink = "http://localhost:8080/api/candidates";
+		var getCandidatesLink = "http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates";
+		var updateCandidate = "http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates";
+		var newCadidateLink = "http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates";
+		var deleteCandidateLink = "http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates";
 
 		var candidates;
 
@@ -73,6 +68,7 @@
 	<script type="text/javascript">
 		$(document).ready(function () {
 			getCandidatesFromServer();
+			//getResults();
 
 			$("#add-new-candidate").click(function() {
 				currentAction = "create";
@@ -116,20 +112,21 @@
 		    candidatesHeader.ATestGrade = "ATest Grade";
 		    candidatesHeader.socialId = "Social Id";
 		    candidatesHeader.actions = "Actions";
-		    addCandidateToList(candidatesHeader, true, 0);
+		    addCandidateToList(candidatesHeader, true, 0)
 
 		    // Gets the candidates from the server
 		    $.ajax({
 				type: "GET",
-				dataType: "json",
+				dataType: "jsonp",
 				url: getCandidatesLink,
 
 				statusCode: {
 					200: function() {
+						//alert("ok");
 					},
 					404: function() {
-						alert( "page not found" );
-					}
+						//alert( "page not found" );
+					},
 				}
 			}) .done(function( data ) {
 				parseJsonFile(data);
@@ -145,6 +142,33 @@
 	    	}
 	    	candidates = json.candidates;
 	    }	    
+
+	    function getResults() {
+	    	results = jQuery.parseJSON('{"admissionResults":[{"id":"XvsG","finalGrade":9.77,"candidateId":"MZOp","admissionStatus":{"statusString":"tax_free","statusInt":0}},{"id":"V7RQ","finalGrade":9.615,"candidateId":"fQak","admissionStatus":{"statusString":"tax_free","statusInt":0}},{"id":"NZBR","finalGrade":9.615,"candidateId":"NuUI","admissionStatus":{"statusString":"tax_free","statusInt":0}},{"id":"6f9H","finalGrade":9.49,"candidateId":"Ssi6","admissionStatus":{"statusString":"tax_free","statusInt":0}},{"id":"CLzC","finalGrade":9.27,"candidateId":"mjgQ","admissionStatus":{"statusString":"tax_free","statusInt":0}},{"id":"vGoH","finalGrade":9.100000000000001,"candidateId":"hHAg","admissionStatus":{"statusString":"tax_free","statusInt":0}},{"id":"KKSw","finalGrade":9,"candidateId":"j21y","admissionStatus":{"statusString":"tax_free","statusInt":0}},{"id":"CfJs","finalGrade":8.965,"candidateId":"75us","admissionStatus":{"statusString":"tax","statusInt":1}},{"id":"k5rG","finalGrade":8.86,"candidateId":"DBvh","admissionStatus":{"statusString":"tax","statusInt":1}},{"id":"CEeZ","finalGrade":8.675,"candidateId":"aDZl","admissionStatus":{"statusString":"tax","statusInt":1}},{"id":"AQ0T","finalGrade":8.645,"candidateId":"uG6A","admissionStatus":{"statusString":"tax","statusInt":1}},{"id":"pRsY","finalGrade":8.605,"candidateId":"ltCs","admissionStatus":{"statusString":"tax","statusInt":1}},{"id":"jNwO","finalGrade":8.395,"candidateId":"UxCK","admissionStatus":{"statusString":"tax","statusInt":1}},{"id":"Co3D","finalGrade":8.395,"candidateId":"RBd2","admissionStatus":{"statusString":"tax","statusInt":1}},{"id":"96yc","finalGrade":8.215,"candidateId":"vpt7","admissionStatus":{"statusString":"tax","statusInt":1}},{"id":"8LnY","finalGrade":8.175,"candidateId":"z5p1","admissionStatus":{"statusString":"tax","statusInt":1}},{"id":"QkTX","finalGrade":8.17,"candidateId":"UEuJ","admissionStatus":{"statusString":"tax","statusInt":1}},{"id":"vajx","finalGrade":8.06,"candidateId":"sOed","admissionStatus":{"statusString":"tax","statusInt":1}},{"id":"ZgC9","finalGrade":8.01,"candidateId":"zmSd","admissionStatus":{"statusString":"tax","statusInt":1}},{"id":"abhF","finalGrade":7.965,"candidateId":"8ixA","admissionStatus":{"statusString":"tax","statusInt":1}},{"id":"hbyI","finalGrade":7.9,"candidateId":"Fitl","admissionStatus":{"statusString":"tax","statusInt":1}},{"id":"zlNx","finalGrade":7.8549999999999995,"candidateId":"2qWs","admissionStatus":{"statusString":"tax","statusInt":1}},{"id":"Kzjp","finalGrade":7.73,"candidateId":"ff5r","admissionStatus":{"statusString":"tax","statusInt":1}},{"id":"F0v7","finalGrade":7.67,"candidateId":"SyXY","admissionStatus":{"statusString":"tax","statusInt":1}},{"id":"BxWT","finalGrade":7.65,"candidateId":"bmVg","admissionStatus":{"statusString":"tax","statusInt":1}},{"id":"I7d5","finalGrade":7.625,"candidateId":"OSM9","admissionStatus":{"statusString":"tax","statusInt":1}},{"id":"nJms","finalGrade":7.115,"candidateId":"Uo9y","admissionStatus":{"statusString":"tax","statusInt":1}},{"id":"KeGE","finalGrade":6.975,"candidateId":"Xgej","admissionStatus":{"statusString":"rejected","statusInt":2}},{"id":"3BfB","finalGrade":6.9,"candidateId":"2OGp","admissionStatus":{"statusString":"rejected","statusInt":2}},{"id":"6ap8","finalGrade":6.675,"candidateId":"ovYU","admissionStatus":{"statusString":"rejected","statusInt":2}},{"id":"8uli","finalGrade":6.45,"candidateId":"Sf1c","admissionStatus":{"statusString":"rejected","statusInt":2}}]}');
+
+	    	parseResults(results);
+	    }
+
+	    function parseResults(json) {
+	    	arrayLength = json.admissionResults.length;
+	    	for (var i = 0; i < arrayLength; i++) {
+	    		var candidateId = json.admissionResults[i].candidateId;
+	    		var finalGrade = json.admissionResults[i].finalGrade;
+	    		var resultState = json.admissionResults[i].admissionStatus.statusString;
+
+	    		addResultToCandidate(candidateId, finalGrade, resultState);
+	    	}
+	    }
+
+	    function addResultToCandidate(candidateId, finalGrade, resultState) {
+	    	for (var i = 0; i < candidates.length; i++) {
+	    		if (candidates[i].id == candidateId) {
+	    			candidates[i].finalGrade = finalGrade;
+	    			candidates[i].resultState = resultState;
+	    			break;
+	    		}
+	    	}
+	    }
 
 	    function addCandidateToList(candidate, isFirst, id) {
 	    	idElem = $("<div></div>")
