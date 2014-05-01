@@ -2,6 +2,10 @@ package ro.infoiasi.fiiadmis.model;
 
 public class Candidate implements Entity {
 
+	/**
+	 * Serial Version UID
+	 */
+	private static final long serialVersionUID = -5208664767813416795L;
 	private String id;
 	private String firstName;
 	private String lastName;

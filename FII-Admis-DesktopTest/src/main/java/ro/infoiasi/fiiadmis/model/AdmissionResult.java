@@ -5,7 +5,6 @@ import java.util.Map;
 
 public class AdmissionResult implements Entity {
 
-
     /**
 	 * Serial Version UID
 	 */
