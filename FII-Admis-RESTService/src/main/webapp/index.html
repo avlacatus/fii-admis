@@ -98,7 +98,6 @@
                 		request.setRequestHeader("Pragma", "admin");
             		}
 				}).done(function( data ) {
-					alert("Results computed!");
 				});    	
 			});
 	       
@@ -268,8 +267,6 @@
 				url: newCadidateLink,				
 				data: getValuesFromFormAsJson()
 			}).done(function( data ) {
-				alert("Candidate added");
-
 				candidates = null;
 				$("#candidate-list").empty();
 				getCandidatesFromServer();
@@ -299,7 +296,6 @@
 				url: updateCandidate + "/" + currentCandidateId,				
 				data: getValuesFromFormAsJson()
 			}).done(function( data ) {
-				alert("Candidate modified");				
 			});	    	
 
 	    	var values = getValuesFromFormAsObject();
@@ -353,7 +349,6 @@
 					type: "DELETE",
 					url: updateCandidate + "/" + candidates[id].id,				
 				}).done(function( data ) {
-					alert("Candidate deleted");		
 				}); 
 
 				$("#candidate-id-" + candidates[id].id).remove();			
