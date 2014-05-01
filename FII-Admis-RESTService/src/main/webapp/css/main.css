@@ -30,12 +30,12 @@
 
 .first-name-elem {
 	display: inline-block;
-	width: 8%;
+	width: 10%;
 }
 	    		
 .last-name-elem {
 	display: inline-block;
-	width: 8%;
+	width: 10%;
 }
 
 .gpa-grade-elem {
@@ -51,6 +51,16 @@
 .social-id-elem {
 	display: inline-block;
 	width: 15%;
+}
+
+.result-score-elem {
+	display: inline-block;
+	width: 8%;
+}
+
+.result-status-elem {
+	display: inline-block;
+	width: 8%;
 }
 
 .actions-elem {
