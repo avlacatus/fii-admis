@@ -367,6 +367,11 @@
 	    	if (candidates != null) {
 	    		window.clearInterval(resultsInterval);
 				parseResults(results);
+
+                if (results.admissionResults.length > 0) {
+                    $("#add-new-candidate").remove();
+                    $("#compute-results").remove();
+                }
 			}
 	    }
 	</script>
