@@ -1,6 +1,8 @@
 package ro.infoiasi.fiiadmis.service.rest.resources;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -16,152 +18,171 @@ import org.restlet.util.Series;
 
 import ro.infoiasi.fiiadmis.model.AdmissionResult;
 import ro.infoiasi.fiiadmis.model.AdmissionResultFilters;
+import ro.infoiasi.fiiadmis.model.Candidate;
 import ro.infoiasi.fiiadmis.service.rest.dao.DaoHolder;
 
 public class AdmissionResultsResource extends AbstractResource {
 
-    private static final Logger LOG = Logger.getLogger(AdmissionResultsResource.class);
+	private static final Logger LOG = Logger.getLogger(AdmissionResultsResource.class);
 
-    @Get
-    public JsonRepresentation getAdmissionResults() {
-        LOG.debug("Retrieving the admission results from the DAO.");
+	@Get
+	public JsonRepresentation getAdmissionResults() {
+		LOG.debug("Retrieving the admission results from the DAO.");
 
-        List<AdmissionResult> admissionResults = null;
-        try {
-            admissionResults = getAdmissionResultsFromDao();
-        } catch (IOException e) {
-            handleInternalServerError(e);
-        }
+		List<AdmissionResult> admissionResults = null;
+		try {
+			admissionResults = getAdmissionResultsFromDao();
+		} catch (IOException e) {
+			handleInternalServerError(e);
+		}
 
-        // Check if the admission results are available.
-        if (!isAvailable(admissionResults)) {
-            // Check the requester's identity (student or admin).
-            if (isAdmin()) {
-                // If admin, the admission results will be generated.
-                try {
-                    LOG.info("Start computing the admission results");
-                    admissionResults = DaoHolder.startComputingAdmissionResults()
-                            .getItems(AdmissionResultFilters.all());
-                } catch (IOException e) {
-                    handleInternalServerError(e);
-                }
-            } else {
-                // If not admin, forbidden.
-                handleClientError(Status.CLIENT_ERROR_FORBIDDEN);
-                return null;
-            }
+		// Check if the admission results are available.
+		if (!isAvailable(admissionResults)) {
+			// Check the requester's identity (student or admin).
+			if (isAdmin()) {
+				// If admin, the admission results will be generated.
+				try {
+					LOG.info("Start computing the admission results");
+					admissionResults = DaoHolder.startComputingAdmissionResults().getItems(null, null);
+				} catch (IOException e) {
+					handleInternalServerError(e);
+				}
+			} else {
+				// If not admin, forbidden.
+				handleClientError(Status.CLIENT_ERROR_FORBIDDEN);
+				return null;
+			}
 
-        }
+		}
 
-        // Create the response in json format.
-        JsonRepresentation response = null;
-        try {
-            response = createJsonFrom("admissionResults", admissionResults);
-            logResponse(response);
-        } catch (JSONException e) {
-            handleInternalServerError(e);
-        } catch (IOException e) {
-            handleInternalServerError(e);
-        }
+		// Create the response in json format.
+		JsonRepresentation response = null;
+		try {
+			response = createJsonFrom("admissionResults", admissionResults);
+			logResponse(response);
+		} catch (JSONException e) {
+			handleInternalServerError(e);
+		} catch (IOException e) {
+			handleInternalServerError(e);
+		}
 
-        return response;
-    }
+		return response;
+	}
 
-    private List<AdmissionResult> getAdmissionResultsFromDao() throws IOException {
-        Form queryParams = getRequest().getResourceRef().getQueryAsForm();
-        if (queryParams == null) {
-            LOG.debug("Get all admission results.");
-            return DaoHolder.getAdmissionResultsDao().getItems(AdmissionResultFilters.all());
-        }
+	private List<AdmissionResult> getAdmissionResultsFromDao() throws IOException {
+		Form queryParams = getRequest().getResourceRef().getQueryAsForm();
 
-        String value = queryParams.getFirstValue("sort_by");
-        if (value == null) {
-            return DaoHolder.getAdmissionResultsDao().getItems(AdmissionResultFilters.all());
-        }
+		if (queryParams == null) {
+			LOG.debug("Get all admission results.");
+			return DaoHolder.getAdmissionResultsDao().getItems(null, null);
+		}
 
-        if (value.equals("lastName")) {
-            // TODO get sorted admisson results from Dao by lastName
-            LOG.debug("Get admission results sorted by lastname.");
-            return DaoHolder.getAdmissionResultsDao().getItems(AdmissionResultFilters.all());
-        }
+		String value = queryParams.getFirstValue("sort_by");
+		if (value != null) {
+			if (value.equals("lastName")) {
+				LOG.debug("Get admission results sorted by lastname.");
+				List<Candidate> candidatesByLastName = DaoHolder.getCandidateDao().getItems(null,
+						new Comparator<Candidate>() {
+							@Override
+							public int compare(Candidate o1, Candidate o2) {
+								if (o1 != null && o2 != null) {
+									if (o1.getLastName()!= null) {
+										return o1.getLastName().compareTo(o2.getLastName());
+									}
+									return 1;
+								}
+								return 0;
+							}
+						});
+				List<AdmissionResult> output = new ArrayList<AdmissionResult>();
+				for (Candidate candidate : candidatesByLastName) {
+					output.add(DaoHolder.getAdmissionResultsDao()
+							.getItems(AdmissionResultFilters.byCandidateId(candidate.getId()), null).get(0));
+				}
+				return output;
+			}
+			if (value.equals("finalGrade")) {
+				LOG.debug("Get admission results sorted by final grade.");
+				return DaoHolder.getAdmissionResultsDao().getItems(null, new Comparator<AdmissionResult>() {
+					@Override
+					public int compare(AdmissionResult o1, AdmissionResult o2) {
+						return (-1) * Double.compare(o1.getFinalGrade(), o2.getFinalGrade());
+					}
+				});
+			}
+		}
 
-        if (value.equals("finalGrade")) {
-            // TODO get sorted admisson results from Dao by finalGrade.
-            LOG.debug("Get admission results sorted by final grade.");
-            return DaoHolder.getAdmissionResultsDao().getItems(AdmissionResultFilters.all());
-        }
+		LOG.debug("Get all admission results.");
+		return DaoHolder.getAdmissionResultsDao().getItems(null, null);
+	}
 
-        LOG.debug("Get all admission results.");
-        return DaoHolder.getAdmissionResultsDao().getItems(AdmissionResultFilters.all());
-    }
+	@Delete
+	public void deleteAdmissionResults() {
+		if (!isAdmin()) {
+			handleClientError(Status.CLIENT_ERROR_FORBIDDEN);
+			return;
+		}
 
-    @Delete
-    public void deleteAdmissionResults() {
-        if (!isAdmin()) {
-            handleClientError(Status.CLIENT_ERROR_FORBIDDEN);
-            return;
-        }
+		try {
+			List<AdmissionResult> items = DaoHolder.getAdmissionResultsDao().getItems(null, null);
+			for (AdmissionResult item : items) {
+				DaoHolder.getAdmissionResultsDao().deleteItem(item.getId());
+			}
+		} catch (IOException e) {
+			handleInternalServerError(e);
+			return;
+		}
 
-        try {
-            List<AdmissionResult> items = DaoHolder.getAdmissionResultsDao().getItems(AdmissionResultFilters.all());
-            for (AdmissionResult item : items) {
-                DaoHolder.getAdmissionResultsDao().deleteItem(item.getId());
-            }
-        } catch (IOException e) {
-            handleInternalServerError(e);
-            return;
-        }
+		setStatus(Status.SUCCESS_NO_CONTENT);
+	}
 
-        setStatus(Status.SUCCESS_NO_CONTENT);
-    }
+	private boolean isAdmin() {
+		LOG.debug("Checking for the requester's identity");
 
-    private boolean isAdmin() {
-        LOG.debug("Checking for the requester's identity");
+		Series<Parameter> headers = (Series<Parameter>) getRequest().getAttributes().get("org.restlet.http.headers");
+		Set<String> headerNames = headers.getNames();
 
-        Series<Parameter> headers = (Series<Parameter>) getRequest().getAttributes().get("org.restlet.http.headers");
-        Set<String> headerNames = headers.getNames();
+		for (String h : headerNames) {
+			LOG.debug("Header: " + h);
+		}
 
-        for (String h : headerNames) {
-            LOG.debug("Header: " + h);
-        }
+		if (!headerNames.contains("Pragma") && !headerNames.contains("pragma")) {
+			LOG.debug("No header Pragma found");
+			return false;
+		}
 
-        if (!headerNames.contains("Pragma") && !headerNames.contains("pragma")) {
-            LOG.debug("No header Pragma found");
-            return false;
-        }
+		LOG.debug("Header Pragma found");
 
-        LOG.debug("Header Pragma found");
+		String values = headers.getValues("Pragma", "\n", true);
+		if (values == null) {
+			values = headers.getValues("pragma", "\n", true);
+		}
 
-        String values = headers.getValues("Pragma", "\n", true);
-        if (values == null) {
-            values = headers.getValues("pragma", "\n", true);
-        }
+		for (String headerValue : values.split("\n")) {
+			if (headerValue.equals("admin")) {
+				LOG.debug("Value ***** found.");
+				return true;
+			}
+		}
 
-        for (String headerValue : values.split("\n")) {
-            if (headerValue.equals("admin")) {
-                LOG.debug("Value ***** found.");
-                return true;
-            }
-        }
+		LOG.debug("No correct value found in the header values");
 
-        LOG.debug("No correct value found in the header values");
+		return false;
+	}
 
-        return false;
-    }
+	private boolean isAvailable(List<AdmissionResult> admissionResults) {
+		if (admissionResults == null) {
+			return false;
+		}
+		if (admissionResults.size() == 0) {
+			return false;
+		}
+		return true;
+	}
 
-    private boolean isAvailable(List<AdmissionResult> admissionResults) {
-        if (admissionResults == null) {
-            return false;
-        }
-        if (admissionResults.size() == 0) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    protected Logger getLOG() {
-        return LOG;
-    }
+	@Override
+	protected Logger getLOG() {
+		return LOG;
+	}
 
 }

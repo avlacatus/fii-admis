@@ -1,6 +1,7 @@
 package ro.infoiasi.fiiadmis.service.rest.resources;
 
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -13,7 +14,6 @@ import org.restlet.resource.Get;
 import org.restlet.resource.Post;
 
 import ro.infoiasi.fiiadmis.model.Candidate;
-import ro.infoiasi.fiiadmis.model.CandidateFilters;
 import ro.infoiasi.fiiadmis.service.rest.dao.DaoHolder;
 
 public class CandidatesResource extends AbstractResource {
@@ -49,23 +49,35 @@ public class CandidatesResource extends AbstractResource {
     private List<Candidate> getCandidatesFromDao() throws IOException {
         Form queryParams = getRequest().getResourceRef().getQueryAsForm();
         if (queryParams == null) {
-            LOG.debug("Get all candidates.");
-            return DaoHolder.getCandidateDao().getItems(CandidateFilters.all());
+            LOG.debug("Get all candidates; no query parameters");
+            return DaoHolder.getCandidateDao().getItems(null, null);
         }
 
         String lastName = queryParams.getFirstValue("sort_by");
         if (lastName == null) {
-            return DaoHolder.getCandidateDao().getItems(CandidateFilters.all());
+        	LOG.debug("Get all candidates; no sort_by param");
+            return DaoHolder.getCandidateDao().getItems(null, null);
         }
 
         if (lastName.equals("lastName")) {
-            // TODO get sorted candidates from Dao
             LOG.debug("Get candidates sorted by lastname.");
-            return DaoHolder.getCandidateDao().getItems(CandidateFilters.all());
+            return DaoHolder.getCandidateDao().getItems(null, new Comparator<Candidate>() {
+				
+				@Override
+				public int compare(Candidate o1, Candidate o2) {
+					if (o1 != null && o2 != null) {
+						if (o1.getLastName() != null) {
+							return o1.getLastName().compareTo(o2.getLastName());
+						} else return 1;
+						
+					}
+					return 0;
+				}
+			});
         }
 
         LOG.debug("Get all candidates.");
-        return DaoHolder.getCandidateDao().getItems(CandidateFilters.all());
+        return DaoHolder.getCandidateDao().getItems(null, null);
     }
 
     @Post

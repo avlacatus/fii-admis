@@ -27,7 +27,7 @@ public class CandidateResource extends AbstractResource {
 
         List<Candidate> candidates = null;
         try {
-            candidates = DaoHolder.getCandidateDao().getItems(CandidateFilters.byId(candidateId));
+            candidates = DaoHolder.getCandidateDao().getItems(CandidateFilters.byId(candidateId), null);
         } catch (IOException e) {
             handleInternalServerError(e);
         }

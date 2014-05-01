@@ -14,41 +14,41 @@ import ro.infoiasi.fiiadmis.service.rest.dao.DaoHolder;
 
 public class AdmissionResultPerCandidateResource extends AbstractResource {
 
-    private static final Logger LOG = Logger.getLogger(AdmissionResultPerCandidateResource.class);
+	private static final Logger LOG = Logger.getLogger(AdmissionResultPerCandidateResource.class);
 
-    @Get
-    public JsonRepresentation getCandidate() {
-        String candidateId = (String) getRequestAttributes().get("candidate_id");
-        LOG.debug("Retrieving admission result for candidate " + candidateId + " from the DAO.");
+	@Get
+	public JsonRepresentation getCandidate() {
+		String candidateId = (String) getRequestAttributes().get("candidate_id");
+		LOG.debug("Retrieving admission result for candidate " + candidateId + " from the DAO.");
 
-        List<AdmissionResult> admissionResultPerCandidate = null;
-        try {
-            admissionResultPerCandidate = DaoHolder.getAdmissionResultsDao().getItems(
-                    AdmissionResultFilters.byCandidateId(candidateId));
-        } catch (IOException e) {
-            handleInternalServerError(e);
-        }
+		List<AdmissionResult> admissionResultPerCandidate = null;
+		try {
+			admissionResultPerCandidate = DaoHolder.getAdmissionResultsDao().getItems(
+					AdmissionResultFilters.byCandidateId(candidateId), null);
+		} catch (IOException e) {
+			handleInternalServerError(e);
+		}
 
-        if (admissionResultPerCandidate.size() != 1) {
-            handleClientError(Status.CLIENT_ERROR_NOT_FOUND);
-            return null;
-        }
+		if (admissionResultPerCandidate.size() != 1) {
+			handleClientError(Status.CLIENT_ERROR_NOT_FOUND);
+			return null;
+		}
 
-        // Create the response in json format.
-        JsonRepresentation response = null;
-        try {
-            response = createJsonFrom(admissionResultPerCandidate.get(0));
-            logResponse(response);
-        } catch (IOException e) {
-            handleInternalServerError(e);
-        }
+		// Create the response in json format.
+		JsonRepresentation response = null;
+		try {
+			response = createJsonFrom(admissionResultPerCandidate.get(0));
+			logResponse(response);
+		} catch (IOException e) {
+			handleInternalServerError(e);
+		}
 
-        return response;
-    }
+		return response;
+	}
 
-    @Override
-    protected Logger getLOG() {
-        return LOG;
-    }
+	@Override
+	protected Logger getLOG() {
+		return LOG;
+	}
 
 }

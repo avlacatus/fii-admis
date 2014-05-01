@@ -60,7 +60,7 @@ public class EntityDAOImpl<E extends Entity> implements EntityDAO<E> {
 
 	@Override
 	public List<E> getItems(Predicate<E> filter, Comparator<E> comparator) throws IOException {
-		return getMultipleItems(filter, comparator, -1);
+		return getItems(filter, comparator, -1);
 	}
 
 	@Override
