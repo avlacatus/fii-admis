@@ -1,18 +1,33 @@
 fii-admis
 =========
 
-Repository for FII school project (CSS)
+Repository for FII school project (CSS) .
+
+This is an application consisting of 3 main modules:
 
 
 
 GUI Application
 ------------------
-- Written in Javascript
-- User Interface for the students and for the admin
+- Written in Javascript (jQuery, Twitter Bootstrap, HTML5, CSS3)
+- User Interface for the students (http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/index.html) and for the admin (http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/admin.html)
+- The student can visualise the list of candidates and add himself
+- After the results are published, he can only visualize them
+- The admin can
+visualize the list of candidates, edit the details
 
 
 
-Custom database
+
+
+REST Service
+------------
+- Deployment: The REST service is deployed with [AWS Elastic Beanstalk].
+
+- API Documentation:
+http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/apidoc.html
+
+Custom text database
 ---------------
 - Structure:
 
@@ -46,14 +61,6 @@ ad4e:sandu:istrate:1900201345644:9.55:8.7
 15a9:alexandru:ivan:1900201345644:7.67:5.67
 ```
 
-
-
-REST Service
-------------
-- Deployment: The REST service is deployed with [AWS Elastic Beanstalk].
-
-- API Documentation:
-http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/
 
 
 
