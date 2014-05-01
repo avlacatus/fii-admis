@@ -8,7 +8,7 @@
 <body>
 
   <h2>
-    FII Admis REST API <span style="color: red; ">{DRAFT}</span>
+    FII Admis REST API
   </h2>
 
   <p>
@@ -18,7 +18,7 @@
     * Input/ Output sunt in formatter json. <br />
     * La url-ul <a
       href="http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api">http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api</a>
-    <B><span style="color: red; ">se adauga</span></b> urmatorele path-uri. <br />
+    <B><span style="color: blue; ">se adauga</span></b> urmatoarele path-uri. <br />
   </p>
 
   <hr />
@@ -29,7 +29,7 @@
   </p>
 
   <p>
-    <b><span style="color: red; "> GET http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates <br />
+    <b><span style="color: blue; "> GET http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates <br />
         <br /> 200 OK <br /> { "candidates": [ { "id": "Aa2I", "lastName": "Popescu", "gpaGrade": 9.3, "ATestGrade":
         8.9, "socialId": "347389523255435", "firstName": "Ionut" }, { "id": "vr6U", "lastName": "Popescu", "gpaGrade":
         9.3, "ATestGrade": 8.9, "socialId": "347389523255435", "firstName": "Ionut" } ]}
@@ -43,7 +43,7 @@
     first_name, last_name, social_id, gpa_grade, a_test_grade} <br />- Scop: informatiile personale doar unui student
   </p>
   <p>
-    <b><span style="color: red; "> GET
+    <b><span style="color: blue; "> GET
         http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates/Aa2I </br> <br /> 200 OK <br />{ "id":
         "Aa2I", "lastName": "Popescu", "gpaGrade": 9.3, "ATestGrade": 8.9, "socialId": "347389523255435", "firstName":
         "Ionut" }
@@ -58,12 +58,53 @@
     fi permisa si din interfata de elevi <br />
   </p>
 
+  <p>
+      <b><span style="color: blue; "> GET
+        http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/admission_results </br> <br /> 200 OK <br />{
+"admissionResults":[
+    {
+        "finalGrade":9.77,
+        "id":"boiF",
+        "candidateId":"jfcf",
+        "admissionStatus":{
+            "statusString":"tax_free",
+            "statusInt":0
+        }
+    },
+    {
+        "finalGrade":9.615,
+        "id":"vheC",
+        "candidateId":"rXg6",
+        "admissionStatus":{
+            "statusString":"tax_free",
+            "statusInt":0
+        }
+    }]}
+    </span></b>
+  </p>
+
+
   <hr />
 
   <p>
     <b>GET /admission_results/{candidate_id}</b> <br />- Output: informatiile unui candidat despre rezultatul sau:
     {candidate_id, final_grade, status} <br />- Scop: informatii de admitere doar pentru un student <br />-
     Restrictie: aceasta operatie va fi permisa doar dupa ce un admin va data GET la /admission_results
+  </p>
+
+  <p>
+      <b><span style="color: blue; "> GET
+        http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/admission_results/jfcf </br> <br /> 200 OK <br />
+    {
+        "finalGrade":9.77,
+        "id":"boiF",
+        "candidateId":"jfcf",
+        "admissionStatus":{
+            "statusString":"tax_free",
+            "statusInt":0
+        }
+    }
+    </span></b>
   </p>
 
   <hr/>
@@ -73,7 +114,7 @@
     Output: 201 Created + Header: "Location: /{candidate_id}" <br />- Scop: se inregistreaza elevul la facultate
   </p>
   <p>
-    <b><span style="color: red; "> POST http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates <br />{"lastName":"Jolie","gpaGrade":9.3,"ATestGrade":8.9,"socialId":"347389523255435","firstName":"Angelina"}
+    <b><span style="color: blue; "> POST http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates <br />{"lastName":"Jolie","gpaGrade":9.3,"ATestGrade":8.9,"socialId":"347389523255435","firstName":"Angelina"}
         <br /> <br />201 Created <br /> Location:
         http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates/PmbP
     </span></b>
@@ -88,7 +129,7 @@
   </p>
 
   <p>
-    <b><span style="color: red; "> PUT
+    <b><span style="color: blue; "> PUT
         http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates/zZY7 <br />{"lastName":"Popescianu","gpaGrade":9.3,"ATestGrade":8.9,"socialId":"347389523255435","firstName":"Ionut"}
         <br /> <br />204 No Content
     </span></b>
@@ -97,11 +138,11 @@
   <hr />
 
   <p>
-    <b>DELETE /candidates/{candidate_id}</b> <br />- Input: operatie permisa doar admin-ului, marcat prin headerul Pragma:admin <br />- Output: 204 No Content <br />- Scop: studentul
+    <b>DELETE /candidates/{candidate_id}</b> <br />- Input: operatie permisa doar admin-ului, marcat prin header-ul "Pragma:admin" <br />- Output: 204 No Content <br />- Scop: studentul
     vrea sa renunte la admitere, insa numai un administrator il poate sterge
   </p>
   <p>
-    <b><span style="color: red; "> DELETE <br />http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates/Dmzi
+    <b><span style="color: blue; "> DELETE <br />http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/candidates/Dmzi
         <br /> <br />204 No Content
     </span></b>
   </p>
@@ -109,11 +150,11 @@
   <hr/>
 
   <p>
-    <b>DELETE /admission_results</b> <br />- Input: operatie permisa doar admin-ului, marcat prin header-ul Pragma:admin <br />- Output: 204 No Content <br />- Scop: admin-ul vrea sa stearga rezultatele (mai mult in scop de test). Operatia nu va fi permisa in interfata web.
-    <br/> Doar admin-ul (Pragma: admin) are voie. Altfel, se va primi un 403 Forbidden.
+    <b>DELETE /admission_results</b> <br />- Input: operatie permisa doar admin-ului, marcat prin header-ul "Pragma:admin" <br />- Output: 204 No Content <br />- Scop: admin-ul vrea sa stearga rezultatele (mai mult in scop de test). Operatia nu va fi permisa in interfata web.
+    <br/> Doar admin-ul ("Pragma: admin") are voie. Altfel, se va primi un 403 Forbidden.
   </p>
   <p>
-    <b><span style="color: red; "> DELETE <br />http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/admission_results
+    <b><span style="color: blue; "> DELETE <br />http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/api/admission_results
         <br /> <br />204 No Content
     </span></b>
   </p>
