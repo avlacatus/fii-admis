@@ -39,7 +39,7 @@ REST Service
  API Documentation:
 http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/apidoc.html
 
- The request input parameters and the response are in the json format
+ The request input parameters and the response are in the json format.
 
 Custom database
 ---------------
