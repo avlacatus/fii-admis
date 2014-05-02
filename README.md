@@ -78,10 +78,9 @@ The results can be visualized via the web interface or via the web service, in t
 
 Tools and Libraries
 -------------------
-
+- HTML 5, CSS 3
 - [jQuery]
 - [Twitter Bootstrap]
-- HTML 5, CSS 3
 - Java 7
 - [Restlet Framework]
 - [Google Guava Libraries]
