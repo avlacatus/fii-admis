@@ -9,7 +9,6 @@ This is an application consisting of 3 main modules:
 
 GUI Application
 ------------------
-- Written in Javascript (jQuery, Twitter Bootstrap, HTML5, CSS3)
 - User Interface for the students (http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/index.html) and for the admin (http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/admin.html)
 - The student can visualise the list of candidates and add himself by filling a form with the following:
     - First name
