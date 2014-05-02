@@ -29,7 +29,9 @@ The final admission status is as follows:
 - final grade >= 9 => TAX_FREE
 - final grade >= 7 && final grade < 9 => TAX
 - final grade < 7 => REJECTED
-- 
+
+
+
 REST Service
 ------------
 - Deployment: The REST service is deployed with [AWS Elastic Beanstalk].
