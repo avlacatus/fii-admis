@@ -34,14 +34,16 @@ The final admission status is as follows:
 
 REST Service
 ------------
-- Deployment: The REST service is deployed with [AWS Elastic Beanstalk].
+ Deployment: The REST service is deployed with [AWS Elastic Beanstalk].
 
-- API Documentation:
+ API Documentation:
 http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/apidoc.html
 
-Custom text database
+ The request input parameters and the response are in the json format
+
+Custom database
 ---------------
-- Structure:
+- Structure - two text files representing the tables. Each record is a line with colon separated fields:
 
 ```
 candidates
