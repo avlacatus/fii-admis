@@ -21,7 +21,8 @@ GUI Application
     - visualize the list of candidates
     - edit their details
     - delete a candidate
-    - start computation of the admission results and publish them. 
+    - start computation of the admission results and publish them.
+- The results can be exported via PDF.
 
 The final admission grade is a computed as the average of the GPA Grade and the A-Test grade.
 The final admission status is as follows:
@@ -72,7 +73,7 @@ E8F8:BjSY:8.01:1
 
 ```
 
-The results can be visualized via the web interface or via the web service, in the json format.
+The results can be visualized via the web interface, the web service, in the json format, or in the PDF format, by clicking on a link (http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/admission_results.pdf).
 
 
 Tools and Libraries

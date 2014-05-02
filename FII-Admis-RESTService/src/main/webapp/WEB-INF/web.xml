@@ -18,10 +18,19 @@
             <param-value>ro.infoiasi.fiiadmis.service.rest.MainApplication</param-value>
         </init-param>
     </servlet>
+    <servlet>
+        <servlet-name>ResultsPDFExport</servlet-name>
+        <servlet-class>ro.infoiasi.fiiadmis.service.rest.pdf.ResultsPDFExport</servlet-class>
+    </servlet>
 
-    <!-- Catch all requests -->
+    <!-- Catch all api requests -->
     <servlet-mapping>
         <servlet-name>RestletServlet</servlet-name>
         <url-pattern>/api/*</url-pattern>
+    </servlet-mapping>
+    <!--The pdf export value-->
+    <servlet-mapping>
+        <servlet-name>ResultsPDFExport</servlet-name>
+        <url-pattern>/admission_results.pdf</url-pattern>
     </servlet-mapping>
 </web-app> 

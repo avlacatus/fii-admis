@@ -1,16 +1,15 @@
 package ro.infoiasi.fiiadmis.service.rest.dao.business;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import org.apache.log4j.Logger;
-
 import ro.infoiasi.fiiadmis.db.dao.EntityDAO;
 import ro.infoiasi.fiiadmis.model.AdmissionResult;
 import ro.infoiasi.fiiadmis.model.AdmissionResult.Status;
 import ro.infoiasi.fiiadmis.model.Candidate;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public final class AdmissionResultsProcessor {
 
@@ -60,7 +59,11 @@ public final class AdmissionResultsProcessor {
 	}
 
 	private double processFinalGrade(double gpaGrade, double aTestGrade) {
-		return (gpaGrade + aTestGrade) / 2;
+        double initial = (gpaGrade + aTestGrade) / 2;
+        // display final grade with 3 decimals precision
+        int temp = (int) (initial * 1000);
+
+        return (double)temp / 1000;
 	}
 
 	private Status getAdmissionStatus(double gpaGrade, double aTestGrade, double finalGrade) {

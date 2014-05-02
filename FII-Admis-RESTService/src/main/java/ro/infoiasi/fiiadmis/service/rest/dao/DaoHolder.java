@@ -43,7 +43,7 @@ public class DaoHolder {
             LOG.debug("Initializing table test-candidates.");
             candidatesDao = initCandidateDao("test-candidates");
 
-            LOG.debug("Initializing table test-admission-mirelap.");
+            LOG.debug("Initializing table test-admission.");
             admissionResultsDao = initAdmissionResults("test-admission");
         } catch (IOException e) {
             e.printStackTrace();
