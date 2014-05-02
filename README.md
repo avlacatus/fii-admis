@@ -11,15 +11,25 @@ GUI Application
 ------------------
 - Written in Javascript (jQuery, Twitter Bootstrap, HTML5, CSS3)
 - User Interface for the students (http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/index.html) and for the admin (http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/admin.html)
-- The student can visualise the list of candidates and add himself
-- After the results are published, he can only visualize them
+- The student can visualise the list of candidates and add himself by filling a form with the following:
+    - First name
+    - Last name
+    - Social id (in Romanian: CNP), exactly 13 digits
+    - GPA grade (in Romanian: media din timpul anilor de studiu), 1.00 - 10.00
+    - A-Test grade (in Romanian: media de la bacalaureat), 1.00-10.00
+- After the admission results are published, the student can only visualize them
 - The admin can
-visualize the list of candidates, edit the details
+    - visualize the list of candidates
+    - edit their details
+    - delete a candidate
+    - start computation of the admission results and publish them. 
 
-
-
-
-
+The final admission grade is a computed as the average of the GPA Grade and the A-Test grade.
+The final admission status is as follows:
+- final grade >= 9 => TAX_FREE
+- final grade >= 7 && final grade < 9 => TAX
+- final grade < 7 => REJECTED
+- 
 REST Service
 ------------
 - Deployment: The REST service is deployed with [AWS Elastic Beanstalk].
@@ -35,44 +45,46 @@ Custom text database
 candidates
 ==========
 candidate_id {4 alphanumeric characters}
-first_name {max 20 chars}
-last_name {max 20 chars}
+first_name
+last_name
 social_id {13 chars exactly}
-gpa_grade {4-5 chars 0.00 - 10.00}
-a_test_grade {4-5 chars 0.00 - 10.00}
+gpa_grade {1.00 - 10.00}
+a_test_grade {1.00 - 10.00}
 
 admission_results
 =================
 
 admission_result_id {4 alphanumeric characters}
 candidate_id {candidates-foreign-key, 4 alphanumeric characters}
-final_grade {4-5 chars 0.00 - 10.00}
+final_grade {0.00 - 10.00}
 status {0(tax-free), 1(tax) or 2(rejected)}
 
-Exemplu de doua inregistrari in tabela 'candidates'
-ad4e:sandu:istrate:1900201345644:9.55:8.7
-15a9:alexandru:ivan:1900201345644:7.67:5.67
+Sample from 'candidates':
+zPyN:Maria:Rotaru:2900908785634:6.9:6.9
+BjSY:Georgiana:Marin:2910417104043:8.53:7.49
+
+Sample from 'admission_results':
+l0zh:zPyN:6.9:2
+E8F8:BjSY:8.01:1
+
 ```
 
-- Sample:
-
-```
-ad4e:sandu:istrate:1900201345644:9.55:8.7
-15a9:alexandru:ivan:1900201345644:7.67:5.67
-```
-
-
+The results can be visualized via the web interface or via the web service, in the json format.
 
 
 Tools and Libraries
 -------------------
 
-- Language: Java 7
+- [jQuery]
+- [Twitter Bootstrap]
+- HTML 5, CSS 3
+- Java 7
+- [Restlet Framework]
+- [Google Guava Libraries]
 - [Github for Source Control]
 - [AWS Elastic Beanstalk]
 - [Apache Maven]
-- [Google Guava Libraries]
-- [Restlet Framework]
+
 
 
 
@@ -94,3 +106,5 @@ Team
 [Apache Maven]: http://maven.apache.org/
 [Google Guava Libraries]: https://code.google.com/p/guava-libraries/
 [Restlet Framework]: http://restlet.org/
+[jQuery]: https://jquery.com/
+[Twitter Bootstrap]: http://getbootstrap.com/
