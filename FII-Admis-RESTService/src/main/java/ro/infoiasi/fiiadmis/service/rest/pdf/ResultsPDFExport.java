@@ -59,7 +59,7 @@ public class ResultsPDFExport extends HttpServlet {
     }
 
 
-    private void exportResults(OutputStream outputStream, List<Candidate> candidates, List<AdmissionResult> results)
+    protected void exportResults(OutputStream outputStream, List<Candidate> candidates, List<AdmissionResult> results)
             throws IOException, COSVisitorException {
 
         // Create a document and add a page to it

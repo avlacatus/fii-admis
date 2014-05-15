@@ -11,8 +11,8 @@ public class DefaultAdmissionResultsFormatter implements EntityFormatter<Admissi
     }
 
     @Override
-    public AdmissionResult read(String textLine) {
-        String[] fields = textLine.split(getFieldSeparator());
+    public AdmissionResult read(String record) {
+        String[] fields = record.split(getFieldSeparator());
         Preconditions.checkArgument(fields.length == 4, "The admission result line must have 4 fields");
         AdmissionResult candidate = new AdmissionResult();
         candidate.setId(fields[0]);

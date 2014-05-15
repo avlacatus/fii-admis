@@ -6,7 +6,7 @@ public interface EntityFormatter<E extends Entity> {
 
     String getFieldSeparator();
 
-    E read(String textLine);
+    E read(String record);
 
     String write(E entity);
 }

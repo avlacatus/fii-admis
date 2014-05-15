@@ -11,9 +11,9 @@ public class DefaultCandidateFormatter implements EntityFormatter<Candidate> {
     }
 
     @Override
-    public Candidate read(String textLine) {
+    public Candidate read(String record) {
 
-        String[] fields = textLine.split(getFieldSeparator());
+        String[] fields = record.split(getFieldSeparator());
         Preconditions.checkArgument(fields.length == 6, "The candidate line must have 6 fields");
         Candidate candidate = new Candidate();
         candidate.setId(fields[0]);
