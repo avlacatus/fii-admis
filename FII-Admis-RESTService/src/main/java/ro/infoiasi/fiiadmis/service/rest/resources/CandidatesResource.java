@@ -44,7 +44,7 @@ public class CandidatesResource extends AbstractResource {
 
     private List<Candidate> getCandidatesFromDao() throws IOException {
         LOG.debug("Get candidates sorted by lastname.");
-        return DaoHolder.getCandidateDao().getItems(null, new CandidateLastNameComparator());
+        return DaoHolder.getCandidateDao().getItems(null, CandidateComparator.byLastName());
     }
 
     @Post

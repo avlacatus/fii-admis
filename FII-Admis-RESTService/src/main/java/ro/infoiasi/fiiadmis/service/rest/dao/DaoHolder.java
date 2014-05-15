@@ -1,7 +1,10 @@
 package ro.infoiasi.fiiadmis.service.rest.dao;
 
-import com.google.common.annotations.VisibleForTesting;
+import java.io.IOException;
+import java.util.Comparator;
+
 import org.apache.log4j.Logger;
+
 import ro.infoiasi.fiiadmis.db.Table;
 import ro.infoiasi.fiiadmis.db.TextDatabase;
 import ro.infoiasi.fiiadmis.db.TextDatabaseImpl;
@@ -14,8 +17,7 @@ import ro.infoiasi.fiiadmis.model.Candidate;
 import ro.infoiasi.fiiadmis.service.rest.dao.business.AdmissionResultsProcessor;
 import ro.infoiasi.fiiadmis.service.rest.resources.CandidatesResource;
 
-import java.io.IOException;
-import java.util.Comparator;
+import com.google.common.annotations.VisibleForTesting;
 
 public class DaoHolder {
 
@@ -51,6 +53,16 @@ public class DaoHolder {
             e.printStackTrace();
             throw new RuntimeException("Can't create database", e);
         }
+    }
+
+    @VisibleForTesting
+    public static void setCustomCandidatesDao(EntityDAO<Candidate> candidateDaoCustom) {
+        candidatesDao = candidateDaoCustom;
+    }
+
+    @VisibleForTesting
+    public static void setCustomAdmissionResults(EntityDAO<AdmissionResult> admissionResultsDaoCustom) {
+        admissionResultsDao = admissionResultsDaoCustom;
     }
 
     @VisibleForTesting
