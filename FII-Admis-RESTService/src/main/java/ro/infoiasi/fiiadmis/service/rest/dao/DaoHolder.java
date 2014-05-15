@@ -1,9 +1,7 @@
 package ro.infoiasi.fiiadmis.service.rest.dao;
 
-import java.io.IOException;
-
+import com.google.common.annotations.VisibleForTesting;
 import org.apache.log4j.Logger;
-
 import ro.infoiasi.fiiadmis.db.Table;
 import ro.infoiasi.fiiadmis.db.TextDatabase;
 import ro.infoiasi.fiiadmis.db.TextDatabaseImpl;
@@ -16,7 +14,8 @@ import ro.infoiasi.fiiadmis.model.Candidate;
 import ro.infoiasi.fiiadmis.service.rest.dao.business.AdmissionResultsProcessor;
 import ro.infoiasi.fiiadmis.service.rest.resources.CandidatesResource;
 
-import com.google.common.annotations.VisibleForTesting;
+import java.io.IOException;
+import java.util.Comparator;
 
 public class DaoHolder {
 
@@ -72,7 +71,13 @@ public class DaoHolder {
     }
 
     public static EntityDAO<AdmissionResult> startComputingAdmissionResults() {
-        AdmissionResultsProcessor.get().processResults(getCandidateDao(), getAdmissionResultsDao());
+        AdmissionResultsProcessor.get().processResults(getCandidateDao(), getAdmissionResultsDao(),
+                new Comparator<AdmissionResult>() {
+                    @Override
+                    public int compare(AdmissionResult o1, AdmissionResult o2) {
+                        return (-1) * Double.compare(o1.getFinalGrade(), o2.getFinalGrade());
+                    }
+                });
         return getAdmissionResultsDao();
     }
 }

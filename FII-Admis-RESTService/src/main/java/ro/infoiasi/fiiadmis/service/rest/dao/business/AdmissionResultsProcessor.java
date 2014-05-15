@@ -28,10 +28,11 @@ public final class AdmissionResultsProcessor {
 		return sInstance;
 	}
 
-	public void processResults(EntityDAO<Candidate> candidatesDAO, EntityDAO<AdmissionResult> resultsDAO) {
+	public void processResults(EntityDAO<Candidate> candidatesDAO, EntityDAO<AdmissionResult> resultsDAO,
+                               Comparator<AdmissionResult> comparator) {
 		try {
 			List<Candidate> candidates = candidatesDAO.getItems(null, null);
-			List<AdmissionResult> results = new ArrayList<AdmissionResult>();
+			List<AdmissionResult> results = new ArrayList<>();
 			for (Candidate c : candidates) {
 				AdmissionResult result = new AdmissionResult();
 				result.setCandidateId(c.getId());
@@ -40,12 +41,7 @@ public final class AdmissionResultsProcessor {
 				results.add(result);
 			}
 
-			Collections.sort(results, new Comparator<AdmissionResult>() {
-				@Override
-				public int compare(AdmissionResult o1, AdmissionResult o2) {
-					return (-1) * Double.compare(o1.getFinalGrade(), o2.getFinalGrade());
-				}
-			});
+			Collections.sort(results, comparator);
 
 			for (AdmissionResult result : results) {
 				String resultId = resultsDAO.addItem(result);
