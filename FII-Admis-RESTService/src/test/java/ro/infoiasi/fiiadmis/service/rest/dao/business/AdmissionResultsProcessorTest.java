@@ -1,17 +1,10 @@
 package ro.infoiasi.fiiadmis.service.rest.dao.business;
 
-import static org.junit.Assert.assertEquals;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-
 import org.apache.log4j.Logger;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-
 import ro.infoiasi.fiiadmis.db.Table;
 import ro.infoiasi.fiiadmis.db.TextDatabaseImpl;
 import ro.infoiasi.fiiadmis.db.dao.EntityDAOImpl;
@@ -22,13 +15,20 @@ import ro.infoiasi.fiiadmis.model.Candidate;
 import ro.infoiasi.fiiadmis.service.rest.resources.AdmissionResultComparator;
 import ro.infoiasi.fiiadmis.service.rest.resources.CandidateComparator;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+
 public class AdmissionResultsProcessorTest {
 
     private static final Logger LOG = Logger.getLogger(AdmissionResultsProcessorTest.class);
 
     private static final Comparator<Candidate> BY_LAST_NAME = CandidateComparator.byLastName();
 
-    private static final List<Candidate> mockCandidates = new ArrayList<Candidate>();
+    private List<Candidate> mockCandidates;
 
     private EntityDAOImpl<Candidate> candidatesDao;
     private EntityDAOImpl<AdmissionResult> admissionResultsDao;
@@ -38,6 +38,7 @@ public class AdmissionResultsProcessorTest {
     @Before
     public void initializeMockDaoHolder() throws IOException {
         // Create dummy list with candidates.
+        mockCandidates = new ArrayList<Candidate>();
         mockCandidates.add(new Candidate("a", "Maria", "Jolie", "123456789123", 9.12, 9.14));
         mockCandidates.add(new Candidate("b", "John", "Smith", "312456789123", 8.23, 5.13));
         mockCandidates.add(new Candidate("c", "Jane", "Ron", "345612789123", 9.67, 6.58));
@@ -51,7 +52,7 @@ public class AdmissionResultsProcessorTest {
                 .when(candidatesDao.getItems(null, null))
                 .thenReturn(mockCandidates);
 
-        // Create dummt database and tables
+        // Create dummy database and tables
         db = new TextDatabaseImpl("testdb");
         Table<AdmissionResult> table = db.openTableOrCreateIfNotExists("test",
                 new DefaultAdmissionResultsFormatter());
@@ -60,7 +61,7 @@ public class AdmissionResultsProcessorTest {
         admissionResultsDao = new EntityDAOImpl<AdmissionResult>(table);
     }
 
-    @org.junit.After
+    @After
     public void clearDao() throws IOException {
         candidatesDao = null;
         admissionResultsDao = null;
@@ -81,7 +82,7 @@ public class AdmissionResultsProcessorTest {
         check(results.get(2), "b", 6.68, Status.REJECTED);
     }
 
-    private static void check(AdmissionResult result, String expectedCandidateId,
+    private void check(AdmissionResult result, String expectedCandidateId,
             double expectedFinalGrade, Status expectedStatus) {
         assertEquals(4, result.getId().length());
         assertEquals(expectedCandidateId, result.getCandidateId());

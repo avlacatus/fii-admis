@@ -23,7 +23,7 @@ public class AdmissionResult implements Entity {
         static {
             fStatuses = new HashMap<>();
             for (Status s : Status.values()) {
-                fStatuses.put(Integer.valueOf(s.getStatusInt()), s);
+                fStatuses.put(s.getStatusInt(), s);
             }
         }
 
@@ -33,7 +33,7 @@ public class AdmissionResult implements Entity {
         }
 
         public static Status getStatus(int intValue) {
-            return fStatuses.get(Integer.valueOf(intValue));
+            return fStatuses.get(intValue);
         }
 
         public int getStatusInt() {

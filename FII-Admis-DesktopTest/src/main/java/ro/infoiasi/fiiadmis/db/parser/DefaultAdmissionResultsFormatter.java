@@ -14,11 +14,23 @@ public class DefaultAdmissionResultsFormatter implements EntityFormatter<Admissi
     public AdmissionResult read(String record) {
         String[] fields = record.split(getFieldSeparator());
         Preconditions.checkArgument(fields.length == 4, "The admission result line must have 4 fields");
+
         AdmissionResult candidate = new AdmissionResult();
         candidate.setId(fields[0]);
         candidate.setCandidateId(fields[1]);
-        candidate.setFinalGrade(Double.parseDouble(fields[2]));
-        candidate.setAdmissionStatus(AdmissionResult.Status.getStatus(Integer.parseInt(fields[3])));
+
+        try {
+            candidate.setFinalGrade(Double.parseDouble(fields[2]));
+
+            AdmissionResult.Status status = AdmissionResult.Status.getStatus(Integer.parseInt(fields[3]));
+            Preconditions.checkArgument(status != null, "Wrong admission status number");
+            candidate.setAdmissionStatus(status);
+
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException(e);
+        }
+
+
         return candidate;
     }
 

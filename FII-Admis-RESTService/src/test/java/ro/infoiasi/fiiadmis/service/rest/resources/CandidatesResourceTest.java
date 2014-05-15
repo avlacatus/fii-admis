@@ -1,25 +1,25 @@
 package ro.infoiasi.fiiadmis.service.rest.resources;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-
 import org.apache.log4j.Logger;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.restlet.ext.json.JsonRepresentation;
-
 import ro.infoiasi.fiiadmis.db.dao.EntityDAO;
 import ro.infoiasi.fiiadmis.db.dao.EntityDAOImpl;
 import ro.infoiasi.fiiadmis.model.AdmissionResult;
 import ro.infoiasi.fiiadmis.model.Candidate;
 import ro.infoiasi.fiiadmis.service.rest.dao.DaoHolder;
 import ro.infoiasi.fiiadmis.service.rest.util.DummyJsonGenerator;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class CandidatesResourceTest {
 
@@ -28,11 +28,12 @@ public class CandidatesResourceTest {
     private static final Comparator<AdmissionResult> BY_FINAL_GRADE = AdmissionResultComparator.byFinalGrade();
     private static final Comparator<Candidate> BY_LAST_NAME = CandidateComparator.byLastName();
 
-    private static final List<Candidate> mockCandidates = new ArrayList<Candidate>();
+    private List<Candidate> mockCandidates;
 
     @Before
     public void initializeMockDaoHolder() throws IOException {
         // Mock list with candidates.
+        mockCandidates = new ArrayList<Candidate>();
         mockCandidates.add(new Candidate("a", "Maria", "Jolie", "123456789123", 9.12, 7.12));
         mockCandidates.add(new Candidate("b", "John", "Smith", "312456789123", 8.23, 8.13));
         mockCandidates.add(new Candidate("c", "Jane", "Ron", "345612789123", 9.67, 6.58));
@@ -55,7 +56,7 @@ public class CandidatesResourceTest {
         DaoHolder.setCustomAdmissionResults(admissionResultsDao);
     }
 
-    @org.junit.After
+    @After
     public void clearDao() {
         DaoHolder.clearDao();
     }

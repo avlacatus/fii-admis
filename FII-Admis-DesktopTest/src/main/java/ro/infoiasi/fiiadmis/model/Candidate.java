@@ -82,6 +82,23 @@ public class Candidate implements Entity {
 	}
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Candidate candidate = (Candidate) o;
+
+        if (Double.compare(candidate.aTestGrade, aTestGrade) != 0) return false;
+        if (Double.compare(candidate.gpaGrade, gpaGrade) != 0) return false;
+        if (firstName != null ? !firstName.equals(candidate.firstName) : candidate.firstName != null) return false;
+        if (id != null ? !id.equals(candidate.id) : candidate.id != null) return false;
+        if (lastName != null ? !lastName.equals(candidate.lastName) : candidate.lastName != null) return false;
+        if (socialId != null ? !socialId.equals(candidate.socialId) : candidate.socialId != null) return false;
+
+        return true;
+    }
+
+    @Override
     public int hashCode() {
         int result;
         long temp;
@@ -95,38 +112,4 @@ public class Candidate implements Entity {
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }
-
-    @Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Candidate other = (Candidate) obj;
-		if (Double.doubleToLongBits(aTestGrade) != Double.doubleToLongBits(other.aTestGrade))
-			return false;
-		if (id != other.id)
-			return false;
-		if (firstName == null) {
-			if (other.firstName != null)
-				return false;
-		} else if (!firstName.equals(other.firstName))
-			return false;
-		if (Double.doubleToLongBits(gpaGrade) != Double.doubleToLongBits(other.gpaGrade))
-			return false;
-		if (lastName == null) {
-			if (other.lastName != null)
-				return false;
-		} else if (!lastName.equals(other.lastName))
-			return false;
-		if (socialId == null) {
-			if (other.socialId != null)
-				return false;
-		} else if (!socialId.equals(other.socialId))
-			return false;
-		return true;
-	}
-
 }

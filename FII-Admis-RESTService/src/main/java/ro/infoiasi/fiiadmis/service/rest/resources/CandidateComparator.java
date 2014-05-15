@@ -1,12 +1,12 @@
 package ro.infoiasi.fiiadmis.service.rest.resources;
 
-import java.util.Comparator;
-
 import ro.infoiasi.fiiadmis.model.Candidate;
+
+import java.util.Comparator;
 
 public class CandidateComparator {
 
-    private static Comparator<Candidate> BY_LAST_NAME =
+    private static final Comparator<Candidate> BY_LAST_NAME =
             new Comparator<Candidate>() {
                 @Override
                 public int compare(Candidate o1, Candidate o2) {

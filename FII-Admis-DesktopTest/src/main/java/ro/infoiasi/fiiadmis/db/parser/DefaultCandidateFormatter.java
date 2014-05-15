@@ -20,8 +20,14 @@ public class DefaultCandidateFormatter implements EntityFormatter<Candidate> {
         candidate.setFirstName(fields[1]);
         candidate.setLastName(fields[2]);
         candidate.setSocialId(fields[3]);
-        candidate.setGpaGrade(Double.parseDouble(fields[4]));
-        candidate.setATestGrade(Double.parseDouble(fields[5]));
+
+
+        try {
+            candidate.setGpaGrade(Double.parseDouble(fields[4]));
+            candidate.setATestGrade(Double.parseDouble(fields[5]));
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException(e);
+        }
 
         return candidate;
     }

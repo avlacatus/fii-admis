@@ -21,6 +21,8 @@ public class TextDatabaseImpl implements TextDatabase {
 
     private final Object toSync = new Object();
 
+    private boolean dropped = false;
+
 
     public TextDatabaseImpl(String dbRootPathName) throws IOException {
 
@@ -49,6 +51,7 @@ public class TextDatabaseImpl implements TextDatabase {
 
     @Override
     public void drop() throws IOException {
+        Preconditions.checkState(!dropped, "Database was dropped! Operation no longer possible!");
         synchronized (toSync) {
 
             for (Table<? extends Entity> t : getAllTables()) {
@@ -56,6 +59,8 @@ public class TextDatabaseImpl implements TextDatabase {
             }
 
             tables.clear();
+
+            dropped = true;
         }
     }
 
@@ -63,6 +68,7 @@ public class TextDatabaseImpl implements TextDatabase {
     public <E extends Entity> Table<E> openTableOrCreateIfNotExists(String tableName, EntityFormatter<E> formatter)
                                         throws IOException {
 
+        Preconditions.checkState(!dropped, "Database was dropped! Operation no longer possible!");
         Preconditions.checkArgument(tableName != null, "table name must not be null");
         Preconditions.checkArgument(formatter != null, "formatter must not be null");
         synchronized (toSync) {
@@ -79,7 +85,9 @@ public class TextDatabaseImpl implements TextDatabase {
 
     @Override
     public void dropTable(String tableName) throws IOException {
+        Preconditions.checkState(!dropped, "Database was dropped! Operation no longer possible!");
         Preconditions.checkArgument(tables.containsKey(tableName), tableName +  "does not exist in the database");
+
         synchronized (toSync) {
 
             Files.deleteIfExists(tables.get(tableName).getTablePath());
