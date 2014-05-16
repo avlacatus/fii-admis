@@ -105,10 +105,26 @@ public class TextDatabaseImplTest {
     }
 
     @Test(expected = IllegalStateException.class)
-    public void testDropDbException() throws IOException {
+    public void testDropDbCreateException() throws IOException {
 
         db.drop();
 
         db.openTableOrCreateIfNotExists("whatever", new DefaultCandidateFormatter());
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testDropDbTwiceException() throws IOException {
+
+        db.drop();
+
+        db.drop();
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testDropDbDropTableException() throws IOException {
+
+        db.drop();
+
+        db.dropTable(fakeTableName);
     }
 }
