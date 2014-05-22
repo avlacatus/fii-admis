@@ -30,6 +30,8 @@ public class EntityDAOImpl<E extends Entity> implements EntityDAO<E> {
 
 	@Override
 	public String addItem(E item) throws IOException {
+        Preconditions.checkArgument(item != null, "Cannot insert a null object!");
+        Preconditions.checkArgument(table != null, "Cannot insert an object into a null table!");
 
 		synchronized (toSync) {
 			String newId = RandomStringUtils.randomAlphanumeric(4);
@@ -43,13 +45,15 @@ public class EntityDAOImpl<E extends Entity> implements EntityDAO<E> {
 				writer.write(table.getFormatter().write(item));
 				writer.write(System.lineSeparator());
 			}
-			return newId;
-		}
+            Preconditions.checkArgument(getItemById(item.getId()) != null, "Object was not added!");
+            return newId;
+        }
+
 	}
 
 	@Override
 	public E getItemById(final String entityId) throws IOException {
-		Preconditions.checkArgument(entityId != null, "id must not be null");
+		Preconditions.checkArgument(entityId != null && entityId.length() > 0, "Invalid entity id!");
 		return getSingleItem(new Predicate<E>() {
 			@Override
 			public boolean apply(E input) {
@@ -71,6 +75,7 @@ public class EntityDAOImpl<E extends Entity> implements EntityDAO<E> {
 	@Override
 	public void updateItem(E item) throws IOException {
 		Preconditions.checkArgument(item != null, "The input must not be null");
+        Preconditions.checkArgument(table != null, "Cannot update an object into a null table!");
 		synchronized (toSync) {
 
 			Path tmpPath = Paths.get(table.getTablePath().toString() + ".tmp");
@@ -94,11 +99,13 @@ public class EntityDAOImpl<E extends Entity> implements EntityDAO<E> {
 			}
 			Files.move(tmpPath, table.getTablePath(), StandardCopyOption.REPLACE_EXISTING);
 		}
+        Preconditions.checkArgument(getItemById(item.getId()).equals(item), "Object was not updated!");
 	}
 
 	@Override
 	public void deleteItem(String entityId) throws IOException {
-		Preconditions.checkArgument(entityId != null, "id must be null");
+        Preconditions.checkArgument(entityId != null && entityId.length() > 0, "Invalid entity id!");
+        Preconditions.checkArgument(table != null, "Cannot delete an object from a null table!");
 		synchronized (toSync) {
 
 			Path tmpPath = Paths.get(table.getTablePath().toString() + ".tmp");
@@ -121,7 +128,7 @@ public class EntityDAOImpl<E extends Entity> implements EntityDAO<E> {
 			}
 			Files.move(tmpPath, table.getTablePath(), StandardCopyOption.REPLACE_EXISTING);
 		}
-
+        Preconditions.checkArgument(getItemById(entityId) == null, "Object was not deleted!");
 	}
 
 	private E getSingleItem(Predicate<E> filter) throws IOException {
@@ -134,6 +141,7 @@ public class EntityDAOImpl<E extends Entity> implements EntityDAO<E> {
 	}
 
 	private List<E> getMultipleItems(Predicate<E> filter, Comparator<E> comparator, int maxResults) throws IOException {
+        Preconditions.checkArgument(table != null, "Cannot read objects from a null table!");
 		synchronized (toSync) {
 			try (BufferedReader reader = Files.newBufferedReader(table.getTablePath(), Charset.defaultCharset())) {
 				String line = null;

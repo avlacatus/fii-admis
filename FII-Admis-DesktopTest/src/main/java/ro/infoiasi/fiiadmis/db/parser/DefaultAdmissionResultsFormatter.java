@@ -36,6 +36,7 @@ public class DefaultAdmissionResultsFormatter implements EntityFormatter<Admissi
 
     @Override
     public String write(AdmissionResult entity) {
+        Preconditions.checkArgument(entity != null, "Cannot format a null entity!");
         return Joiner.on(getFieldSeparator())
                      .join(
                             entity.getId(),

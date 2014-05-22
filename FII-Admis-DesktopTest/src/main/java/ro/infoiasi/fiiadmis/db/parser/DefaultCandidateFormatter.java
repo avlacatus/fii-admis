@@ -12,7 +12,6 @@ public class DefaultCandidateFormatter implements EntityFormatter<Candidate> {
 
     @Override
     public Candidate read(String record) {
-
         String[] fields = record.split(getFieldSeparator());
         Preconditions.checkArgument(fields.length == 6, "The candidate line must have 6 fields");
         Candidate candidate = new Candidate();
@@ -20,7 +19,6 @@ public class DefaultCandidateFormatter implements EntityFormatter<Candidate> {
         candidate.setFirstName(fields[1]);
         candidate.setLastName(fields[2]);
         candidate.setSocialId(fields[3]);
-
 
         try {
             candidate.setGpaGrade(Double.parseDouble(fields[4]));
@@ -34,6 +32,7 @@ public class DefaultCandidateFormatter implements EntityFormatter<Candidate> {
 
     @Override
     public String write(Candidate entity) {
+        Preconditions.checkArgument(entity != null, "Cannot format a null entity!");
         return Joiner.on(getFieldSeparator())
                      .join(
                             entity.getId(),

@@ -25,11 +25,9 @@ public class TextDatabaseImpl implements TextDatabase {
 
 
     public TextDatabaseImpl(String dbRootPathName) throws IOException {
-
+        Preconditions.checkArgument(dbRootPathName != null && dbRootPathName.length() > 0, "Invalid database path name!");
         this.dbRootPath = Paths.get(dbRootPathName);
-
         createDbFolderIfNotExists(dbRootPath);
-
         tables = new HashMap<>();
     }
 
@@ -57,9 +55,7 @@ public class TextDatabaseImpl implements TextDatabase {
             for (Table<? extends Entity> t : getAllTables()) {
                 Files.delete(t.getTablePath());
             }
-
             tables.clear();
-
             dropped = true;
         }
     }
@@ -67,10 +63,9 @@ public class TextDatabaseImpl implements TextDatabase {
     @Override
     public <E extends Entity> Table<E> openTableOrCreateIfNotExists(String tableName, EntityFormatter<E> formatter)
                                         throws IOException {
-
         Preconditions.checkState(!dropped, "Database was dropped! Operation no longer possible!");
-        Preconditions.checkArgument(tableName != null, "table name must not be null");
-        Preconditions.checkArgument(formatter != null, "formatter must not be null");
+        Preconditions.checkArgument(tableName != null && tableName.length() > 0, "Invalid table name!");
+        Preconditions.checkArgument(formatter != null, "Formatter must not be null!");
         synchronized (toSync) {
 
             if (!tables.containsKey(tableName)) {
@@ -86,7 +81,7 @@ public class TextDatabaseImpl implements TextDatabase {
     @Override
     public void dropTable(String tableName) throws IOException {
         Preconditions.checkState(!dropped, "Database was dropped! Operation no longer possible!");
-        Preconditions.checkArgument(tables.containsKey(tableName), tableName +  "does not exist in the database");
+        Preconditions.checkArgument(tables.containsKey(tableName), tableName +  "does not exist in the database!");
 
         synchronized (toSync) {
 

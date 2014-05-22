@@ -1,5 +1,6 @@
 package ro.infoiasi.fiiadmis.db;
 
+import com.google.common.base.Preconditions;
 import ro.infoiasi.fiiadmis.db.parser.EntityFormatter;
 import ro.infoiasi.fiiadmis.model.Entity;
 
@@ -15,9 +16,12 @@ public class TableImpl<E extends Entity> implements Table<E> {
 
 
     public TableImpl(Path dbPath, String tableName, EntityFormatter<E> formatter) throws IOException {
+        Preconditions.checkArgument(dbPath != null, "Cannot init a table from a null path!");
+        Preconditions.checkArgument(tableName != null, "Cannot init a table with a null name!");
+        Preconditions.checkArgument(formatter != null, "Cannot init a table with a null formatter!");
+
         this.tablePath = Paths.get(dbPath.toString(), tableName);
         createTableFileIfNotExists(tablePath);
-
         this.formatter = formatter;
     }
 

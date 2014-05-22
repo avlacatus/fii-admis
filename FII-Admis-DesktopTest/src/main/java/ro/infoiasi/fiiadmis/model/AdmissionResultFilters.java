@@ -9,17 +9,14 @@ public class AdmissionResultFilters {
     private AdmissionResultFilters() {}
 
     public static Predicate<AdmissionResult> all() {
-
         return Predicates.alwaysTrue();
     }
 
     public static Predicate<AdmissionResult> none() {
-
         return Predicates.alwaysFalse();
     }
 
     public static Predicate<AdmissionResult> byCandidateId(final String candidateId) {
-
         return new Predicate<AdmissionResult>() {
             @Override
             public boolean apply(AdmissionResult result) {
@@ -29,7 +26,6 @@ public class AdmissionResultFilters {
     }
 
     public static Predicate<AdmissionResult> byFinalGrade(final double grade, final double approximation) {
-
         return new Predicate<AdmissionResult>() {
             @Override
             public boolean apply(AdmissionResult result) {
@@ -39,7 +35,6 @@ public class AdmissionResultFilters {
     }
 
     public static Predicate<AdmissionResult> byStatus(final AdmissionResult.Status status) {
-
         return new Predicate<AdmissionResult>() {
             @Override
             public boolean apply(AdmissionResult result) {

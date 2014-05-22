@@ -1,9 +1,5 @@
 package ro.infoiasi.fiiadmis;
 
-import java.io.IOException;
-import java.util.Comparator;
-import java.util.List;
-
 import ro.infoiasi.fiiadmis.db.Table;
 import ro.infoiasi.fiiadmis.db.TextDatabase;
 import ro.infoiasi.fiiadmis.db.TextDatabaseImpl;
@@ -15,6 +11,10 @@ import ro.infoiasi.fiiadmis.model.AdmissionResult;
 import ro.infoiasi.fiiadmis.model.AdmissionResultFilters;
 import ro.infoiasi.fiiadmis.model.Candidate;
 import ro.infoiasi.fiiadmis.model.CandidateFilters;
+
+import java.io.IOException;
+import java.util.Comparator;
+import java.util.List;
 
 public class Main {
 
@@ -67,7 +67,7 @@ public class Main {
 
         listAll(dao);
         if (candidate != null) {
-            candidate.setFirstName("mihai");
+            candidate.setFirstName(candidate.getFirstName() + "a");
             dao.updateItem(candidate);
             listAll(dao);
         }
