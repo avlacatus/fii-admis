@@ -12,6 +12,8 @@ import ro.infoiasi.fiiadmis.service.rest.resources.AdmissionResultsResource;
 import ro.infoiasi.fiiadmis.service.rest.resources.CandidateResource;
 import ro.infoiasi.fiiadmis.service.rest.resources.CandidatesResource;
 
+import com.google.common.base.Preconditions;
+
 public class MainApplication extends Application {
 
     private static final Logger LOG = Logger.getLogger(MainApplication.class);
@@ -41,6 +43,9 @@ public class MainApplication extends Application {
     }
 
     private static void attach(Router router, String uriPath, Class<? extends ServerResource> resource) {
+        Preconditions.checkNotNull(router);
+        Preconditions.checkNotNull(uriPath);
+        Preconditions.checkNotNull(resource);
         LOG.debug("Attaching " + uriPath + " to resource " + resource.getSimpleName());
         router.attach(uriPath, resource);
     }

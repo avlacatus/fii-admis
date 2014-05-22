@@ -1,6 +1,9 @@
 package ro.infoiasi.fiiadmis.service.rest.dao.business;
 
 import org.apache.log4j.Logger;
+
+import com.google.common.base.Preconditions;
+
 import ro.infoiasi.fiiadmis.db.dao.EntityDAO;
 import ro.infoiasi.fiiadmis.model.AdmissionResult;
 import ro.infoiasi.fiiadmis.model.AdmissionResult.Status;
@@ -30,6 +33,9 @@ public final class AdmissionResultsProcessor {
 
 	public void processResults(EntityDAO<Candidate> candidatesDAO, EntityDAO<AdmissionResult> resultsDAO,
                                Comparator<AdmissionResult> comparator) {
+	        Preconditions.checkNotNull(candidatesDAO);
+	        Preconditions.checkNotNull(resultsDAO);
+	        Preconditions.checkNotNull(comparator);
 		try {
 			List<Candidate> candidates = candidatesDAO.getItems(null, null);
 			List<AdmissionResult> results = new ArrayList<>();

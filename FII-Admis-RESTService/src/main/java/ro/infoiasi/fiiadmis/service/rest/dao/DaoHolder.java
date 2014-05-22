@@ -18,6 +18,7 @@ import ro.infoiasi.fiiadmis.service.rest.dao.business.AdmissionResultsProcessor;
 import ro.infoiasi.fiiadmis.service.rest.resources.CandidatesResource;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Preconditions;
 
 public class DaoHolder {
 
@@ -72,11 +73,13 @@ public class DaoHolder {
     }
 
     private static EntityDAO<Candidate> initCandidateDao(String tableName) throws IOException {
+        Preconditions.checkNotNull(tableName);
         Table<Candidate> candidatesTable = db.openTableOrCreateIfNotExists(tableName, new DefaultCandidateFormatter());
         return new EntityDAOImpl<>(candidatesTable);
     }
 
     private static EntityDAO<AdmissionResult> initAdmissionResults(String tableName) throws IOException {
+        Preconditions.checkNotNull(tableName);
         Table<AdmissionResult> admissionResultsTable = db.openTableOrCreateIfNotExists(tableName,
                 new DefaultAdmissionResultsFormatter());
         return new EntityDAOImpl<>(admissionResultsTable);

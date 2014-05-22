@@ -11,6 +11,8 @@ import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.resource.Get;
 import org.restlet.resource.Post;
 
+import com.google.common.base.Preconditions;
+
 import ro.infoiasi.fiiadmis.model.Candidate;
 import ro.infoiasi.fiiadmis.service.rest.dao.DaoHolder;
 
@@ -49,6 +51,8 @@ public class CandidatesResource extends AbstractResource {
 
     @Post
     public void postCandidate(JsonRepresentation jsonCandidate) {
+        Preconditions.checkNotNull(jsonCandidate);
+
         LOG.debug("Posting the candidate to the DAO.");
 
         try {
@@ -66,6 +70,8 @@ public class CandidatesResource extends AbstractResource {
     }
 
     private String addCandidateFrom(JSONObject obj) throws JSONException, IOException {
+        Preconditions.checkNotNull(obj);
+
         LOG.debug("Get information from the json and creating the candidate.");
 
         Candidate candidate = new Candidate();

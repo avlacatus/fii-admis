@@ -12,6 +12,8 @@ import org.restlet.resource.Delete;
 import org.restlet.resource.Get;
 import org.restlet.resource.Put;
 
+import com.google.common.base.Preconditions;
+
 import ro.infoiasi.fiiadmis.model.Candidate;
 import ro.infoiasi.fiiadmis.model.CandidateFilters;
 import ro.infoiasi.fiiadmis.service.rest.dao.DaoHolder;
@@ -51,6 +53,8 @@ public class CandidateResource extends AbstractResource {
 
     @Put
     public void updateCandidate(JsonRepresentation jsonCandidate) {
+        Preconditions.checkNotNull(jsonCandidate);
+
         String candidateId = (String) getRequestAttributes().get("candidate_id");
         LOG.debug("Updating candidate " + candidateId + " from the DAO.");
 
@@ -83,6 +87,9 @@ public class CandidateResource extends AbstractResource {
     }
 
     private void updateCandidate(String candidateId, JSONObject obj) throws IOException, JSONException {
+        Preconditions.checkNotNull(candidateId);
+        Preconditions.checkNotNull(obj);
+
         LOG.debug("Get information from the json and updating the candidate.");
 
         Candidate candidate = new Candidate();

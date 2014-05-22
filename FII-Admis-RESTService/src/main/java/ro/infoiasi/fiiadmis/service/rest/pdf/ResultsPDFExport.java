@@ -1,13 +1,16 @@
 package ro.infoiasi.fiiadmis.service.rest.pdf;
 
 import com.google.common.base.Joiner;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
+
 import org.apache.pdfbox.exceptions.COSVisitorException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+
 import ro.infoiasi.fiiadmis.model.AdmissionResult;
 import ro.infoiasi.fiiadmis.model.Candidate;
 import ro.infoiasi.fiiadmis.service.rest.dao.DaoHolder;
@@ -16,6 +19,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Arrays;
@@ -29,6 +33,8 @@ public class ResultsPDFExport extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Preconditions.checkNotNull(request);
+        Preconditions.checkNotNull(response);
         DaoHolder.initializeDb();
         List<AdmissionResult> admissionResults = DaoHolder.getAdmissionResultsDao().getItems(null, null);
         List<Candidate> candidates = DaoHolder.getCandidateDao().getItems(null, new Comparator<Candidate>() {
@@ -61,6 +67,9 @@ public class ResultsPDFExport extends HttpServlet {
 
     protected void exportResults(OutputStream outputStream, List<Candidate> candidates, List<AdmissionResult> results)
             throws IOException, COSVisitorException {
+        Preconditions.checkNotNull(outputStream);
+        Preconditions.checkNotNull(candidates);
+        Preconditions.checkNotNull(results);
 
         // Create a document and add a page to it
         PDDocument document = new PDDocument();
