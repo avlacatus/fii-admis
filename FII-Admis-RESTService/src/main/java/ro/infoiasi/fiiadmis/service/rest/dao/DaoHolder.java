@@ -73,13 +73,13 @@ public class DaoHolder {
     }
 
     private static EntityDAO<Candidate> initCandidateDao(String tableName) throws IOException {
-        Preconditions.checkNotNull(tableName);
+        Preconditions.checkArgument(tableName != null, "Can't initiate DAO from a null table name.");
         Table<Candidate> candidatesTable = db.openTableOrCreateIfNotExists(tableName, new DefaultCandidateFormatter());
         return new EntityDAOImpl<>(candidatesTable);
     }
 
     private static EntityDAO<AdmissionResult> initAdmissionResults(String tableName) throws IOException {
-        Preconditions.checkNotNull(tableName);
+        Preconditions.checkArgument(tableName != null, "Can't initiate DAO from a null table name.");
         Table<AdmissionResult> admissionResultsTable = db.openTableOrCreateIfNotExists(tableName,
                 new DefaultAdmissionResultsFormatter());
         return new EntityDAOImpl<>(admissionResultsTable);

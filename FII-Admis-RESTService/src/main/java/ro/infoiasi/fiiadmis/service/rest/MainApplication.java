@@ -43,9 +43,9 @@ public class MainApplication extends Application {
     }
 
     private static void attach(Router router, String uriPath, Class<? extends ServerResource> resource) {
-        Preconditions.checkNotNull(router);
-        Preconditions.checkNotNull(uriPath);
-        Preconditions.checkNotNull(resource);
+        Preconditions.checkArgument(router != null, "Can't attach null router.");
+        Preconditions.checkArgument(uriPath != null, "Can't attach null uri.");
+        Preconditions.checkArgument(resource != null, "Can't attach to a null resource.");
         LOG.debug("Attaching " + uriPath + " to resource " + resource.getSimpleName());
         router.attach(uriPath, resource);
     }

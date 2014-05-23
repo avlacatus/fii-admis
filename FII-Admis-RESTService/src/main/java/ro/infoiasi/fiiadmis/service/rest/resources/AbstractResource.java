@@ -24,8 +24,8 @@ public abstract class AbstractResource extends ServerResource {
     }
 
     protected JsonRepresentation createJsonFrom(String name, Collection<?> collection) throws JSONException {
-        Preconditions.checkNotNull(name);
-        Preconditions.checkNotNull(collection);
+        Preconditions.checkArgument(name != null);
+        Preconditions.checkArgument(collection != null);
 
         // Create the json array from the collection.
         JSONArray array = new JSONArray();
@@ -50,7 +50,7 @@ public abstract class AbstractResource extends ServerResource {
     }
 
     protected JsonRepresentation handleInternalServerError(Exception e) {
-        Preconditions.checkNotNull(e);
+        Preconditions.checkArgument(e != null);
 
         setStatus(Status.SERVER_ERROR_INTERNAL);
         JsonRepresentation internalServerErrorResponse = new JsonRepresentation(e);
@@ -59,13 +59,13 @@ public abstract class AbstractResource extends ServerResource {
     }
 
     protected void logInternalServerError(JsonRepresentation internalServerErrorResponse) {
-        Preconditions.checkNotNull(internalServerErrorResponse);
+        Preconditions.checkArgument(internalServerErrorResponse != null);
 
         getLOG().error("RESPONSE - Internal Server Error: " + internalServerErrorResponse.toString());
     }
 
     protected void logResponse(JsonRepresentation json) throws IOException {
-        Preconditions.checkNotNull(json);
+        Preconditions.checkArgument(json != null);
 
         getLOG().debug("RESPONSE: " + json.getText());
     }

@@ -51,7 +51,7 @@ public class CandidatesResource extends AbstractResource {
 
     @Post
     public void postCandidate(JsonRepresentation jsonCandidate) {
-        Preconditions.checkNotNull(jsonCandidate);
+        Preconditions.checkArgument(jsonCandidate != null);
 
         LOG.debug("Posting the candidate to the DAO.");
 
@@ -70,7 +70,7 @@ public class CandidatesResource extends AbstractResource {
     }
 
     private String addCandidateFrom(JSONObject obj) throws JSONException, IOException {
-        Preconditions.checkNotNull(obj);
+        Preconditions.checkArgument(obj != null);
 
         LOG.debug("Get information from the json and creating the candidate.");
 

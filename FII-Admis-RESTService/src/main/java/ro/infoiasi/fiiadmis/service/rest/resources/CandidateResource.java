@@ -53,7 +53,7 @@ public class CandidateResource extends AbstractResource {
 
     @Put
     public void updateCandidate(JsonRepresentation jsonCandidate) {
-        Preconditions.checkNotNull(jsonCandidate);
+        Preconditions.checkArgument(jsonCandidate != null);
 
         String candidateId = (String) getRequestAttributes().get("candidate_id");
         LOG.debug("Updating candidate " + candidateId + " from the DAO.");
@@ -87,8 +87,8 @@ public class CandidateResource extends AbstractResource {
     }
 
     private void updateCandidate(String candidateId, JSONObject obj) throws IOException, JSONException {
-        Preconditions.checkNotNull(candidateId);
-        Preconditions.checkNotNull(obj);
+        Preconditions.checkArgument(candidateId != null);
+        Preconditions.checkArgument(obj != null);
 
         LOG.debug("Get information from the json and updating the candidate.");
 
