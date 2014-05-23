@@ -3,7 +3,7 @@ fii-admis
 
 Repository for FII school project (CSS) .
 
-Faza 1
+Phase 1
 ------------------
 
 This is an application consisting of 3 main modules:
@@ -79,10 +79,10 @@ E8F8:BjSY:8.01:1
 The results can be visualized via the web interface, the web service, in the json format, or in the PDF format, by clicking on a link (http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/admission_results.pdf).
 
 
-Faza 2
+Phase 2
 -------------------
 
-Faza 3
+Phase 3
 -------------------
 
 
