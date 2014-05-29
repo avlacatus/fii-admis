@@ -62,6 +62,8 @@ http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/apidoc.html
  ```
 
  ```
+ public class CandidateResource extends AbstractResource {
+
   @Put
   public void updateCandidate(JsonRepresentation jsonCandidate) {
       Preconditions.checkArgument(jsonCandidate != null);
@@ -83,6 +85,7 @@ http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/apidoc.html
           return;
       }
   }
+}
  ```
 
 
