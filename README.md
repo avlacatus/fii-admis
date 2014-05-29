@@ -12,26 +12,32 @@ This is an application consisting of 3 main modules:
 
 GUI Application
 ------------------
-- User Interface for the students (http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/index.html) and for the admin (http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/admin.html)
-- The student can visualise the list of candidates and add himself by filling a form with the following:
+The Web User Interface consists of two main pages: one for the students (http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/index.html) and one for the admin (http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/admin.html)
+
+The student can visualise the list of candidates and add himself by filling a form with the following:
     - First name
     - Last name
     - Social id (in Romanian: CNP), exactly 13 digits
     - GPA grade (in Romanian: media din timpul anilor de studiu), 1.00 - 10.00
     - A-Test grade (in Romanian: media de la bacalaureat), 1.00-10.00
-- After the admission results are published, the student can only visualize them
-- The admin can
+
+After the admission results are published, the student can only visualize them
+
+The admin can:
     - visualize the list of candidates
     - edit their details
     - delete a candidate
     - start computation of the admission results and publish them.
-- The results can be exported via PDF.
+The results can be exported via PDF.
 
 The final admission grade is a computed as the average of the GPA Grade and the A-Test grade.
+
 The final admission status is as follows:
 - final grade >= 9 => TAX_FREE
 - final grade >= 7 && final grade < 9 => TAX
 - final grade < 7 => REJECTED
+
+The UI is implemented using mainly [jQuery], [Twitter Bootstrap], HTML5 and CSS3.
 
 
 
@@ -43,6 +49,43 @@ REST Service
 http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/apidoc.html
 
  The request input parameters and the response are in the json format.
+
+ The service is implemented using [Restlet Framework], a Java framework which makes it really easy to expose resources in a RESTful way.
+ It basically consists of a ``Router`` object which maps an URI to a resource which knows how to handle the request, according to the associated HTTP verb.
+
+ Code sample:
+
+ ```
+   Router router = new Router(getContext());
+
+   router.attach("/candidates/{candidate_id}", CandidateResource.class);
+ ```
+
+ ```
+  @Put
+  public void updateCandidate(JsonRepresentation jsonCandidate) {
+      Preconditions.checkArgument(jsonCandidate != null);
+
+      String candidateId = (String) getRequestAttributes().get("candidate_id");
+      LOG.debug("Updating candidate " + candidateId + " from the DAO.");
+
+      try {
+          updateCandidate(candidateId, jsonCandidate.getJsonObject());
+
+          setStatus(Status.SUCCESS_NO_CONTENT);
+
+          LOG.debug("RESPONSE: " + Status.SUCCESS_NO_CONTENT);
+      } catch (JSONException e) {
+          handleClientError(Status.CLIENT_ERROR_BAD_REQUEST);
+          return;
+      } catch (IOException e) {
+          handleInternalServerError(e);
+          return;
+      }
+  }
+ ```
+
+
 
 Custom database
 ---------------
@@ -88,6 +131,7 @@ E8F8:BjSY:8.01:1
 
 The admission results can be visualized via the web interface, the web service, in the json format, or in the PDF format, by clicking on a link (http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/admission_results.pdf).
 
+This backend module was implemented using Java, version 7.
 
 Phase 2 - Unit testing
 -------------------
@@ -125,21 +169,25 @@ test("Parse results", function () {
 });
 ```
 
-It's important to mention that QUnit supports a wide range of Asserts: ```deepEqual()```, ```equal()```, ```notDeepEqual()```, ```notEqual()```, ```notPropEqual()``` and many others.
+It's important to mention that QUnit supports a wide range of Asserts: ``deepEqual()``, ``equal()``, ``notDeepEqual()``, ``notEqual()``, ``notPropEqual()`` and many others.
 
 Also, because javascript code is often asynchronous, this framework provides callbacks and async control to test even the most complex cases.
 
-Conclusion
-
-QUnit is a powerful javascript unit testing framework. It itegrates well with the most-used library JQuery and other js features.
+In conclusion, QUnit is a powerful javascript unit testing framework. It integrates well with the most-used library JQuery and other js features.
 The documentation provided on-site is comprehensive and easy to use.
-As for the project, the testing would not be possible without code changes but in this way it enforces that the code is not coupled with the html themselves, but in other scripts easy to use for different purposes.
+As for the project, the testing would not be possible without code changes but in this way it enforces that the code is not coupled with the html itself, but in other scripts easy to use for different purposes.
 
 
 REST Service
 ------------
 
-For the REST Service, written in Java, we used the most popular unit testing framework for this language, which is [JUnit]. For the mocking part, we used [Mockito].
+For the REST Service, written in Java, we used the most popular unit testing framework for this language, which is [JUnit].
+
+JUnit allows for a variety of testing assertions, like `assertEquals()`, `assertArrayEquals()`, `assertSame()`, `assertFalse()` and so on.
+It also allows expecting a certain exceptions
+
+
+For the mocking part, we used [Mockito].
 
 Custom database
 ---------------
