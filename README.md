@@ -95,6 +95,46 @@ Phase 2
 GUI Application
 ------------------
 
+The testing for the gui application was done with QUint. This JavaScript framework can easily integrate with JQuery and make unit testing possible.
+
+In order test the project, some changes were required:
+* the code was isolated in a javascript file (this made the code sharing possible between multiple pages)
+* a new html page was created only for testing
+* a javascript file containing the actual tests
+
+The testing was focused on the functionalities possible from the Gui application:
+* Candidates
+    * Parse
+    * Edit
+    * Delete
+* Results
+    * Parse
+
+A sample code that was used to test result parsing
+```
+test("Parse results", function () {
+	candidates = parseResults(
+		jQuery.parseJSON(actual_json);
+
+	equal(candidates.length, 32, "Candidates length");
+	equal(candidates[0].finalGrade, "9.100000000000001", "Candidate 1 grade");
+	equal(candidates[0].resultState, "tax_free", "Candidate 1 status");
+
+	equal(candidates[1].finalGrade, "6.45", "Candidate 2 grade");
+	equal(candidates[1].resultState, "rejected", "Candidate 2 status");
+});
+```
+
+It's important to mention that QUnit supports a wide range of Asserts: deepEqual, equal, notDeepEqual, notEqual, notPropEqual, ok, throws and many others.
+
+Also, because javascript code is often async, this framework provides callbacks and async control to test even the most complex cases.
+
+Conclusion
+QUnit is a powerful javascript unit testing framework. It itegrates well with the most-used library JQuery and other js features.
+The documentation provided on-site is comprehensive and easy to use.
+As for the project, the testing would not be possible without code changes but in this way it enforces that the code is not coupled with the html themselves, but in other scripts easy to use for different purposes.
+
+
 REST Service
 ------------
 
