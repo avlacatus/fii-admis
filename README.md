@@ -196,7 +196,6 @@ For the backend module, we also used [JUnit] and [Mockito]
 
 Phase 3 - Assertions
 -------------------
-Assertions on the backend module
 
 The language constructs we used for adding assertions to our code was `Preconditions.checkArgument(...)` from the guava library.
 
@@ -204,11 +203,24 @@ We added **preconditions** for:
 * checking for valid table, database names (not null, not empty strings)
 * checking for null parameters when operating over components (tables, databases)
 * checking for null items or valid ids when performing CRUD operations over the database
+* checking for null parameters when handling requests/responses on the web services side
 
 We added **postconditions** for checking the validity/success of CRUD operations:
 * after an item was added, we check if the corresponding id exists in the database
 * after an item was updated, we check if the existing item in the database equals the initial object passed as a reference
 * after an item was deleted, we check if the corresponding id does not exist anymore in the database
+
+Example on using pre/post conditions: deleting an object from the database:
+```
+public void deleteItem(String entityId) throws IOException {
+	Preconditions.checkArgument(entityId != null && entityId.length() > 0, "Invalid entity id!");
+	Preconditions.checkArgument(table != null, "Cannot delete an object from a null table!");
+	/**
+	* The actual deletion code
+	*/
+	Preconditions.checkArgument(getItemById(entityId) == null, "Object was not deleted!");
+}
+```
 
 Tools and Libraries
 -------------------
