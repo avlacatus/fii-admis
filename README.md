@@ -80,7 +80,7 @@ E8F8:BjSY:8.01:1
 
 *creating* new objects (uses the formatter and then stores the result to the file)
 
-*reading* (uses the formatter to interpret the data from the file and created corresponding java objects)
+*reading* (uses the formatter to interpret the data from the file and creating corresponding java objects)
 
 *updating* (identifies the corresponding line from the database and replaces it with the string version of the new instance)
 
