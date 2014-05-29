@@ -125,11 +125,12 @@ test("Parse results", function () {
 });
 ```
 
-It's important to mention that QUnit supports a wide range of Asserts: deepEqual, equal, notDeepEqual, notEqual, notPropEqual, ok, throws and many others.
+It's important to mention that QUnit supports a wide range of Asserts: ```deepEqual()```, ```equal()```, ```notDeepEqual()```, ```notEqual()```, ```notPropEqual()``` and many others.
 
 Also, because javascript code is often asynchronous, this framework provides callbacks and async control to test even the most complex cases.
 
 Conclusion
+
 QUnit is a powerful javascript unit testing framework. It itegrates well with the most-used library JQuery and other js features.
 The documentation provided on-site is comprehensive and easy to use.
 As for the project, the testing would not be possible without code changes but in this way it enforces that the code is not coupled with the html themselves, but in other scripts easy to use for different purposes.
