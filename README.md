@@ -94,7 +94,18 @@ Phase 2
 
 Phase 3
 -------------------
+Assertions on the backend module
+The language constructs we used for adding assertions to our code was `Preconditions.checkArgument(...)` from the guava library. 
 
+We added **preconditions** for:
+* checking for valid table, database names (not null, not empty strings)
+* checking for null parameters when operating over components (tables, databases)
+* checking for null items or valid ids when performing CRUD operations over the database
+
+We added **postconditions** for checking the validity/success of CRUD operations:
+* after an item was added, we check if the corresponding id exists in the database
+* after an item was updated, we check if the existing item in the database equals the initial object passed as a reference
+* after an item was deleted, we check if the corresponding id does not exist anymore in the database
 
 Tools and Libraries
 -------------------
