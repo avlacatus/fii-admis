@@ -366,12 +366,16 @@ That's why we have a lot of tests that expect to throw exceptions:
 
 Test cases on the backend database fall into the following categories:
 
-* database tests - check if the database files are created / deleted correctly
-				 - check if the table objects pointing to the file are managed properly
-				 - check if the whole database is dropped properly
-* entity formatter tests - check if a record from a file is correctly parsed into a java Entity object (Candidate / AdmissionResult)
-* filter predicates tests - check if the filters that are applied to the records function properly
-* DAO tests - check if the CRUD operations performed on the text database are implemented correctly
+* database tests
+** check if the database files are created / deleted correctly
+** check if the table objects pointing to the file are managed properly
+** check if the whole database is dropped properly
+* entity formatter tests
+** check if a record from a file is correctly parsed into a java Entity object (Candidate / AdmissionResult)
+* filter predicates tests
+** check if the filters that are applied to the records function properly
+* DAO tests
+** check if the CRUD operations performed on the text database are implemented correctly
 
 Phase 3 - Assertions
 -------------------
