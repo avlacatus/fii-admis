@@ -121,13 +121,13 @@ E8F8:BjSY:8.01:1
 - Parsing - The two files are parsed and each line is converted into an instance of either `Candidate` or `AdmissionResult` java class. This task is performed by the parametrized type `EntityFormatter` which specifies the behavior for converting a line of text into a `Candidate`/`AdmissionResult` (reading from the database) or for converting a `Candidate`/`AdmissionResult` instance into a String which will be saved into the disk file(writing into the database). 
 - The **CRUD** operations over the databases are performed by an abstraction layer called `EntityDAO`. The `EntityDAO` component handles:
 
-* *creating* new objects (uses the formatter and then stores the result to the file)
+** *creating* new objects (uses the formatter and then stores the result to the file)
 
-* *reading* (uses the formatter to interpret the data from the file and creating corresponding java objects)
+** *reading* (uses the formatter to interpret the data from the file and creating corresponding java objects)
 
-* *updating* (identifies the corresponding line from the database and replaces it with the string version of the new instance)
+** *updating* (identifies the corresponding line from the database and replaces it with the string version of the new instance)
 
-* *deleting* (identifies the corresponding line from the file and removes it)
+** *deleting* (identifies the corresponding line from the file and removes it)
 
 The admission results can be visualized via the web interface, the web service, in the json format, or in the PDF format, by clicking on a link (http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/admission_results.pdf).
 
@@ -269,7 +269,7 @@ Custom database
 
 For the backend database module, we also used [JUnit] and [Mockito] for mocking, which we briefly described above.
 
-e use mocking especially to mock table objects that point to custom made files for testing. The sample code for the test scenario of the candidates DAO is:
+We use mocking especially to mock table objects that point to custom made files for testing. The sample code for the test scenario of the candidates DAO is:
 
 ```
 public class EntityDaoCandidateImplTest {
