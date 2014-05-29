@@ -82,7 +82,7 @@ public class TextDatabaseImplTest {
         db.dropTable("whatever");
     }
 
-    @Test()
+    @Test
     public void testDropTable() throws IOException {
 
         db.dropTable(fakeTableName);

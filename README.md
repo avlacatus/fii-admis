@@ -3,8 +3,8 @@ fii-admis
 
 Repository for FII school project (CSS) .
 
-Phase 1
-------------------
+Phase 1 - Building the application
+-----------------------------------
 
 This is an application consisting of 3 main modules:
 
@@ -89,7 +89,7 @@ E8F8:BjSY:8.01:1
 The admission results can be visualized via the web interface, the web service, in the json format, or in the PDF format, by clicking on a link (http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/admission_results.pdf).
 
 
-Phase 2
+Phase 2 - Unit testing
 -------------------
 
 GUI Application
@@ -127,7 +127,7 @@ test("Parse results", function () {
 
 It's important to mention that QUnit supports a wide range of Asserts: deepEqual, equal, notDeepEqual, notEqual, notPropEqual, ok, throws and many others.
 
-Also, because javascript code is often async, this framework provides callbacks and async control to test even the most complex cases.
+Also, because javascript code is often asynchronous, this framework provides callbacks and async control to test even the most complex cases.
 
 Conclusion
 QUnit is a powerful javascript unit testing framework. It itegrates well with the most-used library JQuery and other js features.
@@ -138,13 +138,18 @@ As for the project, the testing would not be possible without code changes but i
 REST Service
 ------------
 
+For the REST Service, written in Java, we used the most popular unit testing framework for this language, which is [JUnit]. For the mocking part, we used [Mockito].
+
 Custom database
 ---------------
 
-Phase 3
+For the backend module, we also used [JUnit] and [Mockito]
+
+Phase 3 - Assertions
 -------------------
 Assertions on the backend module
-The language constructs we used for adding assertions to our code was `Preconditions.checkArgument(...)` from the guava library. 
+
+The language constructs we used for adding assertions to our code was `Preconditions.checkArgument(...)` from the guava library.
 
 We added **preconditions** for:
 * checking for valid table, database names (not null, not empty strings)
@@ -162,6 +167,8 @@ Tools and Libraries
 - [jQuery]
 - [Twitter Bootstrap]
 - Java 7
+- [JUnit]
+- [Mockito]
 - [Restlet Framework]
 - [Google Guava Libraries]
 - [Github for Source Control]
@@ -189,3 +196,5 @@ Team
 [Restlet Framework]: http://restlet.org/
 [jQuery]: https://jquery.com/
 [Twitter Bootstrap]: http://getbootstrap.com/
+[JUnit]: http://junit.org/
+[Mockito]: https://github.com/mockito/mockito
