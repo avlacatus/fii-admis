@@ -92,6 +92,15 @@ The admission results can be visualized via the web interface, the web service, 
 Phase 2
 -------------------
 
+GUI Application
+------------------
+
+REST Service
+------------
+
+Custom database
+---------------
+
 Phase 3
 -------------------
 Assertions on the backend module
