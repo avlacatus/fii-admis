@@ -124,13 +124,13 @@ E8F8:BjSY:8.01:1
 - Parsing - The two files are parsed and each line is converted into an instance of either `Candidate` or `AdmissionResult` java class. This task is performed by the parametrized type `EntityFormatter` which specifies the behavior for converting a line of text into a `Candidate`/`AdmissionResult` (reading from the database) or for converting a `Candidate`/`AdmissionResult` instance into a String which will be saved into the disk file(writing into the database). 
 - The **CRUD** operations over the databases are performed by an abstraction layer called `EntityDAO`. The `EntityDAO` component handles:
 
-** *creating* new objects (uses the formatter and then stores the result to the file)
+	* *creating* new objects (uses the formatter and then stores the result to the file)
 
-** *reading* (uses the formatter to interpret the data from the file and creating corresponding java objects)
+	* *reading* (uses the formatter to interpret the data from the file and creating corresponding java objects)
 
-** *updating* (identifies the corresponding line from the database and replaces it with the string version of the new instance)
+	* *updating* (identifies the corresponding line from the database and replaces it with the string version of the new instance)
 
-** *deleting* (identifies the corresponding line from the file and removes it)
+	* *deleting* (identifies the corresponding line from the file and removes it)
 
 The admission results can be visualized via the web interface, the web service, in the json format, or in the PDF format, by clicking on a link (http://fii-admis-restservice-dt5dd3kc2v.elasticbeanstalk.com/admission_results.pdf).
 
@@ -367,15 +367,15 @@ That's why we have a lot of tests that expect to throw exceptions:
 Test cases on the backend database fall into the following categories:
 
 * database tests
-** check if the database files are created / deleted correctly
-** check if the table objects pointing to the file are managed properly
-** check if the whole database is dropped properly
+	* check if the database files are created / deleted correctly
+	* check if the table objects pointing to the file are managed properly
+	* check if the whole database is dropped properly
 * entity formatter tests
-** check if a record from a file is correctly parsed into a java Entity object (Candidate / AdmissionResult)
+	* check if a record from a file is correctly parsed into a java Entity object (Candidate / AdmissionResult)
 * filter predicates tests
-** check if the filters that are applied to the records function properly
+	* check if the filters that are applied to the records function properly
 * DAO tests
-** check if the CRUD operations performed on the text database are implemented correctly
+	* check if the CRUD operations performed on the text database are implemented correctly
 
 Phase 3 - Assertions
 -------------------
