@@ -422,10 +422,10 @@ Tools and Libraries
 
 Team
 ----
-- Daneliuc Ana-Maria - worked on the database module
-- Lăcătuș Alexandra - worked on the database module
-- Popoveniuc Mirela  - worked on the service module
-- Popovici Adrian  - worked on the UI module
+- Daneliuc Ana-Maria - worked on the database module: implemented all of the classes related to candidates + all database module unit tests
+- Lăcătuș Alexandra - implemented the admission results database classes and their processing logic + assertions
+- Popoveniuc Mirela  - worked on the service module (all of the phases)
+- Popovici Adrian  - worked on the UI module (all of the phases) 
 
 We all contributed to this documentation.
 
